@@ -1,0 +1,163 @@
+<!-- res/layout/welcome_screen.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/dungeonBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/dungeon_background_final"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-60dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/pixeloidsans"
+            android:text="DUNGEON\nCRAWLER"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="48sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Type your name (Press ENTER to Save)"
+            android:textStyle="bold"
+            android:fontFamily="@font/eightbit1"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/playerNameEditText"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp"
+            android:hint="Name:"
+            android:textStyle="bold"
+            android:fontFamily="@font/eightbit1"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Select Difficulty"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/eightbit1"
+            android:textSize="18sp" />
+
+        <RadioGroup
+            android:id="@+id/difficultyRadioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/easyButton"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/rounded_button"
+                android:fontFamily="@font/eightbit1"
+                android:text="Easy"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/mediumButton"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="8dp"
+                android:fontFamily="@font/eightbit1"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_button"
+                android:textSize="18dp"
+                android:text="Medium" />
+
+            <Button
+                android:id="@+id/hardButton"
+                android:fontFamily="@font/eightbit1"
+                android:textStyle="bold"
+                android:text="Hard"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:textSize="18dp"
+                android:background="@drawable/rounded_button" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Select Your Character"
+            android:textColor="#FFFFFF"
+            android:fontFamily="@font/eightbit1"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="-10dp"
+            android:gravity="center">
+
+            <!-- Character Sprite 1 -->
+            <ImageView
+                android:id="@+id/characterSprite1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/knight"
+                android:contentDescription="Character Sprite 1"
+                android:layout_marginEnd="20dp"
+                android:clickable="true" />
+
+            <!-- Character Sprite 2 -->
+            <ImageView
+                android:id="@+id/characterSprite2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/elf"
+                android:contentDescription="Character Sprite 2"
+                android:layout_marginEnd="20dp"
+                android:clickable="true" />
+
+            <!-- Character Sprite 3 -->
+            <ImageView
+                android:id="@+id/characterSprite3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/lizard"
+                android:contentDescription="Character Sprite 3"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <!-- Enter Game Button -->
+        <Button
+            android:id="@+id/enterButton"
+            android:layout_width="200dp"
+            android:layout_height="91dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="-50dp"
+            android:fontFamily="@font/eightbit1"
+            android:text="Enter Game"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</RelativeLayout>
