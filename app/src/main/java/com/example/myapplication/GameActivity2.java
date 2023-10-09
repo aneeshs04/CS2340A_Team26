@@ -11,19 +11,23 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity2 extends AppCompatActivity {
+    private int score;
     private TextView countdownTextView;
-    private int score = 100;
     private Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_game_screen);
+        setContentView(R.layout.second_game_screen);
         SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        // start the score countdown
+
+        // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
+        score = preferences.getInt("score", 0);
+        countdownTextView.setText("Score: " + String.valueOf(score));
         startCountdown();
 
         // populating name and difficulty
@@ -61,21 +65,19 @@ public class GameActivity extends AppCompatActivity {
         imageViewChar.setImageResource(imageResource);
 
         // ending the game
-        Button nextBtn = findViewById(R.id.mainNextButton);
+        Button nextBtn = findViewById(R.id.secondNextButton);
         nextBtn.setOnClickListener(v -> {
             editor.putInt("score", score);
             editor.apply();
-            Intent end = new Intent(GameActivity.this, GameActivity2.class);
+            Intent end = new Intent(GameActivity2.this, GameActivity3.class);
             startActivity(end);
             finish();
         });
-
     }
 
     // handles the countdown of the score
     private void startCountdown() {
         handler.postDelayed(() -> {
-
             // decrease count
             score -= 5;
 
