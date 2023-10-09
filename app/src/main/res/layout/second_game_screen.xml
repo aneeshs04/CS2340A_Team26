@@ -7,7 +7,7 @@
     tools:context=".GameActivity">
 
     <Button
-        android:id="@+id/mainNextButton"
+        android:id="@+id/secondNextButton"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_marginStart="161dp"
@@ -16,7 +16,7 @@
         android:background="@color/black"
         android:backgroundTint="@android:color/black"
         android:fontFamily="@font/pixeloidsans"
-        android:text="end"
+        android:text="Next"
         android:textSize="17sp"
         android:textStyle="bold"
         app:iconTint="#FFFFFF"

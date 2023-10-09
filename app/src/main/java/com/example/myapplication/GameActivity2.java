@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_game_screen);
+        setContentView(R.layout.second_game_screen);
 
         // populating name and difficulty
         TextView textViewName = findViewById(R.id.textViewName);
@@ -50,12 +51,11 @@ public class GameActivity extends AppCompatActivity {
         imageViewChar.setImageResource(imageResource);
 
         // ending the game
-        Button nextBtn = findViewById(R.id.mainNextButton);
+        Button nextBtn = findViewById(R.id.secondNextButton);
         nextBtn.setOnClickListener(v -> {
-            Intent end = new Intent(GameActivity.this, GameActivity2.class);
+            Intent end = new Intent(GameActivity2.this, GameActivity3.class);
             startActivity(end);
             finish();
         });
-
     }
 }
