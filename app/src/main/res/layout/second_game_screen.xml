@@ -36,23 +36,37 @@
 
     <ImageView
         android:id="@+id/healthIcon"
-        android:layout_width="32dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="30dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
         android:src="@drawable/healthicon"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/viewScore"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/viewScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pixeloidsans"
+        android:text="Score: 75"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/healthIcon"
+        tools:layout_editor_absoluteX="4dp" />
 
     <TextView
         android:id="@+id/textViewHealth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:fontFamily="@font/pixeloidsans"
         android:textColor="#FFFFFF"
-        android:textSize="22sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/healthIcon"
         app:layout_constraintTop_toTopOf="@id/healthIcon" />
 
@@ -60,7 +74,7 @@
         android:id="@+id/textViewDifficulty"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:fontFamily="@font/pixeloidsans"
         android:gravity="end"
@@ -73,7 +87,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
-
 
     <TextView
         android:id="@+id/textViewName"

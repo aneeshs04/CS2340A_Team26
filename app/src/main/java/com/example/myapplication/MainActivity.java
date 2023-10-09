@@ -76,50 +76,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView knightView = findViewById(R.id.characterSprite1);
-        ImageView elfView = findViewById(R.id.characterSprite2);
-        ImageView lizardView = findViewById(R.id.characterSprite3);
-
-        knightView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform the action you want when the image is clicked
-                // For example, display a toast message
-                Toast.makeText(MainActivity.this, "Knight Selected!", Toast.LENGTH_SHORT).show();
-                v.startAnimation(animation);
-                elfView.clearAnimation();
-                lizardView.clearAnimation();
-                character = "knight";
-                // You can replace the above code with any desired action.
-            }
+        imageViewChar1.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Knight Selected!", Toast.LENGTH_SHORT).show();
+            v.startAnimation(animation);
+            imageViewChar2.clearAnimation();
+            imageViewChar3.clearAnimation();
+            character = "knight";
         });
 
-        elfView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform the action you want when the image is clicked
-                // For example, display a toast message
-                Toast.makeText(MainActivity.this, "Elf Selected!", Toast.LENGTH_SHORT).show();
-                v.startAnimation(animation);
-                lizardView.clearAnimation();
-                knightView.clearAnimation();
-                character = "elf";
-                // You can replace the above code with any desired action.
-            }
+        imageViewChar2.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Elf Selected!", Toast.LENGTH_SHORT).show();
+            v.startAnimation(animation);
+            imageViewChar1.clearAnimation();
+            imageViewChar3.clearAnimation();
+            character = "elf";
         });
 
-        lizardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform the action you want when the image is clicked
-                // For example, display a toast message
-                Toast.makeText(MainActivity.this, "Lizard Selected!", Toast.LENGTH_SHORT).show();
-                v.startAnimation(animation);
-                elfView.clearAnimation();
-                knightView.clearAnimation();
-                character = "lizard";
-                // You can replace the above code with any desired action.
-            }
+        imageViewChar3.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Lizard Selected!", Toast.LENGTH_SHORT).show();
+            v.startAnimation(animation);
+            imageViewChar1.clearAnimation();
+            imageViewChar2.clearAnimation();
+            character = "lizard";
         });
 
         //starting game
