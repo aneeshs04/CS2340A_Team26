@@ -305,7 +305,7 @@
         tools:ignore="TextContrastCheck" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView1"
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginStart="55dp"
