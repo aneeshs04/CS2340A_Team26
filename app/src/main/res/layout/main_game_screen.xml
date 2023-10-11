@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:contentDescription="yes"
         android:scaleType="centerCrop"
-        android:src="@drawable/firstscreen"
+        android:src="@drawable/leftmap"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="-29dp" />
 
