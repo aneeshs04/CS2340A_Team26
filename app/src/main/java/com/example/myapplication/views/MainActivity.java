@@ -1,7 +1,6 @@
-package com.example.myapplication;
+package com.example.myapplication.views;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -14,10 +13,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.R;
+import com.example.myapplication.model.Player;
+import com.example.myapplication.viewmodels.GameActivityViewModel;
 
 public class MainActivity extends AppCompatActivity {
-    private String difficulty;
-    private String character;
+    private static String difficulty;
+    private static String name;
+    private static String character;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         Button enterBtn = findViewById(R.id.enterButton);
         enterBtn.setOnClickListener(v -> {
             EditText editTextName = (EditText) findViewById(R.id.playerNameEditText);
-            String name = editTextName.getText().toString().trim();
+            name = editTextName.getText().toString().trim();
             if (name.isEmpty()) {
                 Toast.makeText(MainActivity.this, "Please enter a valid name.",
                         Toast.LENGTH_SHORT).show();
@@ -115,20 +118,24 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Please select a character.",
                         Toast.LENGTH_SHORT).show();
             } else {
-                SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("name", name);
-                editor.putString("diff", difficulty);
-                editor.putString("char", character);
-                editor.apply();
-
-                Intent game = new Intent(MainActivity.this, GameActivity.class);
+                Player.getInstance();
+                Intent game = new Intent(MainActivity.this, GameActivityViewModel.class);
                 game.putExtra("difficulty", difficulty);
                 startActivity(game);
                 finish();
             }
         });
+    }
+    public static String getDifficulty() {
+        return difficulty;
+    }
 
+    public static String getName() {
+        return name;
+    }
+
+    public static String getCharacter() {
+        return character;
     }
 }
 
