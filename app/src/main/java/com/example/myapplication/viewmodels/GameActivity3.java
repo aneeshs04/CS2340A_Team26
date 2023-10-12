@@ -1,7 +1,6 @@
-package com.example.myapplication;
+package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,19 +10,24 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class GameActivity extends AppCompatActivity {
+import com.example.myapplication.R;
+import com.example.myapplication.model.Player;
+import com.example.myapplication.views.EndActivity;
+import com.example.myapplication.views.MainActivity;
+
+public class GameActivity3 extends AppCompatActivity {
     private TextView countdownTextView;
-    private int score = 100;
+    private Player player = Player.getInstance();
     private Handler handler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_game_screen);
-        SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        setContentView(R.layout.third_game_screen);
 
-        // start the score countdown
+        // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
+        countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
         startCountdown();
 
         // populating name and difficulty
@@ -32,27 +36,23 @@ public class GameActivity extends AppCompatActivity {
         TextView textViewHealth = findViewById(R.id.textViewHealth);
         ImageView imageViewChar = findViewById(R.id.imageViewCharacter);
 
-        String savedName = preferences.getString("name", "");
-        textViewName.setText(savedName);
-
-        String savedDiff = preferences.getString("diff", "");
-        textViewDiff.setText("Difficulty: " + savedDiff);
+        textViewName.setText(MainActivity.getName());
+        textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
 
         // populating HP
-        if (savedDiff.equals("easy")) {
+        if (MainActivity.getDifficulty().equals("easy")) {
             textViewHealth.setText("150");
-        } else if (savedDiff.equals("medium")) {
+        } else if (MainActivity.getDifficulty().equals("medium")) {
             textViewHealth.setText("100");
         } else {
             textViewHealth.setText("50");
         }
 
         // populating the character icon
-        String savedChar = preferences.getString("char", "");
         int imageResource;
-        if (savedChar.equals("knight")) {
+        if (MainActivity.getCharacter().equals("knight")) {
             imageResource = R.drawable.knight;
-        } else if (savedChar.equals("elf")) {
+        } else if (MainActivity.getCharacter().equals("elf")) {
             imageResource = R.drawable.elf;
         } else {
             imageResource = R.drawable.lizard;
@@ -61,30 +61,21 @@ public class GameActivity extends AppCompatActivity {
         imageViewChar.setImageResource(imageResource);
 
         // ending the game
-        Button nextBtn = findViewById(R.id.mainNextButton);
-        nextBtn.setOnClickListener(v -> {
-            editor.putInt("score", score);
-            editor.apply();
-            Intent end = new Intent(GameActivity.this, GameActivity2.class);
+        Button endBtn = findViewById(R.id.endButton);
+        endBtn.setOnClickListener(v -> {
+            Intent end = new Intent(GameActivity3.this, EndActivity.class);
             startActivity(end);
             finish();
         });
-
     }
 
     // handles the countdown of the score
     private void startCountdown() {
         handler.postDelayed(() -> {
-
-            // decrease count
-            score -= 5;
-
-            // update text
-            countdownTextView.setText("Score: " + String.valueOf(score));
-
-            if (score > 0) {
-                // repeat countdown
-                startCountdown();
+            countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
+            startCountdown();
+            if (player.getScore() == 0) {
+                countdownTextView.setText("Score: 0");
             }
         }, 2000); // 2 second delay
     }

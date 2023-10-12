@@ -1,37 +1,37 @@
-package com.example.myapplication;
+package com.example.myapplication.views;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
+import com.example.myapplication.model.Leaderboard;
+import com.example.myapplication.model.Player;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
 
 public class EndActivity extends AppCompatActivity {
+    private Player player = Player.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.end_screen);
-        SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
 
         TextView scoreView = findViewById(R.id.scoreView);
-        int score = preferences.getInt("score", 0);
-        scoreView.setText("Score: " + score);
+        scoreView.setText("Score: " + String.valueOf(player.getScore()));
 
-        String name = preferences.getString("name", "");
         Date currentTime = Calendar.getInstance().getTime();
         int month = currentTime.getMonth() + 1;
         int day = currentTime.getDate();
         String date = month + "/" + day;
 
         Leaderboard lb = Leaderboard.getInstance();
-        lb.add(name, date, score);
+        lb.add(MainActivity.getName(), date, player.getScore());
 
         ArrayList<String> nameList = lb.getNameList();
         ArrayList<String> dateList = lb.getDateList();
@@ -84,8 +84,6 @@ public class EndActivity extends AppCompatActivity {
 
         Button restartButton = findViewById(R.id.restartButton);
         restartButton.setOnClickListener(v -> {
-            editor.putInt("score", score);
-            editor.apply();
             Intent restart = new Intent(EndActivity.this, StartActivity.class);
             startActivity(restart);
             finish();
