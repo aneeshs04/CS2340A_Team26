@@ -18,6 +18,7 @@ public class GameActivityViewModel extends AppCompatActivity {
     private TextView countdownTextView;
     private Player player = Player.getInstance();
     private Handler handler = new Handler(Looper.getMainLooper());
+    private static Boolean stop;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +71,17 @@ public class GameActivityViewModel extends AppCompatActivity {
     // handles the countdown of the score
     private void startCountdown() {
         handler.postDelayed(() -> {
-            if (player.getScore() > 0) {
-                player.setScore(player.getScore() - 5);
-                countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
-                startCountdown();
+            if (stop == false) {
+                if (player.getScore() > 0) {
+                    player.setScore(player.getScore() - 5);
+                    countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
+                    startCountdown();
+                }
             }
         }, 2000); // 2 second delay
+    }
+
+    public static void setStop(Boolean stop1) {
+        stop = stop1;
     }
 }

@@ -63,6 +63,7 @@ public class GameActivity3 extends AppCompatActivity {
         // ending the game
         Button endBtn = findViewById(R.id.endButton);
         endBtn.setOnClickListener(v -> {
+            GameActivityViewModel.setStop(true);
             Intent end = new Intent(GameActivity3.this, EndActivity.class);
             startActivity(end);
             finish();
