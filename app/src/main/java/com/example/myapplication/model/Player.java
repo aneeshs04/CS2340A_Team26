@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.views.MainActivity;
 
-public class Player extends AppCompatActivity {
+public class Player {
     private static Player player;
     private int score;
     private int health;
-    final private String difficulty = MainActivity.getDifficulty();
+    private String difficulty = "easy";
 
     private Player () {
         this.score = 100;
@@ -46,5 +46,20 @@ public class Player extends AppCompatActivity {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+        if (difficulty.equals("easy")) {
+            this.health = 150;
+        } else if (difficulty.equals("medium")) {
+            this.health = 100;
+        } else {
+            this.health = 50;
+        }
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 }
