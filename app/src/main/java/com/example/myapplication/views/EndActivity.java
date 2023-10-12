@@ -22,13 +22,19 @@ public class EndActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.end_screen);
 
-        TextView scoreView = findViewById(R.id.scoreView);
-        scoreView.setText("Score: " + String.valueOf(player.getScore()));
+        TextView scoreView = findViewById(R.id.scoreRecentView);
+        scoreView.setText(String.valueOf(player.getScore()));
+        TextView nameView = findViewById(R.id.nameRecentView);
+        nameView.setText(MainActivity.getName());
 
         Date currentTime = Calendar.getInstance().getTime();
         int month = currentTime.getMonth() + 1;
         int day = currentTime.getDate();
         String date = month + "/" + day;
+
+        TextView dateView = findViewById(R.id.dateRecentView);
+        dateView.setText(date);
+
 
         Leaderboard lb = Leaderboard.getInstance();
         lb.add(MainActivity.getName(), date, player.getScore());

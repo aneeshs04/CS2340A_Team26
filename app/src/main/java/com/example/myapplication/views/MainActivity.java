@@ -118,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Please select a character.",
                         Toast.LENGTH_SHORT).show();
             } else {
-                Player.getInstance();
+                Player.getInstance().setScore(100);
+                GameActivityViewModel.setStop(false);
                 Intent game = new Intent(MainActivity.this, GameActivityViewModel.class);
                 game.putExtra("difficulty", difficulty);
                 startActivity(game);
