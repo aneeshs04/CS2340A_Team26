@@ -12,22 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
-import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
 
-public class GameActivity3 extends AppCompatActivity {
+public class MainGameActivity extends AppCompatActivity {
     private TextView countdownTextView;
     private Player player = Player.getInstance();
     private Handler handler = new Handler(Looper.getMainLooper());
-
+    private static Boolean stop;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.third_game_screen);
+        setContentView(R.layout.main_game_screen);
 
-        // starting countdown
+        // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
-        countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
         startCountdown();
 
         // populating name and difficulty
@@ -61,23 +59,29 @@ public class GameActivity3 extends AppCompatActivity {
         imageViewChar.setImageResource(imageResource);
 
         // ending the game
-        Button endBtn = findViewById(R.id.endButton);
-        endBtn.setOnClickListener(v -> {
-            GameActivityViewModel.setStop(true);
-            Intent end = new Intent(GameActivity3.this, EndActivity.class);
+        Button nextBtn = findViewById(R.id.mainNextButton);
+        nextBtn.setOnClickListener(v -> {
+            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
             startActivity(end);
             finish();
         });
+
     }
 
     // handles the countdown of the score
     private void startCountdown() {
         handler.postDelayed(() -> {
-            countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
-            startCountdown();
-            if (player.getScore() == 0) {
-                countdownTextView.setText("Score: 0");
+            if (stop == false) {
+                if (player.getScore() > 0) {
+                    player.setScore(player.getScore() - 5);
+                    countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
+                    startCountdown();
+                }
             }
         }, 2000); // 2 second delay
+    }
+
+    public static void setStop(Boolean stop1) {
+        stop = stop1;
     }
 }

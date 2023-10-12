@@ -14,7 +14,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.views.MainActivity;
 
-public class GameActivity2 extends AppCompatActivity {
+public class SecondGameActivity extends AppCompatActivity {
     private TextView countdownTextView;
     private Player player = Player.getInstance();
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -62,7 +62,7 @@ public class GameActivity2 extends AppCompatActivity {
         // ending the game
         Button nextBtn = findViewById(R.id.secondNextButton);
         nextBtn.setOnClickListener(v -> {
-            Intent end = new Intent(GameActivity2.this, GameActivity3.class);
+            Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
             startActivity(end);
             finish();
         });
