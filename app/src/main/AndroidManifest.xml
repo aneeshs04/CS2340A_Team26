@@ -27,15 +27,15 @@
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".viewmodels.GameActivityViewModel"
+            android:name=".viewmodels.MainGameActivity"
             android:exported="false" >
         </activity>
         <activity
-            android:name=".viewmodels.GameActivity2"
+            android:name=".viewmodels.SecondGameActivity"
             android:exported="false" >
         </activity>
         <activity
-            android:name=".viewmodels.GameActivity3"
+            android:name=".viewmodels.ThirdGameActivity"
             android:exported="false" >
         </activity>
         <activity

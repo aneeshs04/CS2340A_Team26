@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
-import com.example.myapplication.viewmodels.GameActivityViewModel;
+import com.example.myapplication.viewmodels.MainGameActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static String difficulty;
@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             } else {
                 Player.getInstance().setScore(100);
-                GameActivityViewModel.setStop(false);
-                Intent game = new Intent(MainActivity.this, GameActivityViewModel.class);
+                MainGameActivity.setStop(false);
+                Intent game = new Intent(MainActivity.this, MainGameActivity.class);
                 game.putExtra("difficulty", difficulty);
                 startActivity(game);
                 finish();
