@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/gameLayout"
     tools:context=".viewmodels.MainGameActivity">
 
     <Button
@@ -92,7 +93,7 @@
         android:id="@+id/textViewName"
         android:layout_width="100dp"
         android:layout_height="20dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginTop="564dp"
         android:fontFamily="@font/pixeloidsans"
         android:shadowColor="#000000"
         android:shadowRadius="5"
@@ -101,24 +102,7 @@
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+
         tools:ignore="TextContrastCheck" />
-
-    <ImageView
-        android:id="@+id/imageViewCharacter"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:clickable="true"
-        android:contentDescription="Character Sprite 1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.388"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.541" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

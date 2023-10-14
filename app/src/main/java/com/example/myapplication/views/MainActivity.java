@@ -46,37 +46,28 @@ public class MainActivity extends AppCompatActivity {
                 R.anim.flash_animation);
 
 
-        buttonEasy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonEasy.startAnimation(animation);
-                buttonMedium.clearAnimation();
-                buttonHard.clearAnimation();
+        buttonEasy.setOnClickListener(v -> {
+            buttonEasy.startAnimation(animation);
+            buttonMedium.clearAnimation();
+            buttonHard.clearAnimation();
 
-                difficulty = "easy";
-            }
+            difficulty = "easy";
         });
 
-        buttonMedium.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonEasy.clearAnimation();
-                buttonMedium.startAnimation(animation);
-                buttonHard.clearAnimation();
+        buttonMedium.setOnClickListener(v -> {
+            buttonEasy.clearAnimation();
+            buttonMedium.startAnimation(animation);
+            buttonHard.clearAnimation();
 
-                difficulty = "medium";
-            }
+            difficulty = "medium";
         });
 
-        buttonHard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buttonEasy.clearAnimation();
-                buttonMedium.clearAnimation();
-                buttonHard.startAnimation(animation);
+        buttonHard.setOnClickListener(v -> {
+            buttonEasy.clearAnimation();
+            buttonMedium.clearAnimation();
+            buttonHard.startAnimation(animation);
 
-                difficulty = "hard";
-            }
+            difficulty = "hard";
         });
 
         imageViewChar1.setOnClickListener(v -> {
@@ -106,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         //starting game
         Button enterBtn = findViewById(R.id.enterButton);
         enterBtn.setOnClickListener(v -> {
-            EditText editTextName = (EditText) findViewById(R.id.playerNameEditText);
+            EditText editTextName = findViewById(R.id.playerNameEditText);
             name = editTextName.getText().toString().trim();
             if (name.isEmpty()) {
                 Toast.makeText(MainActivity.this, "Please enter a valid name.",
@@ -121,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
                 Player.getInstance().setScore(100);
                 MainGameActivity.setStop(false);
                 Intent game = new Intent(MainActivity.this, MainGameActivity.class);
-                game.putExtra("difficulty", difficulty);
                 startActivity(game);
                 finish();
             }
