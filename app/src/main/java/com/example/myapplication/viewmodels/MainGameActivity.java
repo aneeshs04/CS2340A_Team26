@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.views.MainActivity;
@@ -27,6 +28,11 @@ public class MainGameActivity extends AppCompatActivity {
     ConstraintLayout gameLayout;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static Boolean stop;
+    // Define boundaries
+    private final int minX = 0; // Left boundary
+    private final int minY = -50; // Top boundary
+    private int maxX;
+    private int maxY;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,13 @@ public class MainGameActivity extends AppCompatActivity {
         playerView = new PlayerView(this, player.getX(), player.getY());
         gameLayout = findViewById(R.id.gameLayout);
         gameLayout.addView(playerView);
+
+
+        // initializing boundaries of screen
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        maxX = screenWidth - characterNameTextView.getWidth() - 100;
+        maxY = screenHeight - characterNameTextView.getHeight() - 450;
 
         // populating name, difficulty, and health
         TextView textViewName = findViewById(R.id.textViewName);
@@ -79,6 +92,16 @@ public class MainGameActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_UP:
                 player.setY(player.getY() - 50);
                 break;
+        }
+        if (player.getX() < minX) {
+            player.setX(minX);
+        } else if (player.getX() > maxX) {
+            player.setX(maxX);
+        }
+        if (player.getY() < minY) {
+            player.setY(minY);
+        } else if (player.getY() > maxY) {
+            player.setY(maxY);
         }
         playerView.updatePosition(player.getX(), player.getY());
         characterNameTextView.setX(player.getX() - 125);
