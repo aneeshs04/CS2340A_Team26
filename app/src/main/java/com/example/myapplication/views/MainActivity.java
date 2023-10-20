@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Please select a character.",
                         Toast.LENGTH_SHORT).show();
             } else {
-                Player.getInstance().setScore(100);
+                Player.getInstance().setScore(105);
                 MainGameActivity.setStop(false);
                 Intent game = new Intent(MainActivity.this, MainGameActivity.class);
                 startActivity(game);

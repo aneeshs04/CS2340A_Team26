@@ -17,7 +17,7 @@ public class Player {
     private float x,y;
     private float orginalX, orginalY;
     private Player () {
-        this.score = 100;
+        this.score = 105;
 
         switch (difficulty) {
             case "easy":

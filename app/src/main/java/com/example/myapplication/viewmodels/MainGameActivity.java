@@ -2,18 +2,11 @@ package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import com.example.myapplication.model.ScoreCountdown;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
@@ -21,13 +14,13 @@ import com.example.myapplication.model.Player;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.views.PlayerView;
 
-public class MainGameActivity extends AppCompatActivity {
+public class MainGameActivity extends AppCompatActivity implements ScoreCountdown.OnTickListener {
+    private ScoreCountdown countdown;
     private TextView countdownTextView;
     private TextView characterNameTextView;
     private final Player player = Player.getInstance();
     private PlayerView playerView;
     ConstraintLayout gameLayout;
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private static Boolean stop;
     // Define boundaries
     private final int minX = 0;
@@ -42,11 +35,8 @@ public class MainGameActivity extends AppCompatActivity {
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
-        countdownTextView.setText("Score: " + player.getScore());
-        startCountdown();
-
-
-
+        countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
+        countdown.start();
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -83,6 +73,14 @@ public class MainGameActivity extends AppCompatActivity {
 //        });
 
     }
+
+    public void onScoreUpdate(int updatedScore) {
+        if (updatedScore >= 0) {
+            player.setScore(updatedScore);
+            countdownTextView.setText("Score: " + player.getScore());
+        }
+    }
+
 
     // handle key events to move the player and name
     @Override
@@ -121,19 +119,6 @@ public class MainGameActivity extends AppCompatActivity {
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
         return true;
-    }
-
-    // handles the countdown of the score
-    private void startCountdown() {
-        handler.postDelayed(() -> {
-            if (!stop) {
-                if (player.getScore() > 0) {
-                    player.setScore(player.getScore() - 5);
-                    countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
-                    startCountdown();
-                }
-            }
-        }, 2000); // 2 second delay
     }
 
     // allows for other classes to modify the status of the countdown
