@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -90,13 +91,13 @@ public class SecondGameActivity extends AppCompatActivity {
                 break;
         }
         if (player.getX() < minX) {
-            playerView.setVisibility(playerView.INVISIBLE);
+            playerView.setVisibility(View.INVISIBLE);
             player.setX(maxX - 10);
             Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
             startActivity(end);
             finish();
         } else if (player.getX() > maxX) {
-            playerView.setVisibility(playerView.INVISIBLE);
+            playerView.setVisibility(View.INVISIBLE);
             player.setX(minX + 10);
             Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
             startActivity(end);
