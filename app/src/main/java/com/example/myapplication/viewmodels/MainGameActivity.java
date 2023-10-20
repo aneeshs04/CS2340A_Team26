@@ -46,6 +46,8 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
         gameLayout = findViewById(R.id.gameLayout);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
+        characterNameTextView.setVisibility(View.VISIBLE);
+
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -101,6 +103,7 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
             player.setX(minX);
         } else if (player.getX() > maxX) {
             playerView.setVisibility(playerView.INVISIBLE);
+            characterNameTextView.setVisibility(View.INVISIBLE);
             player.setX(minX + 10);
             Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
             startActivity(end);

@@ -28,20 +28,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/exitIcon"
-        android:layout_width="30dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="190dp"
-        android:layout_marginTop="579dp"
-        android:layout_marginEnd="191dp"
-        android:layout_marginBottom="125dp"
-        android:src="@drawable/healthicon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/viewScore"
         android:layout_width="wrap_content"
