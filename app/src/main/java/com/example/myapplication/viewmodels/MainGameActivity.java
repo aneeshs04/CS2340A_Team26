@@ -29,10 +29,11 @@ public class MainGameActivity extends AppCompatActivity {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static Boolean stop;
     // Define boundaries
-    private final int minX = 0; // Left boundary
-    private final int minY = -50; // Top boundary
+    private final int minX = 0;
+    private final int minY = -50;
     private int maxX;
     private int maxY;
+    private static int count = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,11 @@ public class MainGameActivity extends AppCompatActivity {
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
+        countdownTextView.setText("Score: " + player.getScore());
         startCountdown();
+
+
+
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -131,4 +136,13 @@ public class MainGameActivity extends AppCompatActivity {
     public static void setStop(Boolean newStop) {
         stop = newStop;
     }
+
+    public static void setCount(int newCount) {
+        count = newCount;
+    }
+
+    public static int getCount() {
+        return count;
+    }
 }
+

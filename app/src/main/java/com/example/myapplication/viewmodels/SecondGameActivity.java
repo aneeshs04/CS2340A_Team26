@@ -94,6 +94,7 @@ public class SecondGameActivity extends AppCompatActivity {
             playerView.setVisibility(View.INVISIBLE);
             player.setX(maxX - 10);
             Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
+            MainGameActivity.setCount(MainGameActivity.getCount() + 1);
             startActivity(end);
             finish();
         } else if (player.getX() > maxX) {
