@@ -36,6 +36,7 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
+        countdownTextView.setText("Score: " + player.getScore());
         countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
         countdown.start();
 
