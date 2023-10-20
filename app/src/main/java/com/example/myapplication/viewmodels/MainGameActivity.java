@@ -2,6 +2,8 @@ package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +31,9 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
     private int maxX;
     private int maxY;
     private static int count = 1;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private static int animationCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +44,7 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
         countdownTextView.setText("Score: " + player.getScore());
         countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
         countdown.start();
+        stop = false;
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -49,6 +55,7 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
+        animationCountdown();
 
 
         // initializing boundaries of screen
@@ -65,15 +72,6 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
         textViewName.setText(MainActivity.getName());
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
-
-        // moving to next screen (temp)
-//        Button nextBtn = findViewById(R.id.mainNextButton);
-//        nextBtn.setOnClickListener(v -> {
-//            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
-//            startActivity(end);
-//            finish();
-//        });
-
     }
 
     public void onScoreUpdate(int updatedScore) {
@@ -81,6 +79,16 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
             player.setScore(updatedScore);
             countdownTextView.setText("Score: " + player.getScore());
         }
+    }
+
+    private void animationCountdown() {
+        handler.postDelayed(() -> {
+            if (!stop) {
+                playerView.updateAnimation(animationCount % 4);
+                animationCount++;
+                animationCountdown();
+            }
+        }, 200); // 0.2 second delay
     }
 
 
@@ -106,6 +114,7 @@ public class MainGameActivity extends AppCompatActivity implements ScoreCountdow
         } else if (player.getX() > maxX) {
             playerView.setVisibility(playerView.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
+            stop = true;
             player.setX(minX + 10);
             Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
             startActivity(end);
