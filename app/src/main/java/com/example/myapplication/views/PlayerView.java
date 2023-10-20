@@ -9,7 +9,7 @@ import com.example.myapplication.R;
 
 public class PlayerView extends View {
     private float x, y;
-    private final Bitmap bitmap;
+    private Bitmap bitmap;
 
     public PlayerView(Context context, float x, float y) {
         super(context);
@@ -52,5 +52,63 @@ public class PlayerView extends View {
 
     public float getY() {
         return y;
+    }
+
+    public void updateAnimation(int animationCount) {
+        switch (animationCount) {
+            case 0:
+                switch (MainActivity.getCharacter()) {
+                    case "knight":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.knight_0);
+                        break;
+                    case "elf":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.elf_0);
+                        break;
+                    default:
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lizard_0);
+                        break;
+                }
+                break;
+            case 1:
+                switch (MainActivity.getCharacter()) {
+                    case "knight":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.knight_1);
+                        break;
+                    case "elf":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.elf_1);
+                        break;
+                    default:
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lizard_1);
+                        break;
+                }
+                break;
+            case 2:
+                switch (MainActivity.getCharacter()) {
+                    case "knight":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.knight_2);
+                        break;
+                    case "elf":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.elf_2);
+                        break;
+                    default:
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lizard_2);
+                        break;
+                }
+                break;
+            case 3:
+                switch (MainActivity.getCharacter()) {
+                    case "knight":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.knight_3);
+                        break;
+                    case "elf":
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.elf_3);
+                        break;
+                    default:
+                        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lizard_3);
+                        break;
+                }
+                break;
+        }
+        invalidate();
     }
 }

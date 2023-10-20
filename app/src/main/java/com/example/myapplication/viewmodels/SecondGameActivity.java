@@ -29,7 +29,11 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
     private final int minY = -50; // Top boundary
     private int maxX;
     private int maxY;
+    private static Boolean stop;
+
     private ScoreCountdown countdown;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private static int animationCount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
         player.setScore(player.getScore() + 5);
         countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
         countdown.start();
+        stop = false;
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -50,8 +55,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
-
-
+        animationCountdown();
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -68,13 +72,6 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
-        // moving to next screen (temp)
-//        Button nextBtn = findViewById(R.id.secondNextButton);
-//        nextBtn.setOnClickListener(v -> {
-//            Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
-//            startActivity(end);
-//            finish();
-//        });
     }
 
     public void onScoreUpdate(int updatedScore) {
@@ -82,6 +79,16 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
             player.setScore(updatedScore);
             countdownTextView.setText("Score: " + player.getScore());
         }
+    }
+
+    private void animationCountdown() {
+        handler.postDelayed(() -> {
+            if (!stop) {
+                playerView.updateAnimation(animationCount % 4);
+                animationCount++;
+                animationCountdown();
+            }
+        }, 200); // 0.2 second delay
     }
 
     // handle key events to move the player and name
@@ -104,6 +111,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
         if (player.getX() < minX) {
             playerView.setVisibility(View.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
+            stop = true;
             player.setX(maxX - 10);
             Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
             MainGameActivity.setCount(MainGameActivity.getCount() + 1);
@@ -112,6 +120,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
         } else if (player.getX() > maxX) {
             playerView.setVisibility(View.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
+            stop = true;
             player.setX(minX + 10);
             Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
             startActivity(end);

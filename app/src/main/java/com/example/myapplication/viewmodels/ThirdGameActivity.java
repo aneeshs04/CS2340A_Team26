@@ -31,7 +31,10 @@ public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdo
     private final int minY = -50;
     private int maxX;
     private int maxY;
+    private static Boolean stop;
     private ScoreCountdown countdown;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private static int animationCount = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,7 @@ public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdo
         player.setScore(player.getScore() + 5);
         countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
         countdown.start();
+        stop = false;
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -52,6 +56,7 @@ public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdo
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
+        animationCountdown();
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -67,16 +72,6 @@ public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdo
         textViewName.setText(MainActivity.getName());
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
-
-
-        // moving to next screen (temp)
-//        Button endBtn = findViewById(R.id.endButton);
-//        endBtn.setOnClickListener(v -> {
-//            MainGameActivity.setStop(true);
-//            Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
-//            startActivity(end);
-//            finish();
-//        });
     }
 
     public void onScoreUpdate(int updatedScore) {
@@ -84,6 +79,16 @@ public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdo
             player.setScore(updatedScore);
             countdownTextView.setText("Score: " + player.getScore());
         }
+    }
+
+    private void animationCountdown() {
+        handler.postDelayed(() -> {
+            if (!stop) {
+                playerView.updateAnimation(animationCount % 4);
+                animationCount++;
+                animationCountdown();
+            }
+        }, 200); // 0.2 second delay
     }
 
     @Override
@@ -105,6 +110,7 @@ public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdo
         if (player.getX() < minX) {
             playerView.setVisibility(playerView.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
+            stop = true;
             player.setX(maxX - 10);
             Intent end = new Intent(ThirdGameActivity.this, SecondGameActivity.class);
             startActivity(end);
@@ -112,6 +118,7 @@ public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdo
         } else if (player.getX() > maxX) {
             playerView.setVisibility(playerView.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
+            stop = true;
             player.setX(player.getOrginalX());
             player.setY(player.getOrginalY());
             Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
