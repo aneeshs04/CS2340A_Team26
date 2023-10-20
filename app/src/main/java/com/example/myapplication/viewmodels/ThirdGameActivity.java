@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,8 +49,7 @@ public class ThirdGameActivity extends AppCompatActivity {
         gameLayout = findViewById(R.id.gameLayout3);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
-
-
+        characterNameTextView.setVisibility(View.VISIBLE);
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -95,24 +95,24 @@ public class ThirdGameActivity extends AppCompatActivity {
         }
         if (player.getX() < minX) {
             playerView.setVisibility(playerView.INVISIBLE);
+            characterNameTextView.setVisibility(View.INVISIBLE);
             player.setX(maxX - 10);
             Intent end = new Intent(ThirdGameActivity.this, SecondGameActivity.class);
             startActivity(end);
             finish();
         } else if (player.getX() > maxX) {
-            player.setX(maxX);
+            playerView.setVisibility(playerView.INVISIBLE);
+            characterNameTextView.setVisibility(View.INVISIBLE);
+            player.setX(player.getOrginalX());
+            player.setY(player.getOrginalY());
+            Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
+            startActivity(end);
+            finish();
         }
         if (player.getY() < minY) {
             player.setY(minY);
         } else if (player.getY() > maxY) {
             player.setY(maxY);
-        } 
-        if (player.getX() < 500 && player.getX() > 440
-                && player.getY() > 1400 && player.getY() < 1510) {
-            MainGameActivity.setStop(true);
-            Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
-            startActivity(end);
-            finish();
         }
         playerView.updatePosition(player.getX(), player.getY());
         characterNameTextView.setX(player.getX() - 125);

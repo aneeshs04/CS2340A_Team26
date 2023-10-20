@@ -48,6 +48,9 @@ public class SecondGameActivity extends AppCompatActivity {
         gameLayout = findViewById(R.id.gameLayout2);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
+        characterNameTextView.setVisibility(View.VISIBLE);
+
+
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -92,6 +95,7 @@ public class SecondGameActivity extends AppCompatActivity {
         }
         if (player.getX() < minX) {
             playerView.setVisibility(View.INVISIBLE);
+            characterNameTextView.setVisibility(View.INVISIBLE);
             player.setX(maxX - 10);
             Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
             MainGameActivity.setCount(MainGameActivity.getCount() + 1);
@@ -99,6 +103,7 @@ public class SecondGameActivity extends AppCompatActivity {
             finish();
         } else if (player.getX() > maxX) {
             playerView.setVisibility(View.INVISIBLE);
+            characterNameTextView.setVisibility(View.INVISIBLE);
             player.setX(minX + 10);
             Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
             startActivity(end);
