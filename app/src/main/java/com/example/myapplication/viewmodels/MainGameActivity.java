@@ -29,10 +29,11 @@ public class MainGameActivity extends AppCompatActivity {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static Boolean stop;
     // Define boundaries
-    private final int minX = 0; // Left boundary
-    private final int minY = -50; // Top boundary
+    private final int minX = 0;
+    private final int minY = -50;
     private int maxX;
     private int maxY;
+    private static int count = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +41,11 @@ public class MainGameActivity extends AppCompatActivity {
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
+        countdownTextView.setText("Score: " + player.getScore());
         startCountdown();
+
+
+
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -49,7 +54,7 @@ public class MainGameActivity extends AppCompatActivity {
         playerView = new PlayerView(this, player.getX(), player.getY());
         gameLayout = findViewById(R.id.gameLayout);
         gameLayout.addView(playerView);
-
+        playerView.setVisibility(playerView.VISIBLE);
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -67,12 +72,12 @@ public class MainGameActivity extends AppCompatActivity {
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
         // moving to next screen (temp)
-        Button nextBtn = findViewById(R.id.mainNextButton);
-        nextBtn.setOnClickListener(v -> {
-            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
-            startActivity(end);
-            finish();
-        });
+//        Button nextBtn = findViewById(R.id.mainNextButton);
+//        nextBtn.setOnClickListener(v -> {
+//            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
+//            startActivity(end);
+//            finish();
+//        });
 
     }
 
@@ -96,7 +101,11 @@ public class MainGameActivity extends AppCompatActivity {
         if (player.getX() < minX) {
             player.setX(minX);
         } else if (player.getX() > maxX) {
-            player.setX(maxX);
+            playerView.setVisibility(playerView.INVISIBLE);
+            player.setX(minX + 10);
+            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
+            startActivity(end);
+            finish();
         }
         if (player.getY() < minY) {
             player.setY(minY);
@@ -127,4 +136,13 @@ public class MainGameActivity extends AppCompatActivity {
     public static void setStop(Boolean newStop) {
         stop = newStop;
     }
+
+    public static void setCount(int newCount) {
+        count = newCount;
+    }
+
+    public static int getCount() {
+        return count;
+    }
 }
+
