@@ -37,7 +37,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
 
         // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
-        player.setScore(player.getScore() + 5);
+        countdownTextView.setText("Score: " + player.getScore());
         countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
         countdown.start();
 
