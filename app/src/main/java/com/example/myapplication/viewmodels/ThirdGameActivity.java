@@ -1,6 +1,7 @@
 package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
+import android.graphics.RenderNode;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,10 @@ public class ThirdGameActivity extends AppCompatActivity {
     private final Player player = Player.getInstance();
     private PlayerView playerView;
     ConstraintLayout gameLayout;
+    private final int minX = 0; // Left boundary
+    private final int minY = -50; // Top boundary
+    private int maxX;
+    private int maxY;
     private final Handler handler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,15 @@ public class ThirdGameActivity extends AppCompatActivity {
         playerView = new PlayerView(this, player.getX(), player.getY());
         gameLayout = findViewById(R.id.gameLayout3);
         gameLayout.addView(playerView);
+        playerView.setVisibility(playerView.VISIBLE);
+
+
+
+        // initializing boundaries of screen
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        maxX = screenWidth - characterNameTextView.getWidth() - 100;
+        maxY = screenHeight - characterNameTextView.getHeight() - 450;
 
         // populating name, difficulty, and health
         TextView textViewName = findViewById(R.id.textViewName);
@@ -52,14 +66,15 @@ public class ThirdGameActivity extends AppCompatActivity {
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
+
         // moving to next screen (temp)
-        Button endBtn = findViewById(R.id.endButton);
-        endBtn.setOnClickListener(v -> {
-            MainGameActivity.setStop(true);
-            Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
-            startActivity(end);
-            finish();
-        });
+//        Button endBtn = findViewById(R.id.endButton);
+//        endBtn.setOnClickListener(v -> {
+//            MainGameActivity.setStop(true);
+//            Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
+//            startActivity(end);
+//            finish();
+//        });
     }
 
     @Override
@@ -77,6 +92,27 @@ public class ThirdGameActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_UP:
                 player.setY(player.getY() - 50);
                 break;
+        }
+        if (player.getX() < minX) {
+            playerView.setVisibility(playerView.INVISIBLE);
+            player.setX(maxX - 10);
+            Intent end = new Intent(ThirdGameActivity.this, SecondGameActivity.class);
+            startActivity(end);
+            finish();
+        } else if (player.getX() > maxX) {
+            player.setX(maxX);
+        }
+        if (player.getY() < minY) {
+            player.setY(minY);
+        } else if (player.getY() > maxY) {
+            player.setY(maxY);
+        } 
+        if (player.getX() < 500 && player.getX() > 440
+                && player.getY() > 1400 && player.getY() < 1510) {
+            MainGameActivity.setStop(true);
+            Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
+            startActivity(end);
+            finish();
         }
         playerView.updatePosition(player.getX(), player.getY());
         characterNameTextView.setX(player.getX() - 125);

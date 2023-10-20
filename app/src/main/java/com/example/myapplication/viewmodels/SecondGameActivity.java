@@ -23,6 +23,10 @@ public class SecondGameActivity extends AppCompatActivity {
     private final Player player = Player.getInstance();
     private PlayerView playerView;
     ConstraintLayout gameLayout;
+    private final int minX = 0; // Left boundary
+    private final int minY = -50; // Top boundary
+    private int maxX;
+    private int maxY;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -42,6 +46,13 @@ public class SecondGameActivity extends AppCompatActivity {
         playerView = new PlayerView(this, player.getX(), player.getY());
         gameLayout = findViewById(R.id.gameLayout2);
         gameLayout.addView(playerView);
+        playerView.setVisibility(playerView.VISIBLE);
+
+        // initializing boundaries of screen
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        maxX = screenWidth - characterNameTextView.getWidth() - 100;
+        maxY = screenHeight - characterNameTextView.getHeight() - 450;
 
         // populating name, difficulty, and health
         TextView textViewName = findViewById(R.id.textViewName);
@@ -53,12 +64,12 @@ public class SecondGameActivity extends AppCompatActivity {
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
         // moving to next screen (temp)
-        Button nextBtn = findViewById(R.id.secondNextButton);
-        nextBtn.setOnClickListener(v -> {
-            Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
-            startActivity(end);
-            finish();
-        });
+//        Button nextBtn = findViewById(R.id.secondNextButton);
+//        nextBtn.setOnClickListener(v -> {
+//            Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
+//            startActivity(end);
+//            finish();
+//        });
     }
 
     // handle key events to move the player and name
@@ -78,6 +89,25 @@ public class SecondGameActivity extends AppCompatActivity {
                 player.setY(player.getY() - 50);
                 break;
         }
+        if (player.getX() < minX) {
+            playerView.setVisibility(playerView.INVISIBLE);
+            player.setX(maxX - 10);
+            Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
+            startActivity(end);
+            finish();
+        } else if (player.getX() > maxX) {
+            playerView.setVisibility(playerView.INVISIBLE);
+            player.setX(minX + 10);
+            Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
+            startActivity(end);
+            finish();
+        }
+        if (player.getY() < minY) {
+            player.setY(minY);
+        } else if (player.getY() > maxY) {
+            player.setY(maxY);
+        }
+
         playerView.updatePosition(player.getX(), player.getY());
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);

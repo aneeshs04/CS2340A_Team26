@@ -49,7 +49,7 @@ public class MainGameActivity extends AppCompatActivity {
         playerView = new PlayerView(this, player.getX(), player.getY());
         gameLayout = findViewById(R.id.gameLayout);
         gameLayout.addView(playerView);
-
+        playerView.setVisibility(playerView.VISIBLE);
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -67,12 +67,12 @@ public class MainGameActivity extends AppCompatActivity {
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
         // moving to next screen (temp)
-        Button nextBtn = findViewById(R.id.mainNextButton);
-        nextBtn.setOnClickListener(v -> {
-            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
-            startActivity(end);
-            finish();
-        });
+//        Button nextBtn = findViewById(R.id.mainNextButton);
+//        nextBtn.setOnClickListener(v -> {
+//            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
+//            startActivity(end);
+//            finish();
+//        });
 
     }
 
@@ -96,7 +96,11 @@ public class MainGameActivity extends AppCompatActivity {
         if (player.getX() < minX) {
             player.setX(minX);
         } else if (player.getX() > maxX) {
-            player.setX(maxX);
+            playerView.setVisibility(playerView.INVISIBLE);
+            player.setX(minX + 10);
+            Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
+            startActivity(end);
+            finish();
         }
         if (player.getY() < minY) {
             player.setY(minY);
