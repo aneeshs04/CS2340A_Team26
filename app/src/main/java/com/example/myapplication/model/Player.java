@@ -15,7 +15,7 @@ public class Player {
     private int health;
     private String difficulty = MainActivity.getDifficulty();
     private float x,y;
-
+    private float orginalX, orginalY;
     private Player () {
         this.score = 100;
 
@@ -33,6 +33,8 @@ public class Player {
 
         this.x = 550;
         this.y = 2000;
+        orginalX = x;
+        orginalY = y;
     }
 
     public static synchronized Player getInstance() {
@@ -72,4 +74,14 @@ public class Player {
     public void setHealth(int health) {
         this.health = health;
     }
+    public float getOrginalX() {
+        return orginalX;
+    }
+    public float getOrginalY() {
+        return orginalY;
+    }
+//    public String getCharacter() {return character;}
+//    public void setCharacter(String character) {
+//        this.character = character;
+//    }
 }

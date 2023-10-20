@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -55,6 +56,8 @@ public class MainGameActivity extends AppCompatActivity {
         gameLayout = findViewById(R.id.gameLayout);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
+        characterNameTextView.setVisibility(View.VISIBLE);
+
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -102,6 +105,7 @@ public class MainGameActivity extends AppCompatActivity {
             player.setX(minX);
         } else if (player.getX() > maxX) {
             playerView.setVisibility(playerView.INVISIBLE);
+            characterNameTextView.setVisibility(View.INVISIBLE);
             player.setX(minX + 10);
             Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
             startActivity(end);
