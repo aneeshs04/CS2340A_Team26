@@ -15,10 +15,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.views.PlayerView;
 
-public class SecondGameActivity extends AppCompatActivity {
+public class SecondGameActivity extends AppCompatActivity implements ScoreCountdown.OnTickListener {
     private TextView countdownTextView;
     private TextView characterNameTextView;
     private final Player player = Player.getInstance();
@@ -28,8 +29,7 @@ public class SecondGameActivity extends AppCompatActivity {
     private final int minY = -50; // Top boundary
     private int maxX;
     private int maxY;
-    private final Handler handler = new Handler(Looper.getMainLooper());
-
+    private ScoreCountdown countdown;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +37,9 @@ public class SecondGameActivity extends AppCompatActivity {
 
         // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
-        countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
-        startCountdown();
+        player.setScore(player.getScore() + 5);
+        countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
+        countdown.start();
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -71,6 +72,13 @@ public class SecondGameActivity extends AppCompatActivity {
 //            startActivity(end);
 //            finish();
 //        });
+    }
+
+    public void onScoreUpdate(int updatedScore) {
+        if (updatedScore >= 0) {
+            player.setScore(updatedScore);
+            countdownTextView.setText("Score: " + player.getScore());
+        }
     }
 
     // handle key events to move the player and name
@@ -115,16 +123,5 @@ public class SecondGameActivity extends AppCompatActivity {
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
         return true;
-    }
-
-    // handles the countdown of the score
-    private void startCountdown() {
-        handler.postDelayed(() -> {
-            countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
-            startCountdown();
-            if (player.getScore() == 0) {
-                countdownTextView.setText("Score: 0");
-            }
-        }, 2000); // 2 second delay
     }
 }

@@ -15,21 +15,22 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.views.PlayerView;
 
-public class ThirdGameActivity extends AppCompatActivity {
+public class ThirdGameActivity extends AppCompatActivity implements ScoreCountdown.OnTickListener {
     private TextView countdownTextView;
     private TextView characterNameTextView;
     private final Player player = Player.getInstance();
     private PlayerView playerView;
     ConstraintLayout gameLayout;
-    private final int minX = 0; // Left boundary
-    private final int minY = -50; // Top boundary
+    private final int minX = 0;
+    private final int minY = -50;
     private int maxX;
     private int maxY;
-    private final Handler handler = new Handler(Looper.getMainLooper());
+    private ScoreCountdown countdown;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +38,9 @@ public class ThirdGameActivity extends AppCompatActivity {
 
         // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
-        countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
-        startCountdown();
+        player.setScore(player.getScore() + 5);
+        countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
+        countdown.start();
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -75,6 +77,13 @@ public class ThirdGameActivity extends AppCompatActivity {
 //            startActivity(end);
 //            finish();
 //        });
+    }
+
+    public void onScoreUpdate(int updatedScore) {
+        if (updatedScore >= 0) {
+            player.setScore(updatedScore);
+            countdownTextView.setText("Score: " + player.getScore());
+        }
     }
 
     @Override
@@ -119,16 +128,5 @@ public class ThirdGameActivity extends AppCompatActivity {
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
         return true;
-    }
-
-    // handles the countdown of the score
-    private void startCountdown() {
-        handler.postDelayed(() -> {
-            countdownTextView.setText("Score: " + String.valueOf(player.getScore()));
-            startCountdown();
-            if (player.getScore() == 0) {
-                countdownTextView.setText("Score: 0");
-            }
-        }, 2000); // 2 second delay
     }
 }
