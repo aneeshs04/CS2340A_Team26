@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import com.example.myapplication.model.Leaderboard;
 import com.example.myapplication.model.Player;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

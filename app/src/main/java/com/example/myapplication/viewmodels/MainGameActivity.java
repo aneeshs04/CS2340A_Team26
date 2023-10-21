@@ -91,9 +91,11 @@ public class MainGameActivity extends AppCompatActivity {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 player.setX(player.getX() - 50);
+                playerView.setCharacterDirection(false);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 player.setX(player.getX() + 50);
+                playerView.setCharacterDirection(true);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 player.setY(player.getY() + 50);
