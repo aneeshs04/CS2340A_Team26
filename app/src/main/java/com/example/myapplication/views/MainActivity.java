@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.viewmodels.MainGameActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,11 +23,13 @@ public class MainActivity extends AppCompatActivity {
     private static String name;
     private static String character;
 
+    // opens start screen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.start_screen);
 
+        // loading animations of background and character sprites
         ImageView dungeonImageView = findViewById(R.id.dungeonBackground);
         Glide.with(this).asGif().load(R.drawable.dungeon_background_final).into(dungeonImageView);
 
@@ -39,13 +42,15 @@ public class MainActivity extends AppCompatActivity {
         ImageView imageViewChar3 = findViewById(R.id.characterSprite3);
         Glide.with(this).asGif().load(R.drawable.lizard).into(imageViewChar3);
 
-        final Button buttonEasy = findViewById(R.id.easyButton);
-        final Button buttonMedium = findViewById(R.id.mediumButton);
-        final Button buttonHard = findViewById(R.id.hardButton);
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.flash_animation);
 
+        // declaring difficulty buttons
+        final Button buttonEasy = findViewById(R.id.easyButton);
+        final Button buttonMedium = findViewById(R.id.mediumButton);
+        final Button buttonHard = findViewById(R.id.hardButton);
 
+        // difficulty buttons listening for input
         buttonEasy.setOnClickListener(v -> {
             buttonEasy.startAnimation(animation);
             buttonMedium.clearAnimation();
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             difficulty = "hard";
         });
 
+        // character sprites listening for input
         imageViewChar1.setOnClickListener(v -> {
             Toast.makeText(MainActivity.this, "Knight Selected!", Toast.LENGTH_SHORT).show();
             v.startAnimation(animation);
@@ -94,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             character = "lizard";
         });
 
-        //starting game
+        // starting game and countdown timer
         Button enterBtn = findViewById(R.id.enterButton);
         enterBtn.setOnClickListener(v -> {
             EditText editTextName = findViewById(R.id.playerNameEditText);
@@ -110,13 +116,16 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             } else {
                 Player.getInstance().setScore(105);
-                MainGameActivity.setStop(false);
+                ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+                scoreCountDownTimer.start();
                 Intent game = new Intent(MainActivity.this, MainGameActivity.class);
                 startActivity(game);
                 finish();
             }
         });
     }
+
+    // getters for other classes to access private variables
     public static String getDifficulty() {
         return difficulty;
     }

@@ -11,6 +11,7 @@ public class PlayerView extends View {
     private float x, y;
     private Bitmap bitmap;
 
+    // creates a player sprite based on which character was chosen
     public PlayerView(Context context, float x, float y) {
         super(context);
         this.x = x;
@@ -29,6 +30,7 @@ public class PlayerView extends View {
         }
     }
 
+    // declaring size of bitmap
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -40,20 +42,14 @@ public class PlayerView extends View {
         canvas.drawBitmap(bitmap, null, destRect, null);
     }
 
+    // updating the position of the character as it moves
     public void updatePosition(float newX, float newY) {
         x = newX;
         y = newY;
         invalidate();
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
+    // updating the animation of the character based on the character chosen
     public void updateAnimation(int animationCount) {
         switch (animationCount) {
             case 0:
@@ -110,5 +106,14 @@ public class PlayerView extends View {
                 break;
         }
         invalidate();
+    }
+
+    // getters for other classes to access private variables
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 }
