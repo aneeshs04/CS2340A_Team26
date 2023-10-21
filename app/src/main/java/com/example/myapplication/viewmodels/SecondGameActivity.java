@@ -19,9 +19,11 @@ import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.views.PlayerView;
 
-public class SecondGameActivity extends AppCompatActivity implements ScoreCountdown.OnTickListener {
+public class SecondGameActivity extends AppCompatActivity {
     private TextView countdownTextView;
     private TextView characterNameTextView;
+
+    // player movement variables
     private final Player player = Player.getInstance();
     private PlayerView playerView;
     ConstraintLayout gameLayout;
@@ -29,9 +31,9 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
     private final int minY = -50; // Top boundary
     private int maxX;
     private int maxY;
-    private static Boolean stop;
 
-    private ScoreCountdown countdown;
+    // player animation variables
+    private static Boolean stop;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static int animationCount = 0;
     @Override
@@ -42,8 +44,8 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
         // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
         countdownTextView.setText("Score: " + player.getScore());
-        countdown = new ScoreCountdown(60000, 2000, player.getScore(), this);
-        countdown.start();
+        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+        scoreCountDownTimer.setOnScoreChangeListener(newScore -> countdownTextView.setText("Score: " + newScore));
         stop = false;
 
         // initializing location of player and player name
@@ -74,13 +76,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
 
     }
 
-    public void onScoreUpdate(int updatedScore) {
-        if (updatedScore >= 0) {
-            player.setScore(updatedScore);
-            countdownTextView.setText("Score: " + player.getScore());
-        }
-    }
-
+    // handles the animation of the player
     private void animationCountdown() {
         handler.postDelayed(() -> {
             if (!stop) {
@@ -88,7 +84,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
                 animationCount++;
                 animationCountdown();
             }
-        }, 200); // 0.2 second delay
+        }, 200);
     }
 
     // handle key events to move the player and name
@@ -108,13 +104,14 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
                 player.setY(player.getY() - 50);
                 break;
         }
+
+        // checking to see if player is leaving the screen
         if (player.getX() < minX) {
             playerView.setVisibility(View.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(maxX - 10);
             Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
-            MainGameActivity.setCount(MainGameActivity.getCount() + 1);
             startActivity(end);
             finish();
         } else if (player.getX() > maxX) {
@@ -126,6 +123,7 @@ public class SecondGameActivity extends AppCompatActivity implements ScoreCountd
             startActivity(end);
             finish();
         }
+
         if (player.getY() < minY) {
             player.setY(minY);
         } else if (player.getY() > maxY) {

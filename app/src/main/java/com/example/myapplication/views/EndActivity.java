@@ -17,11 +17,14 @@ import java.util.ArrayList;
 
 public class EndActivity extends AppCompatActivity {
     private Player player = Player.getInstance();
+
+    // opening the ending screen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.end_screen);
 
+        // leaderboard initializations
         TextView scoreView = findViewById(R.id.scoreRecentView);
         scoreView.setText(String.valueOf(player.getScore()));
         TextView nameView = findViewById(R.id.nameRecentView);
@@ -43,6 +46,7 @@ public class EndActivity extends AppCompatActivity {
         ArrayList<String> dateList = lb.getDateList();
         ArrayList<Integer> scoreList = lb.getScoreList();
 
+        // modifying leaderboard visual to take in 5 different inputs
         if (scoreList.size() >= 1) {
             TextView leaderboardNameView1 = findViewById(R.id.leaderboardNameView1);
             leaderboardNameView1.setText(nameList.get(0));
@@ -88,6 +92,7 @@ public class EndActivity extends AppCompatActivity {
             leaderboardScoreView5.setText(scoreList.get(4).toString());
         }
 
+        // restarts the game
         Button restartButton = findViewById(R.id.restartButton);
         restartButton.setOnClickListener(v -> {
             Intent restart = new Intent(EndActivity.this, StartActivity.class);

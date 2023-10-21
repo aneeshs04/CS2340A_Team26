@@ -1,12 +1,5 @@
 package com.example.myapplication.model;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.myapplication.R;
 import com.example.myapplication.views.MainActivity;
 
 public class Player {
@@ -15,7 +8,7 @@ public class Player {
     private int health;
     private String difficulty = MainActivity.getDifficulty();
     private float x,y;
-    private float orginalX, orginalY;
+    private final float originalX, originalY;
     private Player () {
         this.score = 105;
 
@@ -33,8 +26,8 @@ public class Player {
 
         this.x = 550;
         this.y = 2000;
-        orginalX = x;
-        orginalY = y;
+        originalX = x;
+        originalY = y;
     }
 
     public static synchronized Player getInstance() {
@@ -44,9 +37,11 @@ public class Player {
         return player;
     }
 
+    // getters/setters to allow other classes to get/modify private variables
     public float getX() {
         return x;
     }
+
     public float getY() {
         return y;
     }
@@ -74,12 +69,15 @@ public class Player {
     public void setHealth(int health) {
         this.health = health;
     }
-    public float getOrginalX() {
-        return orginalX;
+
+    public float getOriginalX() {
+        return originalX;
     }
-    public float getOrginalY() {
-        return orginalY;
+
+    public float getOriginalY() {
+        return originalY;
     }
+
 //    public String getCharacter() {return character;}
 //    public void setCharacter(String character) {
 //        this.character = character;
