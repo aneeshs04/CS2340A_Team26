@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.Wall;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.views.MoveDownStrategy;
 import com.example.myapplication.views.MoveLeftStrategy;
@@ -20,6 +21,8 @@ import com.example.myapplication.views.MoveUpStrategy;
 import com.example.myapplication.views.MovementStrategy;
 import com.example.myapplication.views.Observer;
 import com.example.myapplication.views.PlayerView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
@@ -38,6 +41,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static Boolean stop;
     private static int animationCount = 0;
+    private List<Wall> walls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,18 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         textViewName.setText(MainActivity.getName());
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
+
+        //wall creation for screen 1
+        walls.add(new Wall(150, 80, 1050, 150));
+        walls.add(new Wall(50, 80, 210, 2800));
+        walls.add(new Wall(200, 782, 445, 1750));
+        walls.add(new Wall(150, 2280, 1050, 3000));
+        walls.add(new Wall(600, 782, 1000, 1750));
+        walls.add(new Wall(970, 50, 1500, 450));
+        walls.add(new Wall(970, 580, 1500, 1900));
+        walls.add(new Wall(828, 2050, 1500, 2800));
+        walls.add(new Wall(828, 1600, 1500, 1900));
+
     }
 
     @Override
@@ -104,26 +120,33 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         MovementStrategy strategy = null;
+        player.setProposedX(player.getX());
+        player.setProposedY(player.getY());
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 strategy = new MoveLeftStrategy();
                 playerView.setCharacterDirection(false);
+                player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
                 playerView.setCharacterDirection(true);
+                player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 strategy = new MoveDownStrategy();
+                player.setProposedY(player.getProposedY() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 strategy = new MoveUpStrategy();
+                player.setProposedY(player.getProposedY() - 50);
                 break;
         }
-
-        if (strategy != null) {
-            player.setMovementStrategy(strategy);
+        
+        // if no wall collision, update player's position
+        player.setMovementStrategy(strategy);
+        if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
         }
 
@@ -152,6 +175,15 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
         return true;
+    }
+
+    boolean collidesWithAnyWall(int x, int y) {
+        for (Wall wall : walls) {
+            if (wall.collidesWith(x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

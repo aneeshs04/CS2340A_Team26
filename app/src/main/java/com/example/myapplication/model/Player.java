@@ -17,6 +17,7 @@ public class Player implements Subject {
     private int health;
     private String difficulty = MainActivity.getDifficulty();
     private float x,y;
+    private float proposedX, proposedY;
     private final float originalX, originalY;
     private Player () {
         movementStrategy = new MoveRightStrategy();
@@ -48,6 +49,22 @@ public class Player implements Subject {
     }
 
     // getters/setters to allow other classes to get/modify private variables
+    public float getProposedX() {
+        return proposedX;
+    }
+
+    public float getProposedY() {
+        return proposedY;
+    }
+
+    public void setProposedX(float proposedX) {
+        this.proposedX = proposedX;
+    }
+
+    public void setProposedY(float proposedY) {
+        this.proposedY = proposedY;
+    }
+
     public float getX() {
         return x;
     }
