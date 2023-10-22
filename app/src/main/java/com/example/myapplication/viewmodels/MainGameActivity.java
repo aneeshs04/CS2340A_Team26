@@ -120,27 +120,33 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         MovementStrategy strategy = null;
+        player.setProposedX(player.getX());
+        player.setProposedY(player.getY());
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 strategy = new MoveLeftStrategy();
                 playerView.setCharacterDirection(false);
+                player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
                 playerView.setCharacterDirection(true);
+                player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 strategy = new MoveDownStrategy();
+                player.setProposedY(player.getProposedY() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 strategy = new MoveUpStrategy();
+                player.setProposedY(player.getProposedY() - 50);
                 break;
         }
         
         // if no wall collision, update player's position
-        if (!collidesWithAnyWall((int) proposedX, (int) proposedY) && strategy != null) {
-            player.setMovementStrategy(strategy);
+        player.setMovementStrategy(strategy);
+        if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
         }
 
