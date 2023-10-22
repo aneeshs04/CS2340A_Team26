@@ -14,13 +14,17 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.Wall;
 import com.example.myapplication.views.MainActivity;
+import com.example.myapplication.views.MoveDownStrategy;
+import com.example.myapplication.views.MoveLeftStrategy;
+import com.example.myapplication.views.MoveRightStrategy;
+import com.example.myapplication.views.MoveUpStrategy;
+import com.example.myapplication.views.MovementStrategy;
+import com.example.myapplication.views.Observer;
 import com.example.myapplication.views.PlayerView;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class
-MainGameActivity extends AppCompatActivity {
+public class MainGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
     private TextView characterNameTextView;
 
@@ -43,6 +47,8 @@ MainGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_game_screen);
+
+        player.registerObserver(this);
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
@@ -91,6 +97,14 @@ MainGameActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void update(float x, float y) {
+        characterNameTextView.setX(x - 125);
+        characterNameTextView.setY(y - characterNameTextView.getHeight() + 45);
+        playerView.updatePosition(x, y);
+        playerView.invalidate();
+    }
+
     // handles the animation of the player
     private void animationCountdown() {
         handler.postDelayed(() -> {
@@ -102,38 +116,39 @@ MainGameActivity extends AppCompatActivity {
         }, 200);
     }
 
-
     // handle key events to move the player and name
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        float proposedX = player.getX();
-        float proposedY = player.getY();
+        MovementStrategy strategy = null;
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                proposedX -= 50;
+                strategy = new MoveLeftStrategy();
+                playerView.setCharacterDirection(false);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                proposedX += 50;
+                strategy = new MoveRightStrategy();
+                playerView.setCharacterDirection(true);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                proposedY += 50;
+                strategy = new MoveDownStrategy();
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
-                proposedY -= 50;
+                strategy = new MoveUpStrategy();
                 break;
         }
-
-        // If no wall collision, update player's position
-        if (!collidesWithAnyWall((int) proposedX, (int) proposedY)) {
-            player.setX(proposedX);
-            player.setY(proposedY);
+        
+        // if no wall collision, update player's position
+        if (!collidesWithAnyWall((int) proposedX, (int) proposedY) && strategy != null) {
+            player.setMovementStrategy(strategy);
+            player.performMovement();
         }
 
-        // Now, check for boundary conditions
+        // checking to see if player is leaving the screen
         if (player.getX() < minX) {
             player.setX(minX);
         } else if (player.getX() > maxX) {
+            player.removeObserver(this);
             playerView.setVisibility(playerView.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;

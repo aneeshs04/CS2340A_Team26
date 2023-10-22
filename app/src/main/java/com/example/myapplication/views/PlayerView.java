@@ -3,6 +3,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.view.View;
 import com.example.myapplication.R;
@@ -10,6 +11,7 @@ import com.example.myapplication.R;
 public class PlayerView extends View {
     private float x, y;
     private Bitmap bitmap;
+    private boolean isFacingRight = true;
 
     // creates a player sprite based on which character was chosen
     public PlayerView(Context context, float x, float y) {
@@ -39,7 +41,16 @@ public class PlayerView extends View {
         int width = 100;
         int height = 175;
         Rect destRect = new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
-        canvas.drawBitmap(bitmap, null, destRect, null);
+
+        // flipping character depending on movement direction
+        Matrix matrix = new Matrix();
+        int centerX = bitmap.getWidth() / 2;
+        int centerY = bitmap.getHeight() / 2;
+        if (!isFacingRight) {
+            matrix.setScale(-1, 1, centerX, centerY);
+        }
+        Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        canvas.drawBitmap(newBitmap, null, destRect, null);
     }
 
     // updating the position of the character as it moves
@@ -108,12 +119,16 @@ public class PlayerView extends View {
         invalidate();
     }
 
-    // getters for other classes to access private variables
+    // getters/setters for other classes to access/modify private variables
     public float getX() {
         return x;
     }
 
     public float getY() {
         return y;
+    }
+
+    public void setCharacterDirection(boolean isFacingRight) {
+        this.isFacingRight = isFacingRight;
     }
 }
