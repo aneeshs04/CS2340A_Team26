@@ -12,10 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.Wall;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.views.PlayerView;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MainGameActivity extends AppCompatActivity {
+
+public class
+MainGameActivity extends AppCompatActivity {
     private TextView countdownTextView;
     private TextView characterNameTextView;
 
@@ -32,6 +37,7 @@ public class MainGameActivity extends AppCompatActivity {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static Boolean stop;
     private static int animationCount = 0;
+    private List<Wall> walls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,18 @@ public class MainGameActivity extends AppCompatActivity {
         textViewName.setText(MainActivity.getName());
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
+
+        //wall creation for screen 1
+        walls.add(new Wall(150, 80, 1050, 150));
+        walls.add(new Wall(50, 80, 210, 2800));
+        walls.add(new Wall(200, 782, 445, 1750));
+        walls.add(new Wall(150, 2280, 1050, 3000));
+        walls.add(new Wall(600, 782, 1000, 1750));
+        walls.add(new Wall(970, 50, 1500, 450));
+        walls.add(new Wall(970, 580, 1500, 1900));
+        walls.add(new Wall(850, 2100, 1500, 2800));
+        walls.add(new Wall(850, 1600, 1500, 1900));
+
     }
 
     // handles the animation of the player
@@ -88,22 +106,31 @@ public class MainGameActivity extends AppCompatActivity {
     // handle key events to move the player and name
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        float proposedX = player.getX();
+        float proposedY = player.getY();
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                player.setX(player.getX() - 50);
+                proposedX -= 50;
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                player.setX(player.getX() + 50);
+                proposedX += 50;
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                player.setY(player.getY() + 50);
+                proposedY += 50;
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
-                player.setY(player.getY() - 50);
+                proposedY -= 50;
                 break;
         }
 
-        // checking to see if player is leaving the screen
+        // If no wall collision, update player's position
+        if (!collidesWithAnyWall((int) proposedX, (int) proposedY)) {
+            player.setX(proposedX);
+            player.setY(proposedY);
+        }
+
+        // Now, check for boundary conditions
         if (player.getX() < minX) {
             player.setX(minX);
         } else if (player.getX() > maxX) {
@@ -127,6 +154,15 @@ public class MainGameActivity extends AppCompatActivity {
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
         return true;
+    }
+
+    boolean collidesWithAnyWall(int x, int y) {
+        for (Wall wall : walls) {
+            if (wall.collidesWith(x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
