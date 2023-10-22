@@ -86,8 +86,8 @@ MainGameActivity extends AppCompatActivity {
         walls.add(new Wall(600, 782, 1000, 1750));
         walls.add(new Wall(970, 50, 1500, 450));
         walls.add(new Wall(970, 580, 1500, 1900));
-        walls.add(new Wall(850, 2100, 1500, 2800));
-        walls.add(new Wall(850, 1600, 1500, 1900));
+        walls.add(new Wall(828, 2050, 1500, 2800));
+        walls.add(new Wall(828, 1600, 1500, 1900));
 
     }
 
