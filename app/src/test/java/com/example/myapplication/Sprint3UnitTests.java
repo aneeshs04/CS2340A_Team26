@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
+import com.example.myapplication.model.Observer;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.Wall;
 import com.example.myapplication.model.MoveLeftStrategy;
@@ -75,6 +76,14 @@ public class Sprint3UnitTests {
         player.setY(50);
 
         assertFalse(wall.collidesWith((int) player.getX(), (int) player.getY()));
+    }
+
+    @Test
+    public void testPlayerWin() {
+        Player player = Player.getInstance();
+        player.setWon(true);
+
+        assertTrue(player.getWon());
     }
 
 }

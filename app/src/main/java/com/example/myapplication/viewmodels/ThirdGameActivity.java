@@ -167,6 +167,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
             finish();
         } else if (player.getX() > maxX) {
             player.removeObserver(this);
+            player.setWon(true);
             playerView.setVisibility(playerView.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
