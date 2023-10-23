@@ -93,7 +93,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(1100, 0, 1440, 400));
         walls.add(new Wall(1100, 582, 1440, 3500));
         walls.add(new Wall(0, 582, 150, 1862));
-        walls.add(new Wall(150, 2280, 1050, 3000));
+        walls.add(new Wall(150, 2280, 1500, 3000));
         walls.add(new Wall(0, 2062, 150, 2500));
         walls.add(new Wall(150, 990, 480, 1550));
         walls.add(new Wall(800, 990, 1480, 1550));
