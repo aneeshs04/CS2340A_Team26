@@ -15,13 +15,17 @@ public class Player implements Subject {
     private static Player player;
     private int score;
     private int health;
-    private String difficulty = MainActivity.getDifficulty();
+    private String difficulty = "easy";
     private float x,y;
     private float proposedX, proposedY;
     private final float originalX, originalY;
     private Player () {
         movementStrategy = new MoveRightStrategy();
         this.score = 105;
+
+        if (MainActivity.getDifficulty() != null) {
+            difficulty = MainActivity.getDifficulty();
+        }
 
         switch (difficulty) {
             case "easy":
