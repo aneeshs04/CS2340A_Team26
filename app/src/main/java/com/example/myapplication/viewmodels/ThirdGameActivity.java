@@ -23,6 +23,9 @@ import com.example.myapplication.views.MoveUpStrategy;
 import com.example.myapplication.views.MovementStrategy;
 import com.example.myapplication.views.Observer;
 import com.example.myapplication.views.PlayerView;
+import java.util.ArrayList;
+import java.util.List;
+import com.example.myapplication.model.Wall;
 
 public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
@@ -41,6 +44,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private static Boolean stop;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static int animationCount = 0;
+    private List<Wall> walls = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +85,21 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         textViewName.setText(MainActivity.getName());
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
+
+        //walls for screen 3
+        walls.add(new Wall(50, 80, 1300, 150));
+        walls.add(new Wall(1130, 80, 1440, 900));
+        walls.add(new Wall(950, 782, 1300, 1730));
+        walls.add(new Wall(50, 782, 750, 1730));
+        walls.add(new Wall(0, 0, 410, 400));
+        walls.add(new Wall(0, 600, 400, 1730));
+        walls.add(new Wall(150, 2340, 1400, 3000));
+        walls.add(new Wall(0, 1730, 220, 3000));
+        walls.add(new Wall(1250, 1730, 1440, 2100));
+        walls.add(new Wall(150, 2420, 1600, 3000));
+        walls.add(new Wall(1250, 2320, 1440, 3000));
+        walls.add(new Wall(1250, 2270, 1440, 4000));
+
     }
 
     @Override
@@ -105,26 +125,33 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         MovementStrategy strategy = null;
+        player.setProposedX(player.getX());
+        player.setProposedY(player.getY());
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 strategy = new MoveLeftStrategy();
                 playerView.setCharacterDirection(false);
+                player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
                 playerView.setCharacterDirection(true);
+                player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 strategy = new MoveDownStrategy();
+                player.setProposedY(player.getProposedY() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 strategy = new MoveUpStrategy();
+                player.setProposedY(player.getProposedY() - 50);
                 break;
         }
 
-        if (strategy != null) {
-            player.setMovementStrategy(strategy);
+        // if no wall collision, update player's position
+        player.setMovementStrategy(strategy);
+        if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
         }
 
@@ -163,5 +190,14 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
         return true;
+    }
+
+    boolean collidesWithAnyWall(int x, int y) {
+        for (Wall wall : walls) {
+            if (wall.collidesWith(x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
