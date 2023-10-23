@@ -14,12 +14,12 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.Wall;
 import com.example.myapplication.views.MainActivity;
-import com.example.myapplication.views.MoveDownStrategy;
-import com.example.myapplication.views.MoveLeftStrategy;
-import com.example.myapplication.views.MoveRightStrategy;
-import com.example.myapplication.views.MoveUpStrategy;
-import com.example.myapplication.views.MovementStrategy;
-import com.example.myapplication.views.Observer;
+import com.example.myapplication.model.MoveDownStrategy;
+import com.example.myapplication.model.MoveLeftStrategy;
+import com.example.myapplication.model.MoveRightStrategy;
+import com.example.myapplication.model.MoveUpStrategy;
+import com.example.myapplication.model.MovementStrategy;
+import com.example.myapplication.model.Observer;
 import com.example.myapplication.views.PlayerView;
 import java.util.ArrayList;
 import java.util.List;
@@ -185,5 +185,22 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         }
         return false;
     }
+
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public int getMinX() {
+        return minX;
+    }
+
+    public int getMinY() {
+        return minY;
+    }
+
 }
 

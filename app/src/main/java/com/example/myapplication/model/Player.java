@@ -1,10 +1,6 @@
 package com.example.myapplication.model;
 
 import com.example.myapplication.views.MainActivity;
-import com.example.myapplication.views.MoveRightStrategy;
-import com.example.myapplication.views.MovementStrategy;
-import com.example.myapplication.views.Observer;
-import com.example.myapplication.views.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +15,7 @@ public class Player implements Subject {
     private float x,y;
     private float proposedX, proposedY;
     private final float originalX, originalY;
+    private boolean won = false;
     private Player () {
         movementStrategy = new MoveRightStrategy();
         this.score = 105;
@@ -102,6 +99,12 @@ public class Player implements Subject {
         for (Observer observer : observers) {
             observer.update(x, y);
         }
+    }
+    public Boolean getWon() {
+        return won;
+    }
+    public void setWon(boolean won) {
+        this.won = won;
     }
 
     public void setMovementStrategy(MovementStrategy strategy) {

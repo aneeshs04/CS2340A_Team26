@@ -15,13 +15,17 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.views.MainActivity;
-import com.example.myapplication.views.MoveDownStrategy;
-import com.example.myapplication.views.MoveLeftStrategy;
-import com.example.myapplication.views.MoveRightStrategy;
-import com.example.myapplication.views.MoveUpStrategy;
-import com.example.myapplication.views.MovementStrategy;
-import com.example.myapplication.views.Observer;
+import com.example.myapplication.model.MoveDownStrategy;
+import com.example.myapplication.model.MoveLeftStrategy;
+import com.example.myapplication.model.MoveRightStrategy;
+import com.example.myapplication.model.MoveUpStrategy;
+import com.example.myapplication.model.MovementStrategy;
+import com.example.myapplication.model.Observer;
 import com.example.myapplication.views.PlayerView;
+import java.util.ArrayList;
+import java.util.List;
+import com.example.myapplication.model.Wall;
+
 
 public class SecondGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
@@ -40,6 +44,8 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     private static Boolean stop;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static int animationCount = 0;
+    private List<Wall> walls = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +86,20 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
+        // create walls for second screen
+        walls.add(new Wall(150, 80, 1350, 150));
+        walls.add(new Wall(0, 0, 150, 400));
+        walls.add(new Wall(1100, 0, 1440, 400));
+        walls.add(new Wall(1100, 582, 1440, 3500));
+        walls.add(new Wall(0, 582, 150, 1862));
+        walls.add(new Wall(150, 2280, 1500, 3000));
+        walls.add(new Wall(0, 2062, 150, 2500));
+        walls.add(new Wall(150, 990, 480, 1550));
+        walls.add(new Wall(800, 990, 1480, 1550));
+
+
+
+
     }
 
     @Override
@@ -105,26 +125,33 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         MovementStrategy strategy = null;
+        player.setProposedX(player.getX());
+        player.setProposedY(player.getY());
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 strategy = new MoveLeftStrategy();
                 playerView.setCharacterDirection(false);
+                player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
                 playerView.setCharacterDirection(true);
+                player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 strategy = new MoveDownStrategy();
+                player.setProposedY(player.getProposedY() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 strategy = new MoveUpStrategy();
+                player.setProposedY(player.getProposedY() - 50);
                 break;
         }
 
-        if (strategy != null) {
-            player.setMovementStrategy(strategy);
+        // if no wall collision, update player's position
+        player.setMovementStrategy(strategy);
+        if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
         }
 
@@ -160,5 +187,14 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
         return true;
+    }
+
+    boolean collidesWithAnyWall(int x, int y) {
+        for (Wall wall : walls) {
+            if (wall.collidesWith(x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
