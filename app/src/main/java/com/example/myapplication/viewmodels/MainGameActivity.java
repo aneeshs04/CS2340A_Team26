@@ -185,5 +185,22 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         }
         return false;
     }
+
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public int getMinX() {
+        return minX;
+    }
+
+    public int getMinY() {
+        return minY;
+    }
+
 }
 
