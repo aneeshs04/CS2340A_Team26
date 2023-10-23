@@ -1,4 +1,6 @@
-package com.example.myapplication.views;
+package com.example.myapplication.model;
+
+import com.example.myapplication.model.Observer;
 
 public interface Subject {
     void registerObserver(Observer observer);

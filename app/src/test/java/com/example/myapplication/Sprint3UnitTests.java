@@ -7,13 +7,11 @@ import static org.junit.Assert.assertTrue;
 
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.Wall;
-import com.example.myapplication.viewmodels.MainGameActivity;
-import com.example.myapplication.views.MainActivity;
-import com.example.myapplication.views.MoveLeftStrategy;
-import com.example.myapplication.views.MoveRightStrategy;
-import com.example.myapplication.views.MoveUpStrategy;
-import com.example.myapplication.views.MoveDownStrategy;
-import com.example.myapplication.views.MovementStrategy;
+import com.example.myapplication.model.MoveLeftStrategy;
+import com.example.myapplication.model.MoveRightStrategy;
+import com.example.myapplication.model.MoveUpStrategy;
+import com.example.myapplication.model.MoveDownStrategy;
+import com.example.myapplication.model.MovementStrategy;
 
 
 
