@@ -1,5 +1,6 @@
-package com.example.myapplication.views;
+package com.example.myapplication.model;
 
+import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.Player;
 
 public class MoveUpStrategy implements MovementStrategy {

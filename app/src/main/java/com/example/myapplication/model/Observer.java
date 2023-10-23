@@ -1,4 +1,4 @@
-package com.example.myapplication.views;
+package com.example.myapplication.model;
 
 public interface Observer {
     void update(float x, float y);

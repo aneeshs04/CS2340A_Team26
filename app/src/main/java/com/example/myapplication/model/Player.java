@@ -1,10 +1,6 @@
 package com.example.myapplication.model;
 
 import com.example.myapplication.views.MainActivity;
-import com.example.myapplication.views.MoveRightStrategy;
-import com.example.myapplication.views.MovementStrategy;
-import com.example.myapplication.views.Observer;
-import com.example.myapplication.views.Subject;
 
 import java.util.ArrayList;
 import java.util.List;
