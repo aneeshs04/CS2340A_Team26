@@ -115,7 +115,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Please select a character.",
                         Toast.LENGTH_SHORT).show();
             } else {
-                Player.getInstance().setScore(105);
+                Player player = Player.getInstance();
+                player.setScore(105);
+                player.setDifficulty(difficulty);
+                player.setName(name);
+                player.setCharacter(character);
                 ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
                 scoreCountDownTimer.start();
                 Intent game = new Intent(MainActivity.this, MainGameActivity.class);

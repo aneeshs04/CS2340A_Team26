@@ -9,37 +9,28 @@ public class Player implements Subject {
     private List<Observer> observers = new ArrayList<>();
     private MovementStrategy movementStrategy;
     private static Player player;
+    private static String name;
+    private static String character;
     private int score;
     private int health;
     private String difficulty = "easy";
-    private float x,y;
+    private float x;
+    private float y;
+    private int movementSpeed;
+    private boolean isFacingRight;
     private float proposedX, proposedY;
     private final float originalX, originalY;
     private boolean won = false;
     private Player () {
-        movementStrategy = new MoveRightStrategy();
+        this.movementSpeed = 50;
+        this.movementStrategy = new MoveRightStrategy();
         this.score = 105;
-
-        if (MainActivity.getDifficulty() != null) {
-            difficulty = MainActivity.getDifficulty();
-        }
-
-        switch (difficulty) {
-            case "easy":
-                this.health = 150;
-                break;
-            case "medium":
-                this.health = 100;
-                break;
-            default:
-                this.health = 50;
-                break;
-        }
 
         this.x = 550;
         this.y = 2000;
         originalX = x;
         originalY = y;
+        isFacingRight = true;
     }
 
     public static synchronized Player getInstance() {
@@ -66,14 +57,6 @@ public class Player implements Subject {
         this.proposedY = proposedY;
     }
 
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
     public void setX(float x) {
         this.x = x;
         notifyObservers();
@@ -82,6 +65,14 @@ public class Player implements Subject {
     public void setY(float y) {
         this.y = y;
         notifyObservers();
+    }
+
+    public boolean isFacingRight() {
+        return isFacingRight;
+    }
+
+    public void setFacingRight(boolean facingRight) {
+        isFacingRight = facingRight;
     }
 
     @Override
@@ -107,6 +98,14 @@ public class Player implements Subject {
         this.won = won;
     }
 
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     public void setMovementStrategy(MovementStrategy strategy) {
         movementStrategy = strategy;
     }
@@ -123,12 +122,36 @@ public class Player implements Subject {
         this.score = score;
     }
 
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public static String getName() {
+        return name;
+    }
+
+    public static void setName(String name) {
+        Player.name = name;
+    }
+
     public int getHealth() {
         return health;
     }
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public static String getCharacter() {
+        return character;
+    }
+
+    public static void setCharacter(String character) {
+        Player.character = character;
     }
 
     public float getOriginalX() {

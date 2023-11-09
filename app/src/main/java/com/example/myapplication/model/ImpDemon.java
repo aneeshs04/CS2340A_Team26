@@ -1,37 +1,33 @@
 package com.example.myapplication.model;
 
-import com.example.myapplication.views.MainActivity;
-
-public class Enemy1 implements Enemy {
+public class ImpDemon implements Enemy {
     private int health;
     private int movementSpeed;
     private int power;
+    private Player player = Player.getInstance();
     private int size;
-    private String difficulty;
     private float x,y;
+    private static String name = "imp demon";
 
-    public Enemy1() {
-        if (MainActivity.getDifficulty() != null) {
-            difficulty = MainActivity.getDifficulty();
-        }
-        switch (difficulty) {
+    public ImpDemon() {
+        switch (player.getDifficulty()) {
             case "easy":
-                this.health = 30;
-                this.power = 20;
+                this.health = 50;
+                this.power = 40;
                 break;
             case "medium":
                 this.health = 100;
-                this.power = 50;
+                this.power = 100;
                 break;
             default:
-                this.health = 300;
-                this.power = 100;
+                this.health = 400;
+                this.power = 250;
                 break;
         }
         this.x = 500;
         this.y = 2000;
-        this.size = 20;
-        this.movementSpeed = 20;
+        this.size = 5;
+        this.movementSpeed = 10;
     }
     public float getX() {
         return x;
@@ -44,6 +40,16 @@ public class Enemy1 implements Enemy {
     public void setX(float x) {this.x = x;}
 
     public void setY(float y) {this.y = y;}
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void move() {
+
+    }
+
     public int getHealth() {
         return health;
     }
@@ -56,3 +62,5 @@ public class Enemy1 implements Enemy {
     public int getSize() {return size;}
     public void setSize(int size) {this.size = size;}
 }
+
+

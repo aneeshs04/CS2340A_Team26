@@ -1,37 +1,33 @@
 package com.example.myapplication.model;
 
-import com.example.myapplication.views.MainActivity;
-
-public class Enemy4 implements Enemy{
+public class NecromancerDemon implements Enemy {
     private int health;
     private int movementSpeed;
     private int power;
     private int size;
-    private String difficulty;
     private float x,y;
+    private Player player = Player.getInstance();
+    private static String name = "necromancer demon";
 
-    public Enemy4() {
-        if (MainActivity.getDifficulty() != null) {
-            difficulty = MainActivity.getDifficulty();
-        }
-        switch (difficulty) {
+    public NecromancerDemon() {
+        switch (player.getDifficulty()) {
             case "easy":
-                this.health = 50;
-                this.power = 40;
+                this.health = 30;
+                this.power = 20;
                 break;
             case "medium":
                 this.health = 100;
-                this.power = 100;
+                this.power = 50;
                 break;
             default:
-                this.health = 400;
-                this.power = 250;
+                this.health = 300;
+                this.power = 100;
                 break;
         }
         this.x = 500;
         this.y = 2000;
-        this.size = 5;
-        this.movementSpeed = 10;
+        this.size = 20;
+        this.movementSpeed = 20;
     }
     public float getX() {
         return x;
@@ -44,10 +40,22 @@ public class Enemy4 implements Enemy{
     public void setX(float x) {this.x = x;}
 
     public void setY(float y) {this.y = y;}
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void move() {
+        this.x += 100;
+//        Random random = new Random();
+//        int movement = random.nextInt(11) - 5; // Random movement between -5 and 5
+//        x += movement * movementSpeed;
+    }
+
     public int getHealth() {
         return health;
     }
-
     public void setHealth(int health) {this.health = health;}
     public int getMovementSpeed() {return movementSpeed;}
     public void setMovementSpeed(int movementSpeed) {this.movementSpeed = movementSpeed;}
@@ -56,5 +64,3 @@ public class Enemy4 implements Enemy{
     public int getSize() {return size;}
     public void setSize(int size) {this.size = size;}
 }
-
-
