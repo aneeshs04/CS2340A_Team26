@@ -8,8 +8,9 @@ public class ImpDemon implements Enemy {
     private int size;
     private float x,y;
     private static String name = "imp demon";
+    private String direction = "up";
 
-    public ImpDemon() {
+    public ImpDemon(int x, int y) {
         switch (player.getDifficulty()) {
             case "easy":
                 this.health = 50;
@@ -24,10 +25,10 @@ public class ImpDemon implements Enemy {
                 this.power = 250;
                 break;
         }
-        this.x = 500;
-        this.y = 2000;
+        this.x = x;
+        this.y = y;
         this.size = 5;
-        this.movementSpeed = 10;
+        this.movementSpeed = 50;
     }
     public float getX() {
         return x;
@@ -47,7 +48,13 @@ public class ImpDemon implements Enemy {
 
     @Override
     public void move() {
-
+        if (direction.equals("up")) {
+            this.x += 50;
+            this.y -= 50;
+        } else {
+            this.x -= 50;
+            this.y += 50;
+        }
     }
 
     public int getHealth() {
@@ -61,6 +68,10 @@ public class ImpDemon implements Enemy {
     public void setPower(int power) {this.power = power;}
     public int getSize() {return size;}
     public void setSize(int size) {this.size = size;}
+    public void changeDirection(String direction) {
+        this.direction = direction;
+    }
+    public String getDirection() {return direction;}
 }
 
 

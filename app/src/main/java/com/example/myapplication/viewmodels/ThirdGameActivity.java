@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myapplication.R;
+import com.example.myapplication.model.BigDemonFactory;
+import com.example.myapplication.model.ChortFactory;
+import com.example.myapplication.model.Enemy;
+import com.example.myapplication.model.EnemyFactory;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.views.EndActivity;
@@ -34,6 +38,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     // player movement variables
     private final Player player = Player.getInstance();
     private PlayerViewModel playerView;
+    private EnemyViewModel chortView;
+    private EnemyViewModel bigDemonView;
     ConstraintLayout gameLayout;
     private final int minX = 0;
     private final int minY = -50;
@@ -45,11 +51,16 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static int animationCount = 0;
     private List<Wall> walls = new ArrayList<>();
+    private Handler gameLoopHandler = new Handler();
+    private static final int CHORT_LOOP_DELAY = 100;
+    private static final int BIG_LOOP_DELAY = 200;
+    private List<Enemy> enemies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.third_game_screen);
+        gameLayout = findViewById(R.id.gameLayout3);
 
         player.registerObserver(this);
 
@@ -60,12 +71,31 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         scoreCountDownTimer.setOnScoreChangeListener(newScore -> countdownTextView.setText("Score: " + newScore));
         stop = false;
 
+        //chort
+        EnemyFactory ChortFactory = new ChortFactory();
+        Enemy chort = ChortFactory.createEnemy(835, 200);
+        chortView = new EnemyViewModel(this, chort);
+        gameLayout.addView(chortView);
+        chortView.setVisibility(chortView.VISIBLE);
+        enemies.add(chort);
+
+        //chort
+        EnemyFactory BigDemonFactory = new BigDemonFactory();
+        Enemy bigDemon = BigDemonFactory.createEnemy(250, 2000);
+        bigDemonView = new EnemyViewModel(this, bigDemon);
+        gameLayout.addView(bigDemonView);
+        bigDemonView.setVisibility(bigDemonView.VISIBLE);
+        enemies.add(bigDemon);
+
+        // start the game loops
+        startChortLoop();
+        startBigDemonLoop();
+
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() - 25);
         playerView = new PlayerViewModel(this, player);
-        gameLayout = findViewById(R.id.gameLayout3);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
@@ -99,7 +129,91 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(150, 2420, 1600, 3000));
         walls.add(new Wall(1250, 2320, 1440, 3000));
         walls.add(new Wall(1250, 2270, 1440, 4000));
+    }
 
+    private void startChortLoop() {
+        gameLoopHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Enemy chort = enemies.get(0);
+                // Move each enemy
+                if (chort.getDirection().equals("up")) {
+                    if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() + 50)) {
+                        chort.move();
+                        if (chort.getY() >= maxY) {
+                            chort.changeDirection("down");
+                        }
+                        chortView.invalidate();
+                    } else {
+                        chort.changeDirection("down");
+                    }
+                } else {
+                    if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() - 50)) {
+                        chort.move();
+                        if (chort.getX() <= minX) {
+                            chort.changeDirection("up");
+                        }
+                        chortView.invalidate();
+                    } else {
+                        chort.changeDirection("up");
+                    }
+                }
+                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
+            }
+        }, CHORT_LOOP_DELAY);
+    }
+
+    private void startBigDemonLoop() {
+        gameLoopHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Enemy bigDemon = enemies.get(1);
+                if (bigDemon.getDirection().equals("up")) {
+                    if (!collidesWithAnyWall((int) bigDemon.getX(), (int) bigDemon.getY() - 50)) {
+                        bigDemon.move();
+                        if (bigDemon.getY() <= minY) {
+                            bigDemon.changeDirection("right");
+                        }
+                        bigDemonView.invalidate();
+                    } else {
+                        bigDemon.changeDirection("right");
+                    }
+                } else if (bigDemon.getDirection().equals("right")) {
+                    if (!collidesWithAnyWall((int) bigDemon.getX() + 125, (int) bigDemon.getY())) {
+                        bigDemon.move();
+                        if (bigDemon.getX() >= maxX) {
+                            bigDemon.changeDirection("down");
+                        }
+                        bigDemonView.invalidate();
+                    } else {
+                        bigDemon.changeDirection("down");
+                    }
+                } else if (bigDemon.getDirection().equals("down")) {
+                    if (!collidesWithAnyWall((int) bigDemon.getX(), (int) bigDemon.getY() + 100)) {
+                        bigDemon.move();
+                        if (bigDemon.getY() >= maxY) {
+                            bigDemon.changeDirection("left");
+                        }
+                        bigDemonView.invalidate();
+                    } else {
+                        bigDemon.changeDirection("left");
+                    }
+                } else if (bigDemon.getDirection().equals("left")) {
+                    if (!collidesWithAnyWall((int) bigDemon.getX() - 50, (int) bigDemon.getY())) {
+                        bigDemon.move();
+                        if (bigDemon.getX() <= minX) {
+                            bigDemon.changeDirection("up");
+                        }
+                        bigDemonView.invalidate();
+                    } else {
+                        bigDemon.changeDirection("up");
+                    }
+                }
+                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                gameLoopHandler.postDelayed(this, BIG_LOOP_DELAY);
+            }
+        }, BIG_LOOP_DELAY);
     }
 
     @Override

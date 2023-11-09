@@ -8,8 +8,9 @@ public class NecromancerDemon implements Enemy {
     private float x,y;
     private Player player = Player.getInstance();
     private static String name = "necromancer demon";
+    private String direction = "up";
 
-    public NecromancerDemon() {
+    public NecromancerDemon(int x, int y) {
         switch (player.getDifficulty()) {
             case "easy":
                 this.health = 30;
@@ -24,10 +25,10 @@ public class NecromancerDemon implements Enemy {
                 this.power = 100;
                 break;
         }
-        this.x = 500;
-        this.y = 2000;
+        this.x = x;
+        this.y = y;
         this.size = 20;
-        this.movementSpeed = 20;
+        this.movementSpeed = 100;
     }
     public float getX() {
         return x;
@@ -47,10 +48,11 @@ public class NecromancerDemon implements Enemy {
 
     @Override
     public void move() {
-        this.x += 100;
-//        Random random = new Random();
-//        int movement = random.nextInt(11) - 5; // Random movement between -5 and 5
-//        x += movement * movementSpeed;
+        if (direction.equals("up")) {
+            this.x += 50;
+        } else {
+            this.x -= 50;
+        }
     }
 
     public int getHealth() {
@@ -63,4 +65,9 @@ public class NecromancerDemon implements Enemy {
     public void setPower(int power) {this.power = power;}
     public int getSize() {return size;}
     public void setSize(int size) {this.size = size;}
+    public String getDirection() {return direction;}
+    public void changeDirection(String direction) {
+        this.direction = direction;
+    }
+
 }

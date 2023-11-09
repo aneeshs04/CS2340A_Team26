@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.myapplication.R;
+import com.example.myapplication.model.Enemy;
+import com.example.myapplication.model.EnemyFactory;
+import com.example.myapplication.model.ImpFactory;
+import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.views.MainActivity;
@@ -34,6 +38,9 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     // player movement variables
     private final Player player = Player.getInstance();
     private PlayerViewModel playerView;
+    private EnemyViewModel necroView;
+    private EnemyViewModel impView;
+
     ConstraintLayout gameLayout;
     private final int minX = 0; // Left boundary
     private final int minY = -50; // Top boundary
@@ -45,6 +52,10 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static int animationCount = 0;
     private List<Wall> walls = new ArrayList<>();
+    private Handler gameLoopHandler = new Handler();
+    private static int NECRO_LOOP_DELAY;
+    private static int IMP_LOOP_DELAY;
+    private List<Enemy> enemies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +71,34 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         scoreCountDownTimer.setOnScoreChangeListener(newScore -> countdownTextView.setText("Score: " + newScore));
         stop = false;
 
+        // necromancer
+        gameLayout = findViewById(R.id.gameLayout2);
+        EnemyFactory NecroFactory = new NecromancerFactory();
+        Enemy necromancer = NecroFactory.createEnemy(500, 850);
+        enemies.add(necromancer);
+        necroView = new EnemyViewModel(this, necromancer);
+        gameLayout.addView(necroView);
+        necroView.setVisibility(necroView.VISIBLE);
+        NECRO_LOOP_DELAY = necromancer.getMovementSpeed();
+
+        // imp
+        EnemyFactory ImpFactory = new ImpFactory();
+        Enemy imp = ImpFactory.createEnemy(300, 2200);
+        enemies.add(imp);
+        impView = new EnemyViewModel(this, imp);
+        gameLayout.addView(impView);
+        impView.setVisibility(impView.VISIBLE);
+        IMP_LOOP_DELAY = imp.getMovementSpeed();
+
+        // Start the game loops
+        startNecromancerLoop();
+        startImpLoop();
+
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() - 25);
         playerView = new PlayerViewModel(this, player);
-        gameLayout = findViewById(R.id.gameLayout2);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
@@ -98,12 +131,76 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(800, 990, 1480, 1550));
     }
 
+    private void startNecromancerLoop() {
+        gameLoopHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Enemy necromancer = enemies.get(0);
+                // Move each enemy
+                if (necromancer.getDirection() == "up") {
+                    if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
+                        necromancer.move();
+                        if (necromancer.getX() >= maxX) {
+                            necromancer.changeDirection("down");
+                        }
+                        necroView.invalidate();
+                    } else {
+                        necromancer.changeDirection("down");
+                    }
+                } else {
+                    if (!collidesWithAnyWall((int) necromancer.getX() - 50, (int) necromancer.getY())) {
+                        necromancer.move();
+                        if (necromancer.getX() <= minX) {
+                            necromancer.changeDirection("up");
+                        }
+                        necroView.invalidate();
+                    } else {
+                        necromancer.changeDirection("up");
+                    }
+                }
+                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                gameLoopHandler.postDelayed(this, NECRO_LOOP_DELAY);
+            }
+        }, NECRO_LOOP_DELAY);
+    }
+
+    private void startImpLoop() {
+        gameLoopHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Enemy imp = enemies.get(1);
+                // Move each enemy
+                if (imp.getDirection() == "up") {
+                    if (!collidesWithAnyWall((int) imp.getX() + 100, (int) imp.getY() - 100)) {
+                        imp.move();
+                        if (imp.getX() >= maxX) {
+                            imp.changeDirection("down");
+                        }
+                        impView.invalidate();
+                    } else {
+                        imp.changeDirection("down");
+                    }
+                } else {
+                    if (!collidesWithAnyWall((int) imp.getX() - 25, (int) imp.getY() + 25)) {
+                        imp.move();
+                        if (imp.getX() <= minX) {
+                            imp.changeDirection("up");
+                        }
+                        impView.invalidate();
+                    } else {
+                        imp.changeDirection("up");
+                    }
+                }
+                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                gameLoopHandler.postDelayed(this, IMP_LOOP_DELAY);
+            }
+        }, IMP_LOOP_DELAY);
+    }
+
     @Override
     public void update(float x, float y) {
         characterNameTextView.setX(x - 125);
         characterNameTextView.setY(y - characterNameTextView.getHeight() + 45);
-//        playerView.updatePosition(x, y);
-        playerView.invalidate();
     }
 
     // handles the animation of the player

@@ -11,8 +11,9 @@ public class BigDemon implements Enemy {
     private float x,y;
     private Player player = Player.getInstance();
     private static String name = "big demon";
+    private String direction = "up";
 
-    public BigDemon() {
+    public BigDemon(int x, int y) {
         switch (player.getDifficulty()) {
             case "easy":
                 this.health = 10;
@@ -27,10 +28,10 @@ public class BigDemon implements Enemy {
                 this.power = 50;
                 break;
         }
-        this.x = 500;
-        this.y = 2000;
+        this.x = x;
+        this.y = y;
         this.size = 5;
-        this.movementSpeed = 40;
+        this.movementSpeed = 200;
     }
     public float getX() {
         return x;
@@ -50,7 +51,15 @@ public class BigDemon implements Enemy {
 
     @Override
     public void move() {
-
+        if (direction.equals("left")) {
+            this.x -= 50;
+        } else if (direction.equals("right")) {
+            this.x += 50;
+        } else if (direction.equals("up")) {
+            this.y -= 50;
+        } else if (direction.equals("down")) {
+            this.y += 50;
+        }
     }
 
     public int getHealth() {
@@ -64,4 +73,8 @@ public class BigDemon implements Enemy {
     public void setPower(int power) {this.power = power;}
     public int getSize() {return size;}
     public void setSize(int size) {this.size = size;}
+    public void changeDirection(String direction) {
+        this.direction = direction;
+    }
+    public String getDirection() {return direction;}
 }

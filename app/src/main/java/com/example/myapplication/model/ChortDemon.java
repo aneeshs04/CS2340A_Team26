@@ -8,8 +8,9 @@ public class ChortDemon implements Enemy {
     private Player player = Player.getInstance();
     private float x,y;
     private static String name = "chort demon";
+    private String direction = "up";
 
-    public ChortDemon() {
+    public ChortDemon(int x, int y) {
         switch (player.getDifficulty()) {
             case "easy":
                 this.health = 10;
@@ -24,10 +25,10 @@ public class ChortDemon implements Enemy {
                 this.power = 90;
                 break;
         }
-        this.x = 500;
-        this.y = 2000;
+        this.x = x;
+        this.y = y;
         this.size = 5;
-        this.movementSpeed = 50;
+        this.movementSpeed = 75;
     }
     public float getX() {
         return x;
@@ -47,7 +48,11 @@ public class ChortDemon implements Enemy {
 
     @Override
     public void move() {
-
+        if (direction.equals("up")) {
+            this.y += 50;
+        } else {
+            this.y -= 50;
+        }
     }
 
     public int getHealth() {
@@ -60,5 +65,9 @@ public class ChortDemon implements Enemy {
     public void setPower(int power) {this.power = power;}
     public int getSize() {return size;}
     public void setSize(int size) {this.size = size;}
+    public void changeDirection(String direction) {
+        this.direction = direction;
+    }
+    public String getDirection() {return direction;}
 }
 
