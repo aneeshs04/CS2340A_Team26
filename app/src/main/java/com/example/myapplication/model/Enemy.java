@@ -1,4 +1,20 @@
 package com.example.myapplication.model;
 public interface Enemy {
-    
+    void move();
+    int getHealth();
+    void setHealth(int health);
+    int getMovementSpeed();
+    void setMovementSpeed(int speed);
+    public int getPower();
+    public void setPower(int power);
+    public int getSize();
+    public void setSize(int size);
+    public float getX();
+
+    public float getY();
+
+    public void setX(float x);
+
+    public void setY(float y);
+    public String getName();
 }

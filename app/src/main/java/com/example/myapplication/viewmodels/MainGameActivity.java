@@ -1,28 +1,36 @@
 package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.myapplication.model.Enemy;
+import com.example.myapplication.model.EnemyFactory;
+import com.example.myapplication.model.NecromancerDemon;
+import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.ScoreCountdown;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.Wall;
-import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.model.MoveDownStrategy;
 import com.example.myapplication.model.MoveLeftStrategy;
 import com.example.myapplication.model.MoveRightStrategy;
 import com.example.myapplication.model.MoveUpStrategy;
 import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.Observer;
-import com.example.myapplication.views.PlayerView;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
@@ -30,7 +38,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
 
     // player movement variables
     private final Player player = Player.getInstance();
-    private PlayerView playerView;
+    private PlayerViewModel playerView;
     ConstraintLayout gameLayout;
     private final int minX = 0;
     private final int minY = -50;
@@ -42,6 +50,10 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private static Boolean stop;
     private static int animationCount = 0;
     private List<Wall> walls = new ArrayList<>();
+    private Handler gameLoopHandler = new Handler();
+    private static final int GAME_LOOP_DELAY = 100;
+    private List<Enemy> enemies = new ArrayList<>();
+    private Timer enemyTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +73,14 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         characterNameTextView = findViewById(R.id.textViewName);
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() - 25);
-        playerView = new PlayerView(this, player.getX(), player.getY());
+        playerView = new PlayerViewModel(this, player);
         gameLayout = findViewById(R.id.gameLayout);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
         animationCountdown();
 
+        //initializing enemies
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -80,9 +93,23 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         TextView textViewDiff = findViewById(R.id.textViewDifficulty);
         TextView textViewHealth = findViewById(R.id.textViewHealth);
 
-        textViewName.setText(MainActivity.getName());
-        textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
+        textViewName.setText(player.getName());
+        textViewDiff.setText("Difficulty: " + player.getDifficulty());
+        switch (player.getDifficulty()) {
+            case "easy":
+                player.setHealth(150);
+                break;
+            case "medium":
+                player.setHealth(100);
+                break;
+            default:
+                player.setHealth(50);
+                break;
+        }
         textViewHealth.setText(String.valueOf(player.getHealth()));
+
+        //enemy movement
+
 
         //wall creation for screen 1
         walls.add(new Wall(150, 80, 1050, 150));
@@ -94,15 +121,11 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(970, 580, 1500, 1900));
         walls.add(new Wall(828, 2050, 1500, 2800));
         walls.add(new Wall(828, 1600, 1500, 1900));
-
     }
-
     @Override
     public void update(float x, float y) {
         characterNameTextView.setX(x - 125);
         characterNameTextView.setY(y - characterNameTextView.getHeight() + 45);
-        playerView.updatePosition(x, y);
-        playerView.invalidate();
     }
 
     // handles the animation of the player
@@ -126,12 +149,12 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 strategy = new MoveLeftStrategy();
-                playerView.setCharacterDirection(false);
+                player.setFacingRight(false);
                 player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
-                playerView.setCharacterDirection(true);
+                player.setFacingRight(true);
                 player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
@@ -170,7 +193,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             player.setY(maxY);
         }
 
-        playerView.updatePosition(player.getX(), player.getY());
+//        playerView.updatePosition(player.getX(), player.getY());
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();

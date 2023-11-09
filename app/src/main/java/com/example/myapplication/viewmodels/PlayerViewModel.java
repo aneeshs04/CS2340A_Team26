@@ -1,4 +1,4 @@
-package com.example.myapplication.views;
+package com.example.myapplication.viewmodels;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -6,20 +6,23 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.view.View;
-import com.example.myapplication.R;
 
-public class PlayerView extends View {
-    private float x, y;
+import androidx.lifecycle.ViewModel;
+
+import com.example.myapplication.R;
+import com.example.myapplication.model.Player;
+import com.example.myapplication.views.MainActivity;
+
+public class PlayerViewModel extends View {
+    private Player player;
     private Bitmap bitmap;
-    private boolean isFacingRight = true;
 
     // creates a player sprite based on which character was chosen
-    public PlayerView(Context context, float x, float y) {
+    public PlayerViewModel(Context context, Player player) {
         super(context);
-        this.x = x;
-        this.y = y;
+        this.player = player;
 
-        switch (MainActivity.getCharacter()) {
+        switch (player.getCharacter()) {
             case "knight":
                 bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.knight);
                 break;
@@ -40,24 +43,19 @@ public class PlayerView extends View {
         // drawing bitmap of specific size
         int width = 100;
         int height = 175;
+        float x = player.getX();
+        float y = player.getY();
         Rect destRect = new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
 
         // flipping character depending on movement direction
         Matrix matrix = new Matrix();
         int centerX = bitmap.getWidth() / 2;
         int centerY = bitmap.getHeight() / 2;
-        if (!isFacingRight) {
+        if (!player.isFacingRight()) {
             matrix.setScale(-1, 1, centerX, centerY);
         }
         Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         canvas.drawBitmap(newBitmap, null, destRect, null);
-    }
-
-    // updating the position of the character as it moves
-    public void updatePosition(float newX, float newY) {
-        x = newX;
-        y = newY;
-        invalidate();
     }
 
     // updating the animation of the character based on the character chosen
@@ -117,18 +115,5 @@ public class PlayerView extends View {
                 break;
         }
         invalidate();
-    }
-
-    // getters/setters for other classes to access/modify private variables
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setCharacterDirection(boolean isFacingRight) {
-        this.isFacingRight = isFacingRight;
     }
 }

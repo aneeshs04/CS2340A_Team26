@@ -22,7 +22,7 @@ import com.example.myapplication.model.MoveRightStrategy;
 import com.example.myapplication.model.MoveUpStrategy;
 import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.Observer;
-import com.example.myapplication.views.PlayerView;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.example.myapplication.model.Wall;
@@ -33,7 +33,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
 
     // player movement variables
     private final Player player = Player.getInstance();
-    private PlayerView playerView;
+    private PlayerViewModel playerView;
     ConstraintLayout gameLayout;
     private final int minX = 0;
     private final int minY = -50;
@@ -64,7 +64,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         characterNameTextView = findViewById(R.id.textViewName);
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() - 25);
-        playerView = new PlayerView(this, player.getX(), player.getY());
+        playerView = new PlayerViewModel(this, player);
         gameLayout = findViewById(R.id.gameLayout3);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
@@ -106,7 +106,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     public void update(float x, float y) {
         characterNameTextView.setX(x - 125);
         characterNameTextView.setY(y - characterNameTextView.getHeight() + 45);
-        playerView.updatePosition(x, y);
+//        playerView.updatePosition(x, y);
         playerView.invalidate();
     }
 
@@ -131,12 +131,12 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 strategy = new MoveLeftStrategy();
-                playerView.setCharacterDirection(false);
+                player.setFacingRight(false);;
                 player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
-                playerView.setCharacterDirection(true);
+                player.setFacingRight(true);;
                 player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
@@ -186,7 +186,6 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
             player.setY(maxY);
         }
 
-        playerView.updatePosition(player.getX(), player.getY());
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
