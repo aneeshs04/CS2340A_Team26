@@ -2,7 +2,7 @@ package com.example.myapplication.model;
 
 public class BigDemonFactory extends EnemyFactory {
     @Override
-    public Enemy createEnemy(String type) {
-        return new BigDemon();
+    public Enemy createEnemy(int x, int y) {
+        return new BigDemon(x, y);
     }
 }

@@ -40,10 +40,30 @@ public class EnemyViewModel extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        int width;
+        int height;
+
+        switch (enemy.getName()) {
+            case "necromancer demon":
+                width = 100;
+                height = 175;
+                break;
+            case "chort demon":
+                width = 125;
+                height = 175;
+                break;
+            case "imp demon":
+                width = 100;
+                height = 120;
+                break;
+            default:
+                width = 200;
+                height = 250;
+                break;
+        }
 
         // drawing bitmap of specific size
-        int width = 100;
-        int height = 175;
+
         float x = enemy.getX();
         float y = enemy.getY();
         Matrix matrix = new Matrix();

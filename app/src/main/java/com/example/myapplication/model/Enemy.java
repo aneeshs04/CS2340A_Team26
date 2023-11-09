@@ -10,11 +10,11 @@ public interface Enemy {
     public int getSize();
     public void setSize(int size);
     public float getX();
-
     public float getY();
-
     public void setX(float x);
-
     public void setY(float y);
     public String getName();
+    public String getDirection();
+    public void changeDirection(String direction);
+
 }

@@ -1,8 +1,6 @@
 package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,9 +8,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.myapplication.model.ChortFactory;
 import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
-import com.example.myapplication.model.NecromancerDemon;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.ScoreCountdown;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +27,6 @@ import com.example.myapplication.model.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
@@ -39,6 +35,8 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     // player movement variables
     private final Player player = Player.getInstance();
     private PlayerViewModel playerView;
+    private EnemyViewModel necroView;
+    private EnemyViewModel chortView;
     ConstraintLayout gameLayout;
     private final int minX = 0;
     private final int minY = -50;
@@ -51,14 +49,15 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private static int animationCount = 0;
     private List<Wall> walls = new ArrayList<>();
     private Handler gameLoopHandler = new Handler();
-    private static final int GAME_LOOP_DELAY = 100;
+    private static int NECRO_LOOP_DELAY;
+    private static int CHORT_LOOP_DELAY;
     private List<Enemy> enemies = new ArrayList<>();
-    private Timer enemyTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_game_screen);
+        gameLayout = findViewById(R.id.gameLayout);
 
         player.registerObserver(this);
 
@@ -69,18 +68,38 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         scoreCountDownTimer.setOnScoreChangeListener(newScore -> countdownTextView.setText("Score: " + newScore));
         stop = false;
 
+        //necromancer
+        EnemyFactory NecroFactory = new NecromancerFactory();
+        Enemy necromancer = NecroFactory.createEnemy(500, 500);
+        necroView = new EnemyViewModel(this, necromancer);
+        gameLayout.addView(necroView);
+        necroView.setVisibility(necroView.VISIBLE);
+        enemies.add(necromancer);
+        NECRO_LOOP_DELAY = necromancer.getMovementSpeed();
+
+        //chort
+        EnemyFactory ChortFactory = new ChortFactory();
+        Enemy chort = ChortFactory.createEnemy(500, 400);
+        chortView = new EnemyViewModel(this, chort);
+        gameLayout.addView(chortView);
+        chortView.setVisibility(chortView.VISIBLE);
+        enemies.add(chort);
+        CHORT_LOOP_DELAY = chort.getMovementSpeed();
+
+        // start the game loops
+        startNecromancerLoop();
+        startChortLoop();
+
         // initializing location of player and player name + starting animation
         characterNameTextView = findViewById(R.id.textViewName);
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() - 25);
         playerView = new PlayerViewModel(this, player);
-        gameLayout = findViewById(R.id.gameLayout);
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
         animationCountdown();
 
-        //initializing enemies
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -108,9 +127,6 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         }
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
-        //enemy movement
-
-
         //wall creation for screen 1
         walls.add(new Wall(150, 80, 1050, 150));
         walls.add(new Wall(50, 80, 210, 2800));
@@ -122,6 +138,73 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(828, 2050, 1500, 2800));
         walls.add(new Wall(828, 1600, 1500, 1900));
     }
+
+    private void startNecromancerLoop() {
+        gameLoopHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Enemy necromancer = enemies.get(0);
+                // Move each enemy
+                if (necromancer.getDirection() == "up") {
+                    if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
+                        necromancer.move();
+                        if (necromancer.getX() >= maxX) {
+                            necromancer.changeDirection("down");
+                        }
+                        necroView.invalidate();
+                    } else {
+                        necromancer.changeDirection("down");
+                    }
+                } else {
+                    if (!collidesWithAnyWall((int) necromancer.getX() - 50, (int) necromancer.getY())) {
+                        necromancer.move();
+                        if (necromancer.getX() <= minX) {
+                            necromancer.changeDirection("up");
+                        }
+                        necroView.invalidate();
+                    } else {
+                        necromancer.changeDirection("up");
+                    }
+                }
+                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                gameLoopHandler.postDelayed(this, NECRO_LOOP_DELAY);
+            }
+        }, NECRO_LOOP_DELAY);
+    }
+
+    private void startChortLoop() {
+        gameLoopHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Enemy chort = enemies.get(1);
+                // Move each enemy
+                if (chort.getDirection() == "up") {
+                    if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() + 50)) {
+                        chort.move();
+                        if (chort.getY() >= maxY) {
+                            chort.changeDirection("down");
+                        }
+                        chortView.invalidate();
+                    } else {
+                        chort.changeDirection("down");
+                    }
+                } else {
+                    if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() - 50)) {
+                        chort.move();
+                        if (chort.getX() <= minX) {
+                            chort.changeDirection("up");
+                        }
+                        chortView.invalidate();
+                    } else {
+                        chort.changeDirection("up");
+                    }
+                }
+                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
+            }
+        }, CHORT_LOOP_DELAY);
+    }
+
     @Override
     public void update(float x, float y) {
         characterNameTextView.setX(x - 125);
