@@ -120,17 +120,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
 
         textViewName.setText(player.getName());
         textViewDiff.setText("Difficulty: " + player.getDifficulty());
-        switch (player.getDifficulty()) {
-            case "easy":
-                player.setHealth(150);
-                break;
-            case "medium":
-                player.setHealth(100);
-                break;
-            default:
-                player.setHealth(50);
-                break;
-        }
+        player.setHealth(150);
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
         //wall creation for screen 1
