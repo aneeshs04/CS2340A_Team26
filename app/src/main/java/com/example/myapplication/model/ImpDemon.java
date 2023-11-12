@@ -9,6 +9,7 @@ public class ImpDemon implements Enemy {
     private float x,y;
     private static String name = "imp demon";
     private String direction = "up";
+    private float playerX,playerY;
 
     public ImpDemon(int x, int y) {
         switch (player.getDifficulty()) {
@@ -72,6 +73,19 @@ public class ImpDemon implements Enemy {
         this.direction = direction;
     }
     public String getDirection() {return direction;}
+
+    @Override
+    public void update(float x, float y) {
+        playerX = x;
+        playerY = y;
+
+    }
+
+    @Override
+    public boolean contactWithPlayer() {
+        return playerX > (x - 100) && playerX < (x + 100)
+                && playerY > (y - 100) && playerY < (y + 100);
+    }
 }
 
 

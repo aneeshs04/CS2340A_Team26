@@ -59,7 +59,7 @@ public class PlayerViewModel extends View {
     }
 
     // updating the animation of the character based on the character chosen
-    public void updateAnimation(int animationCount) {
+    public void updateAnimation(int animationCount, boolean movement) {
         switch (animationCount) {
             case 0:
                 switch (MainActivity.getCharacter()) {

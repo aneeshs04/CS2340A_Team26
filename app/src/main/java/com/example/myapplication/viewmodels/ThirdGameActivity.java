@@ -33,6 +33,7 @@ import com.example.myapplication.model.Wall;
 
 public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
+    private TextView textViewHealth;
     private TextView characterNameTextView;
 
     // player movement variables
@@ -78,6 +79,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         gameLayout.addView(chortView);
         chortView.setVisibility(chortView.VISIBLE);
         enemies.add(chort);
+        player.registerObserver(chort);
+
 
         //chort
         EnemyFactory BigDemonFactory = new BigDemonFactory();
@@ -86,6 +89,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         gameLayout.addView(bigDemonView);
         bigDemonView.setVisibility(bigDemonView.VISIBLE);
         enemies.add(bigDemon);
+        player.registerObserver(bigDemon);
+
 
         // start the game loops
         startChortLoop();
@@ -100,6 +105,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
         animationCountdown();
+        updateHealth();
+
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -110,7 +117,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         // populating name, difficulty, and health
         TextView textViewName = findViewById(R.id.textViewName);
         TextView textViewDiff = findViewById(R.id.textViewDifficulty);
-        TextView textViewHealth = findViewById(R.id.textViewHealth);
+        textViewHealth = findViewById(R.id.textViewHealth);
 
         textViewName.setText(MainActivity.getName());
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
@@ -228,11 +235,36 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private void animationCountdown() {
         handler.postDelayed(() -> {
             if (!stop) {
-                playerView.updateAnimation(animationCount % 4);
+                playerView.updateAnimation(animationCount % 4, player.getMovement());
+                bigDemonView.updateAnimation(animationCount % 4);
+                chortView.updateAnimation(animationCount % 4);
                 animationCount++;
                 animationCountdown();
             }
         }, 200);
+    }
+
+    // updates the health of the player
+    private void updateHealth() {
+        handler.postDelayed(() -> {
+            if (!stop) {
+                if (enemies.get(0).contactWithPlayer() && !player.getInvincibility()) {
+                    player.setInvincibility(true);
+                    player.setHealth(player.getHealth() - enemies.get(0).getPower());
+                    handler.postDelayed(() -> {
+                        player.setInvincibility(false);
+                    }, 1000);
+                } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility()) {
+                    player.setInvincibility(true);
+                    player.setHealth(player.getHealth() - enemies.get(1).getPower());
+                    handler.postDelayed(() -> {
+                        player.setInvincibility(false);
+                    }, 1000);
+                }
+                textViewHealth.setText(String.valueOf(player.getHealth()));
+                updateHealth();
+            }
+        }, 100);
     }
 
     // handle key events to move the player and name
@@ -267,6 +299,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         player.setMovementStrategy(strategy);
         if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
+            player.notifyObservers();
         }
 
         // checking to see if player is leaving the screen

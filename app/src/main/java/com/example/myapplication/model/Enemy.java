@@ -1,5 +1,5 @@
 package com.example.myapplication.model;
-public interface Enemy {
+public interface Enemy extends Observer{
     void move();
     int getHealth();
     void setHealth(int health);
@@ -17,4 +17,6 @@ public interface Enemy {
     public String getDirection();
     public void changeDirection(String direction);
 
+    public void update(float x, float y);
+    public boolean contactWithPlayer();
 }

@@ -30,6 +30,7 @@ import java.util.List;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
+    private TextView textViewHealth;
     private TextView characterNameTextView;
 
     // player movement variables
@@ -76,6 +77,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         necroView.setVisibility(necroView.VISIBLE);
         enemies.add(necromancer);
         NECRO_LOOP_DELAY = necromancer.getMovementSpeed();
+        player.registerObserver(necromancer);
 
         //chort
         EnemyFactory ChortFactory = new ChortFactory();
@@ -85,6 +87,8 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         chortView.setVisibility(chortView.VISIBLE);
         enemies.add(chort);
         CHORT_LOOP_DELAY = chort.getMovementSpeed();
+        player.registerObserver(chort);
+
 
         // start the game loops
         startNecromancerLoop();
@@ -99,6 +103,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
         animationCountdown();
+        updateHealth();
 
 
         // initializing boundaries of screen
@@ -110,7 +115,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         // populating name, difficulty, and health
         TextView textViewName = findViewById(R.id.textViewName);
         TextView textViewDiff = findViewById(R.id.textViewDifficulty);
-        TextView textViewHealth = findViewById(R.id.textViewHealth);
+        textViewHealth = findViewById(R.id.textViewHealth);
 
         textViewName.setText(player.getName());
         textViewDiff.setText("Difficulty: " + player.getDifficulty());
@@ -145,25 +150,25 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             public void run() {
                 Enemy necromancer = enemies.get(0);
                 // Move each enemy
-                if (necromancer.getDirection() == "up") {
+                if (necromancer.getDirection() == "right") {
                     if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
                         necromancer.move();
                         if (necromancer.getX() >= maxX) {
-                            necromancer.changeDirection("down");
+                            necromancer.changeDirection("left");
                         }
                         necroView.invalidate();
                     } else {
-                        necromancer.changeDirection("down");
+                        necromancer.changeDirection("left");
                     }
                 } else {
                     if (!collidesWithAnyWall((int) necromancer.getX() - 50, (int) necromancer.getY())) {
                         necromancer.move();
                         if (necromancer.getX() <= minX) {
-                            necromancer.changeDirection("up");
+                            necromancer.changeDirection("right");
                         }
                         necroView.invalidate();
                     } else {
-                        necromancer.changeDirection("up");
+                        necromancer.changeDirection("right");
                     }
                 }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
@@ -178,7 +183,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             public void run() {
                 Enemy chort = enemies.get(1);
                 // Move each enemy
-                if (chort.getDirection() == "up") {
+                if (chort.getDirection().equals("up")) {
                     if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() + 50)) {
                         chort.move();
                         if (chort.getY() >= maxY) {
@@ -215,11 +220,36 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private void animationCountdown() {
         handler.postDelayed(() -> {
             if (!stop) {
-                playerView.updateAnimation(animationCount % 4);
+                playerView.updateAnimation(animationCount % 4, player.getMovement());
+                necroView.updateAnimation(animationCount % 4);
+                chortView.updateAnimation(animationCount % 4);
                 animationCount++;
                 animationCountdown();
             }
         }, 200);
+    }
+
+    // updates the health of the player
+    private void updateHealth() {
+        handler.postDelayed(() -> {
+            if (!stop) {
+                if (enemies.get(0).contactWithPlayer() && !player.getInvincibility()) {
+                    player.setInvincibility(true);
+                    player.setHealth(player.getHealth() - enemies.get(0).getPower());
+                    handler.postDelayed(() -> {
+                        player.setInvincibility(false);
+                    }, 1000);
+                } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility()) {
+                    player.setInvincibility(true);
+                    player.setHealth(player.getHealth() - enemies.get(1).getPower());
+                    handler.postDelayed(() -> {
+                        player.setInvincibility(false);
+                    }, 1000);
+                }
+                textViewHealth.setText(String.valueOf(player.getHealth()));
+                updateHealth();
+            }
+        }, 100);
     }
 
     // handle key events to move the player and name
@@ -250,10 +280,11 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                 break;
         }
         
-        // if no wall collision, update player's position
+        // if no wall collision, update player's position and updates Observers
         player.setMovementStrategy(strategy);
         if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
+            player.notifyObservers();
         }
 
         // checking to see if player is leaving the screen
@@ -276,7 +307,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             player.setY(maxY);
         }
 
-//        playerView.updatePosition(player.getX(), player.getY());
+        // playerView.updatePosition(player.getX(), player.getY());
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();

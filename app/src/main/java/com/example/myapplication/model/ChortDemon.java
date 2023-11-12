@@ -9,6 +9,7 @@ public class ChortDemon implements Enemy {
     private float x,y;
     private static String name = "chort demon";
     private String direction = "up";
+    private float playerX,playerY;
 
     public ChortDemon(int x, int y) {
         switch (player.getDifficulty()) {
@@ -69,5 +70,18 @@ public class ChortDemon implements Enemy {
         this.direction = direction;
     }
     public String getDirection() {return direction;}
+
+    @Override
+    public void update(float x, float y) {
+        playerX = x;
+        playerY = y;
+
+    }
+
+    @Override
+    public boolean contactWithPlayer() {
+        return playerX > (x - 100) && playerX < (x + 120)
+                && playerY > (y - 80) && playerY < (y + 120);
+    }
 }
 
