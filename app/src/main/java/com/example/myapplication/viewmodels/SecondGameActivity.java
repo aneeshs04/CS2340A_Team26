@@ -85,7 +85,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
 
         // imp
         EnemyFactory ImpFactory = new ImpFactory();
-        Enemy imp = ImpFactory.createEnemy(300, 2200);
+        Enemy imp = ImpFactory.createEnemy(100, 2000);
         enemies.add(imp);
         impView = new EnemyViewModel(this, imp);
         gameLayout.addView(impView);
@@ -143,7 +143,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
             public void run() {
                 Enemy necromancer = enemies.get(0);
                 // Move each enemy
-                if (necromancer.getDirection() == "right") {
+                if (necromancer.getDirection().equals("right")) {
                     if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
                         necromancer.move();
                         if (necromancer.getX() >= maxX) {

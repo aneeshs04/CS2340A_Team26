@@ -32,7 +32,7 @@ public class BigDemon implements Enemy {
         this.x = x;
         this.y = y;
         this.size = 5;
-        this.movementSpeed = 200;
+        this.movementSpeed = 125;
     }
     public float getX() {
         return x;

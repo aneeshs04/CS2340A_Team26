@@ -183,7 +183,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             public void run() {
                 Enemy chort = enemies.get(1);
                 // Move each enemy
-                if (chort.getDirection() == "up") {
+                if (chort.getDirection().equals("up")) {
                     if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() + 50)) {
                         chort.move();
                         if (chort.getY() >= maxY) {
