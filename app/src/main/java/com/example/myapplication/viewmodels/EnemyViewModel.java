@@ -66,11 +66,86 @@ public class EnemyViewModel extends View {
 
         float x = enemy.getX();
         float y = enemy.getY();
-        Matrix matrix = new Matrix();
         Rect destRect = new Rect((int) x, (int) y, (int) (x + width), (int) (y + height));
 
         // flipping character depending on movement direction
+        Matrix matrix = new Matrix();
+        int centerX = enemyBitmap.getWidth() / 2;
+        int centerY = enemyBitmap.getHeight() / 2;
+        if (enemy.getDirection().equals("left")) {
+            matrix.setScale(-1, 1, centerX, centerY);
+        }
         Bitmap newBitmap = Bitmap.createBitmap(enemyBitmap, 0, 0, enemyBitmap.getWidth(), enemyBitmap.getHeight(), matrix, true);
         canvas.drawBitmap(newBitmap, null, destRect, null);
+    }
+
+    // updating the animation of the character based on the character chosen
+    public void updateAnimation(int animationCount) {
+        switch (animationCount) {
+            case 0:
+                switch (enemy.getName()) {
+                    case "necromancer demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.necromancer_anim_f0);
+                        break;
+                    case "chort demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.chort_run_anim_f0);
+                        break;
+                    case "imp demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.imp_run_anim_f0);
+                        break;
+                    default:
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_demon_run_anim_f0);
+                        break;
+                }
+                break;
+            case 1:
+                switch (enemy.getName()) {
+                    case "necromancer demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.necromancer_anim_f1);
+                        break;
+                    case "chort demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.chort_run_anim_f1);
+                        break;
+                    case "imp demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.imp_run_anim_f1);
+                        break;
+                    default:
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_demon_run_anim_f1);
+                        break;
+                }
+                break;
+            case 2:
+                switch (enemy.getName()) {
+                    case "necromancer demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.necromancer_anim_f2);
+                        break;
+                    case "chort demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.chort_run_anim_f2);
+                        break;
+                    case "imp demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.imp_run_anim_f2);
+                        break;
+                    default:
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_demon_run_anim_f2);
+                        break;
+                }
+            case 3:
+                switch (enemy.getName()) {
+                    case "necromancer demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.necromancer_anim_f3);
+                        break;
+                    case "chort demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.chort_run_anim_f3);
+                        break;
+                    case "imp demon":
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.imp_run_anim_f3);
+                        break;
+                    default:
+                        enemyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_demon_run_anim_f3);
+                        break;
+                }
+                break;
+        }
+        invalidate();
     }
 }

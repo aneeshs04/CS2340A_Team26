@@ -12,6 +12,7 @@ public class BigDemon implements Enemy {
     private Player player = Player.getInstance();
     private static String name = "big demon";
     private String direction = "up";
+    private float playerX,playerY;
 
     public BigDemon(int x, int y) {
         switch (player.getDifficulty()) {
@@ -77,4 +78,17 @@ public class BigDemon implements Enemy {
         this.direction = direction;
     }
     public String getDirection() {return direction;}
+
+    @Override
+    public void update(float x, float y) {
+        playerX = x;
+        playerY = y;
+
+    }
+
+    @Override
+    public boolean contactWithPlayer() {
+        return playerX > (x - 150) && playerX < (x + 150)
+                && playerY > (y - 160) && playerY < (y + 160);
+    }
 }

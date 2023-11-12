@@ -33,6 +33,7 @@ import com.example.myapplication.model.Wall;
 
 public class SecondGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
+    private TextView textViewHealth;
     private TextView characterNameTextView;
 
     // player movement variables
@@ -80,6 +81,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         gameLayout.addView(necroView);
         necroView.setVisibility(necroView.VISIBLE);
         NECRO_LOOP_DELAY = necromancer.getMovementSpeed();
+        player.registerObserver(necromancer);
 
         // imp
         EnemyFactory ImpFactory = new ImpFactory();
@@ -89,6 +91,8 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         gameLayout.addView(impView);
         impView.setVisibility(impView.VISIBLE);
         IMP_LOOP_DELAY = imp.getMovementSpeed();
+        player.registerObserver(imp);
+
 
         // Start the game loops
         startNecromancerLoop();
@@ -103,6 +107,8 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
         animationCountdown();
+        updateHealth();
+
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -113,7 +119,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         // populating name, difficulty, and health
         TextView textViewName = findViewById(R.id.textViewName);
         TextView textViewDiff = findViewById(R.id.textViewDifficulty);
-        TextView textViewHealth = findViewById(R.id.textViewHealth);
+        textViewHealth = findViewById(R.id.textViewHealth);
 
         textViewName.setText(MainActivity.getName());
         textViewDiff.setText("Difficulty: " + MainActivity.getDifficulty());
@@ -137,25 +143,25 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
             public void run() {
                 Enemy necromancer = enemies.get(0);
                 // Move each enemy
-                if (necromancer.getDirection() == "up") {
+                if (necromancer.getDirection() == "right") {
                     if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
                         necromancer.move();
                         if (necromancer.getX() >= maxX) {
-                            necromancer.changeDirection("down");
+                            necromancer.changeDirection("left");
                         }
                         necroView.invalidate();
                     } else {
-                        necromancer.changeDirection("down");
+                        necromancer.changeDirection("left");
                     }
                 } else {
                     if (!collidesWithAnyWall((int) necromancer.getX() - 50, (int) necromancer.getY())) {
                         necromancer.move();
                         if (necromancer.getX() <= minX) {
-                            necromancer.changeDirection("up");
+                            necromancer.changeDirection("right");
                         }
                         necroView.invalidate();
                     } else {
-                        necromancer.changeDirection("up");
+                        necromancer.changeDirection("right");
                     }
                 }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
@@ -207,11 +213,36 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     private void animationCountdown() {
         handler.postDelayed(() -> {
             if (!stop) {
-                playerView.updateAnimation(animationCount % 4);
+                playerView.updateAnimation(animationCount % 4, player.getMovement());
+                necroView.updateAnimation(animationCount % 4);
+                impView.updateAnimation(animationCount % 4);
                 animationCount++;
                 animationCountdown();
             }
         }, 200);
+    }
+
+    // updates the health of the player
+    private void updateHealth() {
+        handler.postDelayed(() -> {
+            if (!stop) {
+                if (enemies.get(0).contactWithPlayer() && !player.getInvincibility()) {
+                    player.setInvincibility(true);
+                    player.setHealth(player.getHealth() - enemies.get(0).getPower());
+                    handler.postDelayed(() -> {
+                        player.setInvincibility(false);
+                    }, 1000);
+                } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility()) {
+                    player.setInvincibility(true);
+                    player.setHealth(player.getHealth() - enemies.get(1).getPower());
+                    handler.postDelayed(() -> {
+                        player.setInvincibility(false);
+                    }, 1000);
+                }
+                textViewHealth.setText(String.valueOf(player.getHealth()));
+                updateHealth();
+            }
+        }, 100);
     }
 
     // handle key events to move the player and name
@@ -246,6 +277,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         player.setMovementStrategy(strategy);
         if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
+            player.notifyObservers();
         }
 
         // checking to see if player is leaving the screen

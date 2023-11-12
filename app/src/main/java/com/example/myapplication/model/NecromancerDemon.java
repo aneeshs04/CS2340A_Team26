@@ -8,7 +8,8 @@ public class NecromancerDemon implements Enemy {
     private float x,y;
     private Player player = Player.getInstance();
     private static String name = "necromancer demon";
-    private String direction = "up";
+    private String direction = "right";
+    private float playerX,playerY;
 
     public NecromancerDemon(int x, int y) {
         switch (player.getDifficulty()) {
@@ -48,7 +49,7 @@ public class NecromancerDemon implements Enemy {
 
     @Override
     public void move() {
-        if (direction.equals("up")) {
+        if (direction.equals("right")) {
             this.x += 50;
         } else {
             this.x -= 50;
@@ -70,4 +71,16 @@ public class NecromancerDemon implements Enemy {
         this.direction = direction;
     }
 
+    @Override
+    public void update(float x, float y) {
+        playerX = x;
+        playerY = y;
+
+    }
+
+    @Override
+    public boolean contactWithPlayer() {
+        return playerX > (x - 100) && playerX < (x + 100)
+                && playerY > (y - 100) && playerY < (y + 100);
+    }
 }

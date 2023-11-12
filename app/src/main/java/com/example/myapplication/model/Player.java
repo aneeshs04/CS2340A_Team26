@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Player implements Subject {
     private List<Observer> observers = new ArrayList<>();
+    private List<Observer> enemies = new ArrayList<>();
     private MovementStrategy movementStrategy;
     private static Player player;
     private static String name;
@@ -21,6 +22,8 @@ public class Player implements Subject {
     private float proposedX, proposedY;
     private final float originalX, originalY;
     private boolean won = false;
+    private boolean invincibility = false;
+    private boolean movement = false;
     private Player () {
         this.movementSpeed = 50;
         this.movementStrategy = new MoveRightStrategy();
@@ -60,6 +63,7 @@ public class Player implements Subject {
     public void setX(float x) {
         this.x = x;
         notifyObservers();
+
     }
 
     public void setY(float y) {
@@ -91,6 +95,7 @@ public class Player implements Subject {
             observer.update(x, y);
         }
     }
+
     public Boolean getWon() {
         return won;
     }
@@ -162,8 +167,19 @@ public class Player implements Subject {
         return originalY;
     }
 
-//    public String getCharacter() {return character;}
-//    public void setCharacter(String character) {
-//        this.character = character;
-//    }
+    public boolean getInvincibility() {
+        return invincibility;
+    }
+
+    public void setInvincibility(boolean invincibility) {
+        this.invincibility = invincibility;
+    }
+
+    public boolean getMovement() {
+        return movement;
+    }
+
+    public void setMovement(boolean movement) {
+        this.movement = movement;
+    }
 }
