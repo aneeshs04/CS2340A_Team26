@@ -25,9 +25,8 @@ public class EndActivity extends AppCompatActivity {
         setContentView(R.layout.end_screen);
 
         // changing end screen based on if player won or lost
-        boolean playerWon = getIntent().getBooleanExtra("playerWon", false);
         TextView statusTextView = findViewById(R.id.youwinText);
-        if (playerWon) {
+        if (player.getWon()) {
             statusTextView.setText("You Win!");
         } else {
             statusTextView.setText("You Lose!");
