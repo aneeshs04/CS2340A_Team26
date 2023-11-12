@@ -1,5 +1,12 @@
 package com.example.myapplication.model;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.view.View;
+
+import com.example.myapplication.viewmodels.ThirdGameActivity;
+import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
 
 import java.util.ArrayList;
@@ -148,7 +155,11 @@ public class Player implements Subject {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        if (health > 0){
+            this.health = health;
+        } else {
+            this.health = 0;
+        }
     }
 
     public static String getCharacter() {

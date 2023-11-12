@@ -251,12 +251,40 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                 if (enemies.get(0).contactWithPlayer() && !player.getInvincibility()) {
                     player.setInvincibility(true);
                     player.setHealth(player.getHealth() - enemies.get(0).getPower());
+                    if (player.getHealth() <= 0) {
+                        player.removeObserver(this);
+                        player.setWon(false);
+                        playerView.setVisibility(playerView.INVISIBLE);
+                        characterNameTextView.setVisibility(View.INVISIBLE);
+                        stop = true;
+                        player.setX(player.getOriginalX());
+                        player.setY(player.getOriginalY());
+                        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+                        scoreCountDownTimer.cancel();
+                        Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
+                        startActivity(end);
+                        finish();
+                    }
                     handler.postDelayed(() -> {
                         player.setInvincibility(false);
                     }, 1000);
                 } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility()) {
                     player.setInvincibility(true);
                     player.setHealth(player.getHealth() - enemies.get(1).getPower());
+                    if (player.getHealth() <= 0) {
+                        player.removeObserver(this);
+                        player.setWon(false);
+                        playerView.setVisibility(playerView.INVISIBLE);
+                        characterNameTextView.setVisibility(View.INVISIBLE);
+                        stop = true;
+                        player.setX(player.getOriginalX());
+                        player.setY(player.getOriginalY());
+                        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+                        scoreCountDownTimer.cancel();
+                        Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
+                        startActivity(end);
+                        finish();
+                    }
                     handler.postDelayed(() -> {
                         player.setInvincibility(false);
                     }, 1000);
