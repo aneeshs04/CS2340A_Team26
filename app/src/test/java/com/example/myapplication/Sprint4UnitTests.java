@@ -7,8 +7,14 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import com.example.myapplication.model.BigDemon;
+import com.example.myapplication.model.BigDemonFactory;
+import com.example.myapplication.model.ChortDemon;
+import com.example.myapplication.model.ChortFactory;
+import com.example.myapplication.model.Enemy;
+import com.example.myapplication.model.EnemyFactory;
 
 import com.example.myapplication.model.Player;
+
 
 public class Sprint4UnitTests {
     @Test
