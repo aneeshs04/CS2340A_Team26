@@ -18,6 +18,7 @@ import com.example.myapplication.model.ImpFactory;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.model.MoveDownStrategy;
 import com.example.myapplication.model.MoveLeftStrategy;
@@ -85,7 +86,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
 
         // imp
         EnemyFactory ImpFactory = new ImpFactory();
-        Enemy imp = ImpFactory.createEnemy(300, 2200);
+        Enemy imp = ImpFactory.createEnemy(100, 2000);
         enemies.add(imp);
         impView = new EnemyViewModel(this, imp);
         gameLayout.addView(impView);
@@ -143,7 +144,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
             public void run() {
                 Enemy necromancer = enemies.get(0);
                 // Move each enemy
-                if (necromancer.getDirection() == "right") {
+                if (necromancer.getDirection().equals("right")) {
                     if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
                         necromancer.move();
                         if (necromancer.getX() >= maxX) {
@@ -229,12 +230,40 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
                 if (enemies.get(0).contactWithPlayer() && !player.getInvincibility()) {
                     player.setInvincibility(true);
                     player.setHealth(player.getHealth() - enemies.get(0).getPower());
+                    if (player.getHealth() <= 0) {
+                        player.removeObserver(this);
+                        player.setWon(false);
+                        playerView.setVisibility(playerView.INVISIBLE);
+                        characterNameTextView.setVisibility(View.INVISIBLE);
+                        stop = true;
+                        player.setX(player.getOriginalX());
+                        player.setY(player.getOriginalY());
+                        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+                        scoreCountDownTimer.cancel();
+                        Intent end = new Intent(SecondGameActivity.this, EndActivity.class);
+                        startActivity(end);
+                        finish();
+                    }
                     handler.postDelayed(() -> {
                         player.setInvincibility(false);
                     }, 1000);
                 } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility()) {
                     player.setInvincibility(true);
                     player.setHealth(player.getHealth() - enemies.get(1).getPower());
+                    if (player.getHealth() <= 0) {
+                        player.removeObserver(this);
+                        player.setWon(false);
+                        playerView.setVisibility(playerView.INVISIBLE);
+                        characterNameTextView.setVisibility(View.INVISIBLE);
+                        stop = true;
+                        player.setX(player.getOriginalX());
+                        player.setY(player.getOriginalY());
+                        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+                        scoreCountDownTimer.cancel();
+                        Intent end = new Intent(SecondGameActivity.this, EndActivity.class);
+                        startActivity(end);
+                        finish();
+                    }
                     handler.postDelayed(() -> {
                         player.setInvincibility(false);
                     }, 1000);
