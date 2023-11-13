@@ -73,6 +73,8 @@ public class ImpDemon implements Enemy {
         this.direction = direction;
     }
     public String getDirection() {return direction;}
+    public float getPlayerX() {return playerX;}
+    public float getPlayerY() {return playerY;}
 
     @Override
     public void update(float x, float y) {

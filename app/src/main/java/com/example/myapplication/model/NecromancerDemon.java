@@ -70,6 +70,8 @@ public class NecromancerDemon implements Enemy {
     public void changeDirection(String direction) {
         this.direction = direction;
     }
+    public float getPlayerX() {return playerX;}
+    public float getPlayerY() {return playerY;}
 
     @Override
     public void update(float x, float y) {
