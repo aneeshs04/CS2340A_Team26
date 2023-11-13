@@ -78,7 +78,14 @@ public class BigDemon implements Enemy {
         this.direction = direction;
     }
     public String getDirection() {return direction;}
+    public float getPlayerX() {return playerX;}
+    public float getPlayerY() {return playerY;}
 
+    public void updatePlayerHealth(boolean contact, int power, int health) {
+        if (contact == true) {
+            player.setHealth(health - power);
+        }
+    }
     @Override
     public void update(float x, float y) {
         playerX = x;
