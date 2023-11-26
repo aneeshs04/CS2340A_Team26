@@ -52,6 +52,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static int animationCount = 0;
     private List<Wall> walls = new ArrayList<>();
+
+    // enemy handler variables
     private Handler gameLoopHandler = new Handler();
     private static final int CHORT_LOOP_DELAY = 100;
     private static final int BIG_LOOP_DELAY = 200;
