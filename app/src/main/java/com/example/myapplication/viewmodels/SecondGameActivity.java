@@ -54,6 +54,8 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static int animationCount = 0;
     private List<Wall> walls = new ArrayList<>();
+
+    // enemy handler variables
     private Handler gameLoopHandler = new Handler();
     private static int NECRO_LOOP_DELAY;
     private static int IMP_LOOP_DELAY;

@@ -50,6 +50,8 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private static Boolean stop;
     private static int animationCount = 0;
     private List<Wall> walls = new ArrayList<>();
+
+    // enemy handler variables
     private Handler gameLoopHandler = new Handler();
     private static int NECRO_LOOP_DELAY;
     private static int CHORT_LOOP_DELAY;
