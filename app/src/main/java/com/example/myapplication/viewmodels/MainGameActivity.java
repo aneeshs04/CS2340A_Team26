@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
-    private TextView countdownTextView;
     private TextView textViewHealth;
+    private TextView countdownTextView;
     private TextView characterNameTextView;
 
     // player movement variables
