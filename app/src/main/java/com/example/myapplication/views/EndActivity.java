@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class EndActivity extends AppCompatActivity {
     private Player player = Player.getInstance();
 
-    // opening the ending screen
+    //opening the ending screen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
