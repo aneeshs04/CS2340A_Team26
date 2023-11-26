@@ -82,8 +82,8 @@ public class ChortDemon implements Enemy {
 
     @Override
     public boolean contactWithPlayer() {
-        return playerX > (x - 100) && playerX < (x + 120)
-                && playerY > (y - 80) && playerY < (y + 120);
+        return (playerX + 90) > (x + 25) && (playerX + 20) < (x + 100)
+                && (playerY + 115) > y && playerY < (y + 140);
     }
 }
 

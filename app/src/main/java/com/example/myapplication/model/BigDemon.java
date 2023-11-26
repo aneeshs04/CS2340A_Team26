@@ -95,7 +95,7 @@ public class BigDemon implements Enemy {
 
     @Override
     public boolean contactWithPlayer() {
-        return playerX > (x - 150) && playerX < (x + 150)
-                && playerY > (y - 160) && playerY < (y + 160);
+        return (playerX + 90) > (x + 30) && (playerX + 20) < (x + 170)
+                && (playerY + 115) > y && playerY < (y + 205);
     }
 }
