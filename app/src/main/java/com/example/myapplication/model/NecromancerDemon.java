@@ -10,8 +10,7 @@ public class NecromancerDemon implements Enemy {
     private static String name = "necromancer demon";
     private String direction = "right";
     private float playerX,playerY;
-    private String playerDirection;
-
+    private boolean alive = true;
     public NecromancerDemon(int x, int y) {
         switch (player.getDifficulty()) {
             case "easy":
@@ -78,7 +77,6 @@ public class NecromancerDemon implements Enemy {
     public void update(float x, float y, String playerDirection) {
         playerX = x;
         playerY = y;
-        this.playerDirection = playerDirection;
     }
 
     @Override
@@ -91,5 +89,12 @@ public class NecromancerDemon implements Enemy {
     public boolean contactWithWeapon(Weapon weapon) {
         return weapon.getRecRight() > (x) && weapon.getRecLeft() < (x + 100)
                 && weapon.getRecDown() > y && weapon.getRecUp() < (y + 100);
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }
