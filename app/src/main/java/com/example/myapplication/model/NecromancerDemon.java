@@ -1,6 +1,7 @@
 package com.example.myapplication.model;
 
 public class NecromancerDemon implements Enemy {
+
     private int health;
     private int movementSpeed;
     private int power;
