@@ -287,6 +287,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         handler.postDelayed(() -> {
             if (!stop) {
                 if (performWeaponAttack) {
+                    player.notifyObservers();
                     weapon.setAttackCooldown(true);
                     swordView.setVisibility(swordView.VISIBLE);
                     swordView.updateAnimation(weaponAnimationCount);

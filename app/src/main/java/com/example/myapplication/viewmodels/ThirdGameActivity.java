@@ -316,6 +316,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
             if (!stop) {
                 if (performWeaponAttack) {
                     weapon.setAttackCooldown(true);
+                    player.notifyObservers();
                     swordView.setVisibility(swordView.VISIBLE);
                     swordView.updateAnimation(weaponAnimationCount);
                     weaponAnimationCount++;
