@@ -15,8 +15,6 @@ public class Weapon implements Observer{
     private Weapon () {
         playerX = 550;
         playerY = 2000;
-        deltax = 0;
-        deltay = 0;
         attackCooldown = false;
         weaponSwingDirection = "right";
         //playerDirectionRight = true;
@@ -65,8 +63,8 @@ public class Weapon implements Observer{
     public void update(float x, float y) {
         playerX = x;
         playerY = y;
-        this.x = playerX + 50 + deltax;
-        this.y = playerY + 100 + deltay;
+        this.x = playerX + 50;
+        this.y = playerY + 100;
     }
 
 //    public boolean isPlayerDirectionRight() {

@@ -390,6 +390,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(maxX - 10);
+            weapon.setX(player.getX());
             Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
             startActivity(end);
             finish();
@@ -402,6 +403,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(minX + 10);
+            weapon.setX(player.getX() + 50);
             Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
             startActivity(end);
             finish();

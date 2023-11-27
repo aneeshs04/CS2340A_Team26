@@ -385,6 +385,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(minX + 10);
+            weapon.setX(player.getX() + 50);
             Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
             startActivity(end);
             finish();
