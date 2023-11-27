@@ -3,6 +3,7 @@ package com.example.myapplication.model;
 import android.os.CountDownTimer;
 
 public class ScoreCountdown extends CountDownTimer {
+
     private Player player = Player.getInstance();
     private static ScoreCountdown instance;
     private OnScoreChangeListener onScoreChangeListener;
