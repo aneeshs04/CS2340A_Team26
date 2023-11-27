@@ -16,7 +16,7 @@ public class Weapon implements Observer{
         playerY = 2000;
         attackCooldown = false;
         weaponSwingDirection = "right";
-        weaponAttackDelay = 1000; //one second delay between swings
+        weaponAttackDelay = 0; //one second delay between swings
     }
     public static Weapon getInstance() {
         if (weapon == null) {
