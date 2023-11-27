@@ -137,7 +137,11 @@ public class BigDemon implements Enemy {
     }
 
     @Override
-    public boolean contactWithWeapon() {
+    public boolean contactWithWeapon(Weapon weapon) {
+//        if (playerDirection.equals("right")) {
+//            return weapon > (x + 30) && (playerX + 20) < (x + 170)
+//                    && (playerY + 115) > y && playerY < (y + 205);
+//        }
         return false;
     }
 }
