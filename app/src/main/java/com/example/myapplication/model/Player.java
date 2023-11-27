@@ -22,6 +22,7 @@ public class Player implements Subject {
     private static String name;
     private static String character;
     private int score;
+    private int time;
     private int health;
     private String difficulty = "easy";
     private float x;
@@ -106,9 +107,18 @@ public class Player implements Subject {
         }
     }
 
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
     public Boolean getWon() {
         return won;
     }
+
     public void setWon(boolean won) {
         this.won = won;
     }

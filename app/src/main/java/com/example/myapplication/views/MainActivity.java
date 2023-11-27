@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.viewmodels.MainGameActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -128,8 +129,11 @@ public class MainActivity extends AppCompatActivity {
                 player.setDifficulty(difficulty);
                 player.setName(name);
                 player.setCharacter(character);
-                ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 200);
+                player.setTime(0);
+                ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(1000000, 200);
                 scoreCountDownTimer.start();
+                TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(1000000, 1000);
+                timeCountDownTimer.start();
                 Intent game = new Intent(MainActivity.this, MainGameActivity.class);
                 startActivity(game);
                 finish();

@@ -18,6 +18,7 @@ import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.model.MoveDownStrategy;
@@ -34,6 +35,7 @@ import com.example.myapplication.model.Wall;
 
 public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
+    private TextView timeTextView;
     private TextView textViewHealth;
     private TextView characterNameTextView;
 
@@ -80,6 +82,12 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         player.registerObserver(weapon);
 
 
+        // start the time countdown
+        timeTextView = findViewById(R.id.textViewTime);
+        timeTextView.setText("Time Spent: " + player.getTime() + " s");
+        TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(200000, 1000);
+        timeCountDownTimer.setOnTimeChangeListener(newTime -> timeTextView.setText("Time Spent: " + newTime + " s"));
+
         // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
         countdownTextView.setText("Score: " + player.getScore());
@@ -114,7 +122,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
             bigDemonView.setVisibility(bigDemonView.VISIBLE);
             // start the game loops
             startBigDemonLoop();
-        }else {
+        } else {
             bigDemon.setAlive(false);
         }
 
@@ -305,6 +313,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                             player.setY(player.getOriginalY());
                             ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
                             scoreCountDownTimer.cancel();
+                            TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(1000000, 1000);
+                            timeCountDownTimer.cancel();
                             Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
                             startActivity(end);
                             finish();
@@ -444,6 +454,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
             player.setY(player.getOriginalY());
             ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
             scoreCountDownTimer.cancel();
+            TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(1000000, 1000);
+            timeCountDownTimer.cancel();
             Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
             startActivity(end);
             finish();
