@@ -9,5 +9,7 @@ public class MoveRightStrategy implements MovementStrategy {
     public void move(Player player) {
         player.setX(player.getX() + 50);
     }
+
+
 }
 
