@@ -89,7 +89,8 @@ public class ChortDemon implements Enemy {
 
     @Override
     public boolean contactWithWeapon(Weapon weapon) {
-        return false;
+        return weapon.getRecRight() > (x + 25) && weapon.getRecLeft() < (x + 100)
+                && weapon.getRecDown() > y && weapon.getRecUp() < (y + 140);
     }
 }
 
