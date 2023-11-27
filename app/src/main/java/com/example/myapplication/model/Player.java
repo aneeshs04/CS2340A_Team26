@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player implements Subject {
-    private List<Observer> observers = new ArrayList<>();
     private List<Observer> enemies = new ArrayList<>();
+    private List<Observer> observers = new ArrayList<>();
+
+
     private MovementStrategy movementStrategy;
     private static Player player;
     private static String name;
