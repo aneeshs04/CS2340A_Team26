@@ -48,6 +48,8 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private PlayerViewModel playerView;
     private EnemyViewModel chortView;
     private EnemyViewModel bigDemonView;
+    private static boolean chortAlive = true;
+    private static boolean bigDemonAlive = true;
     ConstraintLayout gameLayout;
     private final int minX = 0;
     private final int minY = -50;
@@ -89,25 +91,33 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         EnemyFactory ChortFactory = new ChortFactory();
         Enemy chort = ChortFactory.createEnemy(835, 200);
         chortView = new EnemyViewModel(this, chort);
-        gameLayout.addView(chortView);
-        chortView.setVisibility(chortView.VISIBLE);
         enemies.add(chort);
         player.registerObserver(chort);
+        if (chortAlive) {
+            gameLayout.addView(chortView);
+            chortView.setVisibility(chortView.VISIBLE);
+            // start the game loops
+            startChortLoop();
+        }else {
+            chort.setAlive(false);
+        }
 
 
-        //chort
+        //bigDemon
         EnemyFactory BigDemonFactory = new BigDemonFactory();
         Enemy bigDemon = BigDemonFactory.createEnemy(250, 2000);
         bigDemonView = new EnemyViewModel(this, bigDemon);
-        gameLayout.addView(bigDemonView);
-        bigDemonView.setVisibility(bigDemonView.VISIBLE);
         enemies.add(bigDemon);
         player.registerObserver(bigDemon);
+        if (bigDemonAlive) {
+            gameLayout.addView(bigDemonView);
+            bigDemonView.setVisibility(bigDemonView.VISIBLE);
+            // start the game loops
+            startBigDemonLoop();
+        }else {
+            bigDemon.setAlive(false);
+        }
 
-
-        // start the game loops
-        startChortLoop();
-        startBigDemonLoop();
 
         // initializing location of player and player name
         characterNameTextView = findViewById(R.id.textViewName);
@@ -185,6 +195,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                 if (chort.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(chortView);
                     chort.setAlive(false);
+                    chortAlive = false;
                 }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
@@ -241,6 +252,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                 if (bigDemon.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(bigDemonView);
                     bigDemon.setAlive(false);
+                    bigDemonAlive = false;
                 }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, BIG_LOOP_DELAY);
@@ -273,46 +285,28 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private void updateHealth() {
         handler.postDelayed(() -> {
             if (!stop) {
-                if (enemies.get(0).contactWithPlayer() && !player.getInvincibility() && enemies.get(0).isAlive()) {
-                    player.setInvincibility(true);
-                    player.setHealth(player.getHealth() - enemies.get(0).getPower());
-                    if (player.getHealth() <= 0) {
-                        player.removeObserver(this);
-                        player.setWon(false);
-                        playerView.setVisibility(playerView.INVISIBLE);
-                        characterNameTextView.setVisibility(View.INVISIBLE);
-                        stop = true;
-                        player.setX(player.getOriginalX());
-                        player.setY(player.getOriginalY());
-                        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
-                        scoreCountDownTimer.cancel();
-                        Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
-                        startActivity(end);
-                        finish();
+                for (int i = 0; i < enemies.size(); i++) {
+                    if (enemies.get(i).contactWithPlayer() && !player.getInvincibility() && enemies.get(i).isAlive()) {
+                        player.setInvincibility(true);
+                        player.setHealth(player.getHealth() - enemies.get(i).getPower());
+                        if (player.getHealth() <= 0) {
+                            player.removeObserver(this);
+                            player.setWon(false);
+                            playerView.setVisibility(playerView.INVISIBLE);
+                            characterNameTextView.setVisibility(View.INVISIBLE);
+                            stop = true;
+                            player.setX(player.getOriginalX());
+                            player.setY(player.getOriginalY());
+                            ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+                            scoreCountDownTimer.cancel();
+                            Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
+                            startActivity(end);
+                            finish();
+                        }
+                        handler.postDelayed(() -> {
+                            player.setInvincibility(false);
+                        }, 1000);
                     }
-                    handler.postDelayed(() -> {
-                        player.setInvincibility(false);
-                    }, 1000);
-                } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility() && enemies.get(0).isAlive()) {
-                    player.setInvincibility(true);
-                    player.setHealth(player.getHealth() - enemies.get(1).getPower());
-                    if (player.getHealth() <= 0) {
-                        player.removeObserver(this);
-                        player.setWon(false);
-                        playerView.setVisibility(playerView.INVISIBLE);
-                        characterNameTextView.setVisibility(View.INVISIBLE);
-                        stop = true;
-                        player.setX(player.getOriginalX());
-                        player.setY(player.getOriginalY());
-                        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
-                        scoreCountDownTimer.cancel();
-                        Intent end = new Intent(ThirdGameActivity.this, EndActivity.class);
-                        startActivity(end);
-                        finish();
-                    }
-                    handler.postDelayed(() -> {
-                        player.setInvincibility(false);
-                    }, 1000);
                 }
                 textViewHealth.setText(String.valueOf(player.getHealth()));
                 updateHealth();
@@ -418,8 +412,9 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         // checking to see if player is leaving the screen
         if (player.getX() < minX) {
             player.removeObserver(this);
-            player.removeObserver(enemies.get(0));
-            player.removeObserver(enemies.get(1));
+            for (int i = 0; i < enemies.size(); i++) {
+                player.removeObserver(enemies.get(i));
+            }
             player.removeObserver(weapon);
             playerView.setVisibility(playerView.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
@@ -431,8 +426,9 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
             finish();
         } else if (player.getX() > maxX) {
             player.removeObserver(this);
-            player.removeObserver(enemies.get(0));
-            player.removeObserver(enemies.get(1));
+            for (int i = 0; i < enemies.size(); i++) {
+                player.removeObserver(enemies.get(i));
+            }
             player.removeObserver(weapon);
             player.setWon(true);
             playerView.setVisibility(playerView.INVISIBLE);
