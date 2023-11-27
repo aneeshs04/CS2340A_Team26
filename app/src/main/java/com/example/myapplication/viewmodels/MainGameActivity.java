@@ -175,7 +175,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                     }
                 }
                 if (necromancer.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
-                    player.setHealth(player.getHealth()+100);
+                    gameLayout.removeView(necroView);
                 }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, NECRO_LOOP_DELAY);
@@ -210,7 +210,9 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         chort.changeDirection("up");
                     }
                 }
-
+                if (chort.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
+                    gameLayout.removeView(chortView);
+                }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
             }
