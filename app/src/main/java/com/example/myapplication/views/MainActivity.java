@@ -19,6 +19,7 @@ import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.viewmodels.MainGameActivity;
 
 public class MainActivity extends AppCompatActivity {
+
     private static String name;
     private static String difficulty;
     private static String character;
