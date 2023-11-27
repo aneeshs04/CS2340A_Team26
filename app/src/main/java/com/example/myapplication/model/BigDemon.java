@@ -138,10 +138,20 @@ public class BigDemon implements Enemy {
 
     @Override
     public boolean contactWithWeapon(Weapon weapon) {
+        return weapon.getRecRight() > (x + 30) && weapon.getRecLeft() < (x + 170)
+                && weapon.getRecDown() > y && weapon.getRecUp() < (y + 205);
 //        if (playerDirection.equals("right")) {
-//            return weapon > (x + 30) && (playerX + 20) < (x + 170)
-//                    && (playerY + 115) > y && playerY < (y + 205);
+//
+//        } else if (playerDirection.equals("left")) {
+//            return weapon.getRecRight() > (x + 30) && weapon.getRecLeft() < (x + 170)
+//                    && weapon.getRecDown() > y && weapon.getRecUp() < (y + 205);
+//        } else if (playerDirection.equals("up")) {
+//            return weapon.getRecRight() > (x + 30) && weapon.getRecLeft() < (x + 170)
+//                    && weapon.getRecDown() > y && weapon.getRecUp() < (y + 205);
+//        } else if (playerDirection.equals("down")) {
+//            return weapon.getRecRight() > (x + 30) && weapon.getRecLeft() < (x + 170)
+//                    && weapon.getRecDown() > y && weapon.getRecUp() < (y + 205);
 //        }
-        return false;
+//        return false;
     }
 }
