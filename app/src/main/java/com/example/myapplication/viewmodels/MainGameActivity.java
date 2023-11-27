@@ -24,6 +24,7 @@ import com.example.myapplication.model.MoveRightStrategy;
 import com.example.myapplication.model.MoveUpStrategy;
 import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.Observer;
+import com.example.myapplication.model.Weapon;
 import com.example.myapplication.views.EndActivity;
 
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private TextView textViewHealth;
     private TextView countdownTextView;
     private TextView characterNameTextView;
+
+    //weapon
+    private Weapon weapon = Weapon.getInstance();
+    private Boolean performWeaponAttack = false;
+    private WeaponViewModel swordView;
 
     // player movement variables
     private final Player player = Player.getInstance();
@@ -49,6 +55,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private static Boolean stop;
     private static int animationCount = 0;
+    private static int weaponAnimationCount = 0;
     private List<Wall> walls = new ArrayList<>();
 
     // enemy handler variables
@@ -64,6 +71,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         gameLayout = findViewById(R.id.gameLayout);
 
         player.registerObserver(this);
+        player.registerObserver(weapon);
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
@@ -105,9 +113,12 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         gameLayout.addView(playerView);
         playerView.setVisibility(playerView.VISIBLE);
         characterNameTextView.setVisibility(View.VISIBLE);
+        swordView = new WeaponViewModel(this, weapon);
+        gameLayout.addView(swordView);
+        swordView.setVisibility(swordView.INVISIBLE);
+        updateWeaponAttack();
         animationCountdown();
         updateHealth();
-
 
         // initializing boundaries of screen
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -262,13 +273,61 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         Intent end = new Intent(MainGameActivity.this, EndActivity.class);
                         startActivity(end);
                         finish();
-                    }                    handler.postDelayed(() -> {
+                    }
+                    handler.postDelayed(() -> {
                         player.setInvincibility(false);
                     }, 1000);
                 }
                 textViewHealth.setText(String.valueOf(player.getHealth()));
                 updateHealth();
             }
+        }, 100);
+    }
+
+    //performs weapon attack in the given direction the player is facing.
+    private void updateWeaponAttack() {
+        handler.postDelayed(() -> {
+            if (!stop) {
+                if (performWeaponAttack) {
+                    weapon.setAttackCooldown(true);
+                    swordView.setVisibility(swordView.VISIBLE);
+                    swordView.updateAnimation(weaponAnimationCount);
+                    weaponAnimationCount++;
+                    handler.postDelayed(() -> {
+                        swordView.updateAnimation(weaponAnimationCount);
+                        weaponAnimationCount++;
+                    }, 100);
+                    handler.postDelayed(() -> {
+                        swordView.updateAnimation(weaponAnimationCount);
+                        weaponAnimationCount++;
+                    }, 150);
+                    handler.postDelayed(() -> {
+                        swordView.updateAnimation(weaponAnimationCount);
+                        weaponAnimationCount++;
+                    }, 200);
+                    handler.postDelayed(() -> {
+                        swordView.updateAnimation(weaponAnimationCount);
+                        weaponAnimationCount++;
+                    }, 250);
+                    handler.postDelayed(() -> {
+                        swordView.updateAnimation(weaponAnimationCount);
+                        weaponAnimationCount = 0;
+                    }, 300);
+                    handler.postDelayed(() -> {
+                        swordView.updateAnimation(weaponAnimationCount);
+                        weaponAnimationCount = 0;
+                        swordView.setVisibility(swordView.INVISIBLE);
+                    }, 400);
+
+                    //animation stuff goes here for attack
+                    //enemy stuff goes here
+                    performWeaponAttack = false;
+                    handler.postDelayed(() -> {
+                        weapon.setAttackCooldown(false);
+                    }, weapon.getWeaponAttackDelay());
+                }
+            }
+            updateWeaponAttack();
         }, 100);
     }
 
@@ -283,20 +342,29 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 strategy = new MoveLeftStrategy();
                 player.setFacingRight(false);
+                weapon.setWeaponSwingDirection("left");
                 player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
                 player.setFacingRight(true);
+                weapon.setWeaponSwingDirection("right");
                 player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 strategy = new MoveDownStrategy();
+                weapon.setWeaponSwingDirection("down");
                 player.setProposedY(player.getProposedY() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 strategy = new MoveUpStrategy();
+                weapon.setWeaponSwingDirection("up");
                 player.setProposedY(player.getProposedY() - 50);
+                break;
+            case KeyEvent.KEYCODE_SPACE:
+                if (weapon.isAttackCooldown() == false) {
+                    performWeaponAttack = true;
+                }
                 break;
         }
         
@@ -312,10 +380,14 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             player.setX(minX);
         } else if (player.getX() > maxX) {
             player.removeObserver(this);
+            player.removeObserver(enemies.get(0));
+            player.removeObserver(enemies.get(1));
+            player.removeObserver(weapon);
             playerView.setVisibility(playerView.INVISIBLE);
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(minX + 10);
+            weapon.setX(player.getX() + 50);
             Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
             startActivity(end);
             finish();
@@ -331,6 +403,9 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         characterNameTextView.setX(player.getX() - 125);
         characterNameTextView.setY(player.getY() - characterNameTextView.getHeight() + 45);
         playerView.invalidate();
+        if (swordView != null) {
+            swordView.invalidate();
+        }
         return true;
     }
 

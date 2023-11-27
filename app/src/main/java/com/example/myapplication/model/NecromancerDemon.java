@@ -82,7 +82,7 @@ public class NecromancerDemon implements Enemy {
 
     @Override
     public boolean contactWithPlayer() {
-        return playerX > (x - 100) && playerX < (x + 100)
-                && playerY > (y - 100) && playerY < (y + 100);
+        return (playerX + 90) > x && (playerX + 20) < (x + 100)
+                && (playerY + 115) > y && playerY < (y + 100);
     }
 }

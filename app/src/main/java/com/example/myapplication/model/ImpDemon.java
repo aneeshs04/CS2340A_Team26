@@ -85,8 +85,8 @@ public class ImpDemon implements Enemy {
 
     @Override
     public boolean contactWithPlayer() {
-        return playerX > (x - 100) && playerX < (x + 100)
-                && playerY > (y - 100) && playerY < (y + 100);
+        return (playerX + 90) > (x + 25) && (playerX + 20) < (x + 80)
+                && (playerY + 115) > y && playerY < (y + 90);
     }
 }
 
