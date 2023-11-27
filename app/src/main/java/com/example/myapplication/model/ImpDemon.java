@@ -91,7 +91,7 @@ public class ImpDemon implements Enemy {
     }
 
     @Override
-    public boolean contactWithWeapon() {
+    public boolean contactWithWeapon(Weapon weapon) {
         return false;
     }
 }

@@ -20,6 +20,7 @@ public class WeaponViewModel extends View {
     private Weapon weapon;
     private Bitmap bitmap;
 
+
     // creates a player sprite based on which character was chosen
     public WeaponViewModel(Context context, Weapon weapon) {
         super(context);
@@ -36,35 +37,29 @@ public class WeaponViewModel extends View {
         int width = 150;
         int height = 300;
         float x = weapon.getX();
-        float y = weapon.getY() + 25;
-        Rect destRect = new Rect((int) x, (int) (y - height / 2)
-                , (int) (x + width), (int) (y + height / 2));
+        float y = weapon.getY();
+        Rect destRect = weapon.getDestRect();
 
         // flipping character depending on movement direction
         Matrix matrix = new Matrix();
 
         if (weapon.getWeaponSwingDirection() == "left") {
-            destRect = new Rect((int) (x - width), (int) (y - height / 2), (int) x, (int) (y + height / 2));
+            destRect = weapon.getDestRect();
             int centerX = bitmap.getWidth() / 2;
             int centerY = bitmap.getHeight() / 2;
             matrix.setScale(-1, 1, centerX, centerY);
         }
         if (weapon.getWeaponSwingDirection() == "up") {
-            width = 300;
-            height = 150;
-            destRect = new Rect((int) (x - width / 2), (int) (y - height)
-                    , (int) (x + width / 2), (int) (y));
+            destRect = weapon.getDestRect();
             matrix.setRotate(-90, x, y + 20);
         }
         if (weapon.getWeaponSwingDirection() == "down") {
-            width = 300;
-            height = 150;
-            destRect = new Rect((int) (x - width / 2)
-                    , (int) (y), (int) (x + width / 2), (int) (y + height));
+            destRect = weapon.getDestRect();
             matrix.setRotate(90, x, y + 20);
         }
         Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         canvas.drawBitmap(newBitmap, null, destRect, null);
+
     }
 
     public void updateAnimation(int x) {
@@ -90,4 +85,6 @@ public class WeaponViewModel extends View {
         }
         invalidate();
     }
+
+
 }

@@ -1,5 +1,5 @@
 package com.example.myapplication.model;
-
+import android.graphics.Rect;
 public class Weapon implements Observer{
     private float x;
     private float y;
@@ -9,6 +9,7 @@ public class Weapon implements Observer{
     private boolean attackCooldown;
     private static Weapon weapon;
     private String weaponSwingDirection;
+    private int recLeft, recRight, recUp, recDown;
 
     private Weapon () {
         playerX = 550;
@@ -58,9 +59,62 @@ public class Weapon implements Observer{
 
     @Override
     public void update(float x, float y, String playerDirection) {
-        playerX = x;
-        playerY = y;
-        this.x = playerX + 50;
-        this.y = playerY + 100;
+        playerX = x + 50;
+        playerY = y + 125;
+        this.x = playerX;
+        this.y = playerY;
     }
+
+    public Rect getDestRect() {
+        Rect destRect;
+        switch (weaponSwingDirection) {
+            case "right":
+                destRect = new Rect((int) x, (int) (y - 300 / 2)
+                        , (int) (x + 150), (int) (y + 300 / 2));
+                recLeft = destRect.left;
+                recRight = destRect.right;
+                recUp = destRect.top;
+                recDown = destRect.bottom;
+                return destRect;
+            case "left":
+                destRect = new Rect((int) (x - 150), (int) (y - 300 / 2)
+                        , (int) x, (int) (y + 300 / 2));
+                recLeft = destRect.left;
+                recRight = destRect.right;
+                recUp = destRect.top;
+                recDown = destRect.bottom;
+                return destRect;
+            case "up":
+                destRect = new Rect((int) (x - 300 / 2), (int) (y - 150)
+                        , (int) (x + 300 / 2), (int) (y));;
+                recLeft = destRect.left;
+                recRight = destRect.right;
+                recUp = destRect.top;
+                recDown = destRect.bottom;
+                return destRect;
+            case "down":
+                destRect = new Rect((int) (x - 300 / 2), (int) (y)
+                        , (int) (x + 300 / 2), (int) (y + 150));
+                recLeft = destRect.left;
+                recRight = destRect.right;
+                recUp = destRect.top;
+                recDown = destRect.bottom;
+                return destRect;
+        }
+        return null;
+    }
+
+    public int getRecRight() {
+        return recRight;
+    }
+    public int getRecLeft() {
+        return recLeft;
+    }
+    public int getRecUp() {
+        return recUp;
+    }
+    public int getRecDown() {
+        return recDown;
+    }
+
 }

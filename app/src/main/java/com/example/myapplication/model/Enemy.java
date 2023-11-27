@@ -19,7 +19,7 @@ public interface Enemy extends Observer{
 
     public void update(float x, float y, String playerDirection);
     public boolean contactWithPlayer();
-    public boolean contactWithWeapon();
+    public boolean contactWithWeapon(Weapon weapon);
 
 
 }
