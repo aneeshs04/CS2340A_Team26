@@ -45,6 +45,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private PlayerViewModel playerView;
     private EnemyViewModel necroView;
     private EnemyViewModel chortView;
+    private boolean necroAlive = true;
     ConstraintLayout gameLayout;
     private final int minX = 0;
     private final int minY = -50;
@@ -175,6 +176,9 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         necromancer.changeDirection("right");
                     }
                 }
+                if (necromancer.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
+                    player.setHealth(player.getHealth()+100);
+                }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, NECRO_LOOP_DELAY);
             }
@@ -208,6 +212,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         chort.changeDirection("up");
                     }
                 }
+
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
             }

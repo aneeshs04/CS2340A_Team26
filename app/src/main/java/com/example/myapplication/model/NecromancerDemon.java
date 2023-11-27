@@ -89,6 +89,7 @@ public class NecromancerDemon implements Enemy {
 
     @Override
     public boolean contactWithWeapon(Weapon weapon) {
-        return false;
+        return weapon.getRecRight() > (x) && weapon.getRecLeft() < (x + 100)
+                && weapon.getRecDown() > y && weapon.getRecUp() < (y + 100);
     }
 }
