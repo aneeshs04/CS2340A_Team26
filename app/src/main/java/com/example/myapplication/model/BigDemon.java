@@ -8,11 +8,12 @@ public class BigDemon implements Enemy {
     private int power;
     private int size;
     private String difficulty;
-    private float x,y;
+    private float x, y;
     private Player player = Player.getInstance();
     private static String name = "big demon";
     private String direction = "up";
-    private float playerX,playerY;
+    private float playerX, playerY;
+    private String playerDirection;
 
     public BigDemon(int x, int y) {
         switch (player.getDifficulty()) {
@@ -34,6 +35,7 @@ public class BigDemon implements Enemy {
         this.size = 5;
         this.movementSpeed = 125;
     }
+
     public float getX() {
         return x;
     }
@@ -42,9 +44,13 @@ public class BigDemon implements Enemy {
         return y;
     }
 
-    public void setX(float x) {this.x = x;}
+    public void setX(float x) {
+        this.x = x;
+    }
 
-    public void setY(float y) {this.y = y;}
+    public void setY(float y) {
+        this.y = y;
+    }
 
     public String getName() {
         return name;
@@ -67,35 +73,71 @@ public class BigDemon implements Enemy {
         return health;
     }
 
-    public void setHealth(int health) {this.health = health;}
-    public int getMovementSpeed() {return movementSpeed;}
-    public void setMovementSpeed(int movementSpeed) {this.movementSpeed = movementSpeed;}
-    public int getPower() {return power;}
-    public void setPower(int power) {this.power = power;}
-    public int getSize() {return size;}
-    public void setSize(int size) {this.size = size;}
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getMovementSpeed() {
+        return movementSpeed;
+    }
+
+    public void setMovementSpeed(int movementSpeed) {
+        this.movementSpeed = movementSpeed;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public void changeDirection(String direction) {
         this.direction = direction;
     }
-    public String getDirection() {return direction;}
-    public float getPlayerX() {return playerX;}
-    public float getPlayerY() {return playerY;}
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public float getPlayerX() {
+        return playerX;
+    }
+
+    public float getPlayerY() {
+        return playerY;
+    }
 
     public void updatePlayerHealth(boolean contact, int power, int health) {
         if (contact == true) {
             player.setHealth(health - power);
         }
     }
+
     @Override
-    public void update(float x, float y) {
+    public void update(float x, float y, String playerDirection) {
         playerX = x;
         playerY = y;
-
+        this.playerDirection = playerDirection;
     }
 
     @Override
     public boolean contactWithPlayer() {
         return (playerX + 90) > (x + 30) && (playerX + 20) < (x + 170)
                 && (playerY + 115) > y && playerY < (y + 205);
+    }
+
+    @Override
+    public boolean contactWithWeapon() {
+        return false;
     }
 }

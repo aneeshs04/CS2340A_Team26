@@ -62,7 +62,7 @@ public class Weapon implements Observer{
     }
 
     @Override
-    public void update(float x, float y) {
+    public void update(float x, float y, String playerDirection) {
         playerX = x;
         playerY = y;
         this.x = playerX + 50 + deltax;

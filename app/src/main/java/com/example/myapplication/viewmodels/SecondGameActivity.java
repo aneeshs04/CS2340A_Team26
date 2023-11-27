@@ -220,7 +220,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     }
 
     @Override
-    public void update(float x, float y) {
+    public void update(float x, float y, String direction) {
         characterNameTextView.setX(x - 125);
         characterNameTextView.setY(y - characterNameTextView.getHeight() + 45);
     }
@@ -348,22 +348,26 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
                 strategy = new MoveLeftStrategy();
                 player.setFacingRight(false);
                 weapon.setWeaponSwingDirection("left");
+                player.setPlayerDirection(weapon.getWeaponSwingDirection());
                 player.setProposedX(player.getProposedX() - 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 strategy = new MoveRightStrategy();
                 player.setFacingRight(true);
                 weapon.setWeaponSwingDirection("right");
+                player.setPlayerDirection(weapon.getWeaponSwingDirection());
                 player.setProposedX(player.getProposedX() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 strategy = new MoveDownStrategy();
                 weapon.setWeaponSwingDirection("down");
+                player.setPlayerDirection(weapon.getWeaponSwingDirection());
                 player.setProposedY(player.getProposedY() + 50);
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 strategy = new MoveUpStrategy();
                 weapon.setWeaponSwingDirection("up");
+                player.setPlayerDirection(weapon.getWeaponSwingDirection());
                 player.setProposedY(player.getProposedY() - 50);
                 break;
             case KeyEvent.KEYCODE_SPACE:
