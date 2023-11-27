@@ -1,6 +1,7 @@
 package com.example.myapplication.model;
 
 public class Weapon implements Observer{
+
     private float x;
     private float y;
     private long weaponAttackDelay;
