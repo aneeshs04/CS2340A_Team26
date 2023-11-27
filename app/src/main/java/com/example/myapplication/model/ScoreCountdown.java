@@ -22,7 +22,7 @@ public class ScoreCountdown extends CountDownTimer {
     @Override
     public void onTick(long millisUntilFinished) {
         if (player.getScore() > 0) {
-            player.setScore(player.getScore() - 5);
+            player.setScore(player.getScore() - 1);
         }
         if (onScoreChangeListener != null) {
             onScoreChangeListener.onScoreChange(player.getScore());
@@ -32,7 +32,7 @@ public class ScoreCountdown extends CountDownTimer {
 
     @Override
     public void onFinish() {
-        // Do something when countdown is over
+        // do something when countdown is over
     }
 
     public interface OnScoreChangeListener {
