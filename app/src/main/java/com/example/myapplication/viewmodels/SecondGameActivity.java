@@ -62,6 +62,8 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     private static int weaponAnimationCount = 0;
 
     private List<Wall> walls = new ArrayList<>();
+
+    // enemy handler variables
     private Handler gameLoopHandler = new Handler();
     private static int NECRO_LOOP_DELAY;
     private static int IMP_LOOP_DELAY;
@@ -394,6 +396,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(maxX - 10);
+            weapon.setX(player.getX());
             Intent end = new Intent(SecondGameActivity.this, MainGameActivity.class);
             startActivity(end);
             finish();
@@ -406,6 +409,7 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(minX + 10);
+            weapon.setX(player.getX() + 50);
             Intent end = new Intent(SecondGameActivity.this, ThirdGameActivity.class);
             startActivity(end);
             finish();

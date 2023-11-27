@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
-    private TextView countdownTextView;
     private TextView textViewHealth;
+    private TextView countdownTextView;
     private TextView characterNameTextView;
 
     //weapon
@@ -57,6 +57,8 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private static int animationCount = 0;
     private static int weaponAnimationCount = 0;
     private List<Wall> walls = new ArrayList<>();
+
+    // enemy handler variables
     private Handler gameLoopHandler = new Handler();
     private static int NECRO_LOOP_DELAY;
     private static int CHORT_LOOP_DELAY;
@@ -389,6 +391,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             characterNameTextView.setVisibility(View.INVISIBLE);
             stop = true;
             player.setX(minX + 10);
+            weapon.setX(player.getX() + 50);
             Intent end = new Intent(MainGameActivity.this, SecondGameActivity.class);
             startActivity(end);
             finish();

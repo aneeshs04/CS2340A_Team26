@@ -7,8 +7,7 @@ public class BigDemon implements Enemy {
     private int movementSpeed;
     private int power;
     private int size;
-    private String difficulty;
-    private float x, y;
+    private float x,y;
     private Player player = Player.getInstance();
     private static String name = "big demon";
     private String direction = "up";

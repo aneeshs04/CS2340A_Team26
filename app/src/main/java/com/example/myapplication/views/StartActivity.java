@@ -11,7 +11,7 @@ import com.example.myapplication.R;
 
 
 public class StartActivity extends AppCompatActivity {
-    // opens welcome screen with start button
+    // opens welcome screen and shows start button
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
