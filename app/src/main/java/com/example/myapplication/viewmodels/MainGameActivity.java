@@ -13,6 +13,7 @@ import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.model.TimeCountdown;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.myapplication.R;
@@ -26,12 +27,12 @@ import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.Observer;
 import com.example.myapplication.model.Weapon;
 import com.example.myapplication.views.EndActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
     private TextView textViewHealth;
+    private TextView timeTextView;
     private TextView countdownTextView;
     private TextView characterNameTextView;
 
@@ -75,6 +76,12 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
 
         player.registerObserver(this);
         player.registerObserver(weapon);
+
+        // start the time countdown
+        timeTextView = findViewById(R.id.textViewTime);
+        timeTextView.setText("Time Spent: " + player.getTime() + " s");
+        TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(200000, 1000);
+        timeCountDownTimer.setOnTimeChangeListener(newTime -> timeTextView.setText("Time Spent: " + newTime + " s"));
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);

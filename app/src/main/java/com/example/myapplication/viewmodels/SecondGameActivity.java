@@ -18,6 +18,7 @@ import com.example.myapplication.model.ImpFactory;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
 import com.example.myapplication.model.MoveDownStrategy;
@@ -35,6 +36,7 @@ import com.example.myapplication.model.Wall;
 
 public class SecondGameActivity extends AppCompatActivity implements Observer {
     private TextView countdownTextView;
+    private TextView timeTextView;
     private TextView textViewHealth;
     private TextView characterNameTextView;
 
@@ -79,7 +81,11 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         player.registerObserver(this);
         player.registerObserver(weapon);
 
-
+        // start the time countdown
+        timeTextView = findViewById(R.id.textViewTime);
+        timeTextView.setText("Time Spent: " + player.getTime() + " s");
+        TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(200000, 1000);
+        timeCountDownTimer.setOnTimeChangeListener(newTime -> timeTextView.setText("Time Spent: " + newTime + " s"));
 
         // starting countdown
         countdownTextView = findViewById(R.id.viewScore);
