@@ -17,6 +17,7 @@ public class Wall {
     public float getRight() {
         return right;
     }
+
     public float getTop() {
         return top;
     }
