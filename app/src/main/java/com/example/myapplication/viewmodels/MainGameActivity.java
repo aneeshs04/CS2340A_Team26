@@ -26,6 +26,7 @@ import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.Observer;
 import com.example.myapplication.model.Weapon;
 import com.example.myapplication.views.EndActivity;
+import com.example.myapplication.views.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,6 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private PlayerViewModel playerView;
     private EnemyViewModel necroView;
     private EnemyViewModel chortView;
-    private boolean necroAlive = true;
     ConstraintLayout gameLayout;
     private final int minX = 0;
     private final int minY = -50;
