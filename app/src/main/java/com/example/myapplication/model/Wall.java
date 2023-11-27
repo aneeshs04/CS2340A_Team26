@@ -5,14 +5,15 @@ public class Wall {
 
     public Wall(int left, int top, int right, int bottom) {
         this.left = left;
-        this.top = top;
         this.right = right;
+        this.top = top;
         this.bottom = bottom;
     }
 
     public float getLeft() {
         return left;
     }
+
     public float getRight() {
         return right;
     }
