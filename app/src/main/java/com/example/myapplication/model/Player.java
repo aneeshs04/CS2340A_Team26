@@ -31,6 +31,7 @@ public class Player implements Subject {
     private boolean won = false;
     private boolean invincibility = false;
     private boolean movement = false;
+    private String playerDirection = "right";
     private Player () {
         this.movementSpeed = 50;
         this.movementStrategy = new MoveRightStrategy();
@@ -99,7 +100,7 @@ public class Player implements Subject {
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update(x, y);
+            observer.update(x, y, playerDirection);
         }
     }
 
@@ -192,5 +193,13 @@ public class Player implements Subject {
 
     public void setMovement(boolean movement) {
         this.movement = movement;
+    }
+
+    public void setPlayerDirection(String playerDirection) {
+        this.playerDirection = playerDirection;
+    }
+
+    public String getPlayerDirection() {
+        return playerDirection;
     }
 }

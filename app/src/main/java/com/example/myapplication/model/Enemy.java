@@ -17,6 +17,9 @@ public interface Enemy extends Observer{
     public String getDirection();
     public void changeDirection(String direction);
 
-    public void update(float x, float y);
+    public void update(float x, float y, String playerDirection);
     public boolean contactWithPlayer();
+    public boolean contactWithWeapon();
+
+
 }

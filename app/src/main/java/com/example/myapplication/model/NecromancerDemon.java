@@ -10,6 +10,7 @@ public class NecromancerDemon implements Enemy {
     private static String name = "necromancer demon";
     private String direction = "right";
     private float playerX,playerY;
+    private String playerDirection;
 
     public NecromancerDemon(int x, int y) {
         switch (player.getDifficulty()) {
@@ -74,15 +75,20 @@ public class NecromancerDemon implements Enemy {
     public float getPlayerY() {return playerY;}
 
     @Override
-    public void update(float x, float y) {
+    public void update(float x, float y, String playerDirection) {
         playerX = x;
         playerY = y;
-
+        this.playerDirection = playerDirection;
     }
 
     @Override
     public boolean contactWithPlayer() {
         return (playerX + 90) > x && (playerX + 20) < (x + 100)
                 && (playerY + 115) > y && playerY < (y + 100);
+    }
+
+    @Override
+    public boolean contactWithWeapon() {
+        return false;
     }
 }
