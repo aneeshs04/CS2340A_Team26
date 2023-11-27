@@ -23,6 +23,13 @@ public class MainActivity extends AppCompatActivity {
     private static String name;
     private static String difficulty;
     private static String character;
+//    private boolean necro1Alive = true;
+//    private boolean chort1Alive = true;
+//    private boolean necro2Alive = true;
+//    private boolean imp2Alive = true;
+//    private boolean chort3Alive = true;
+//    private boolean big3Alive = true;
+
 
     // opens start screen
     @Override
@@ -142,5 +149,53 @@ public class MainActivity extends AppCompatActivity {
     public static String getCharacter() {
         return character;
     }
+
+//    public boolean isNecro1Alive() {
+//        return necro1Alive;
+//    }
+//
+//    public void setNecro1Alive(boolean necro1Alive) {
+//        this.necro1Alive = necro1Alive;
+//    }
+//
+//    public boolean isChort1Alive() {
+//        return chort1Alive;
+//    }
+//
+//    public void setChort1Alive(boolean chort1Alive) {
+//        this.chort1Alive = chort1Alive;
+//    }
+//
+//    public boolean isNecro2Alive() {
+//        return necro2Alive;
+//    }
+//
+//    public void setNecro2Alive(boolean necro2Alive) {
+//        this.necro2Alive = necro2Alive;
+//    }
+//
+//    public boolean isImp2Alive() {
+//        return imp2Alive;
+//    }
+//
+//    public void setImp2Alive(boolean imp2Alive) {
+//        this.imp2Alive = imp2Alive;
+//    }
+//
+//    public boolean isChort3Alive() {
+//        return chort3Alive;
+//    }
+//
+//    public void setChort3Alive(boolean chort3Alive) {
+//        this.chort3Alive = chort3Alive;
+//    }
+//
+//    public boolean isBig3Alive() {
+//        return big3Alive;
+//    }
+//
+//    public void setBig3Alive(boolean big3Alive) {
+//        this.big3Alive = big3Alive;
+//    }
 }
 
