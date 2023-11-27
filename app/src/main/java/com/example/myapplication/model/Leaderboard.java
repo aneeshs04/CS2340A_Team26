@@ -3,6 +3,7 @@ package com.example.myapplication.model;
 import java.util.ArrayList;
 
 public class Leaderboard {
+
     private static Leaderboard single_instance = null;
     final private int scoreCount;
     final private ArrayList<Integer> scoreList;
