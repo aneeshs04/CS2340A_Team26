@@ -13,7 +13,7 @@ public class BigDemon implements Enemy {
     private static String name = "big demon";
     private String direction = "up";
     private float playerX, playerY;
-    private String playerDirection;
+    private boolean alive = true;
 
     public BigDemon(int x, int y) {
         switch (player.getDifficulty()) {
@@ -127,7 +127,6 @@ public class BigDemon implements Enemy {
     public void update(float x, float y, String playerDirection) {
         playerX = x;
         playerY = y;
-        this.playerDirection = playerDirection;
     }
 
     @Override
@@ -140,5 +139,13 @@ public class BigDemon implements Enemy {
     public boolean contactWithWeapon(Weapon weapon) {
         return weapon.getRecRight() > (x + 30) && weapon.getRecLeft() < (x + 170)
                 && weapon.getRecDown() > y && weapon.getRecUp() < (y + 205);
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

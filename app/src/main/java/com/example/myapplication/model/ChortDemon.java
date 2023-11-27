@@ -10,8 +10,7 @@ public class ChortDemon implements Enemy {
     private static String name = "chort demon";
     private String direction = "up";
     private float playerX,playerY;
-    private String playerDirection;
-
+    private boolean alive = true;
     public ChortDemon(int x, int y) {
         switch (player.getDifficulty()) {
             case "easy":
@@ -78,7 +77,6 @@ public class ChortDemon implements Enemy {
     public void update(float x, float y, String playerDirection) {
         playerX = x;
         playerY = y;
-        this.playerDirection = playerDirection;
     }
 
     @Override
@@ -91,6 +89,13 @@ public class ChortDemon implements Enemy {
     public boolean contactWithWeapon(Weapon weapon) {
         return weapon.getRecRight() > (x + 25) && weapon.getRecLeft() < (x + 100)
                 && weapon.getRecDown() > y && weapon.getRecUp() < (y + 140);
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }
 

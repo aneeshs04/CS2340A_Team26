@@ -176,6 +176,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                 }
                 if (necromancer.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(necroView);
+                    necromancer.setAlive(false);
                 }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, NECRO_LOOP_DELAY);
@@ -212,6 +213,8 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                 }
                 if (chort.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(chortView);
+                    chort.setAlive(false);
+
                 }
                 // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
                 gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
@@ -242,7 +245,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private void updateHealth() {
         handler.postDelayed(() -> {
             if (!stop) {
-                if (enemies.get(0).contactWithPlayer() && !player.getInvincibility()) {
+                if (enemies.get(0).contactWithPlayer() && !player.getInvincibility() && enemies.get(0).isAlive()) {
                     player.setInvincibility(true);
                     player.setHealth(player.getHealth() - enemies.get(0).getPower());
                     if (player.getHealth() <= 0) {
@@ -262,7 +265,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                     handler.postDelayed(() -> {
                         player.setInvincibility(false);
                     }, 1000);
-                } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility()) {
+                } else if (enemies.get(1).contactWithPlayer() && !player.getInvincibility() && enemies.get(1).isAlive()) {
                     player.setInvincibility(true);
                     player.setHealth(player.getHealth() - enemies.get(1).getPower());
                     if (player.getHealth() <= 0) {
