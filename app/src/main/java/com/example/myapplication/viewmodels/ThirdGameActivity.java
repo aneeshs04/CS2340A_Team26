@@ -194,6 +194,9 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                 }
                 if (chort.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(chortView);
+                    if (chortAlive) {
+                        player.setScore(player.getScore() + 75);
+                    }
                     chort.setAlive(false);
                     chortAlive = false;
                 }
@@ -251,6 +254,9 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                 }
                 if (bigDemon.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(bigDemonView);
+                    if (bigDemonAlive) {
+                        player.setScore(player.getScore() + 25);
+                    }
                     bigDemon.setAlive(false);
                     bigDemonAlive = false;
                 }

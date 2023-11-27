@@ -164,7 +164,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             public void run() {
                 Enemy necromancer = enemies.get(0);
                 // Move each enemy
-                if (necromancer.getDirection() == "right") {
+                if (necromancer.getDirection().equals("right")) {
                     if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
                         necromancer.move();
                         if (necromancer.getX() >= maxX) {
@@ -185,8 +185,12 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         necromancer.changeDirection("right");
                     }
                 }
+                boolean scoreIncrease = false;
                 if (necromancer.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(necroView);
+                    if (necroAlive) {
+                        player.setScore(player.getScore() + 50);
+                    }
                     necromancer.setAlive(false);
                     necroAlive = false;
                 }
@@ -225,6 +229,9 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                 }
                 if (chort.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(chortView);
+                    if (chortAlive) {
+                        player.setScore(player.getScore() + 75);
+                    }
                     chortAlive = false;
                     chort.setAlive(false);
 

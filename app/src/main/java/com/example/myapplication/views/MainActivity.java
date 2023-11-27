@@ -124,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             } else {
                 Player player = Player.getInstance();
-                player.setScore(105);
+                player.setScore(0);
                 player.setDifficulty(difficulty);
                 player.setName(name);
                 player.setCharacter(character);
-                ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+                ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 200);
                 scoreCountDownTimer.start();
                 Intent game = new Intent(MainActivity.this, MainGameActivity.class);
                 startActivity(game);

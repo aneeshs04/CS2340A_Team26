@@ -195,6 +195,9 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
                 }
                 if (necromancer.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(necroView);
+                    if (necroAlive) {
+                        player.setScore(player.getScore() + 50);
+                    }
                     necromancer.setAlive(false);
                     necroAlive = false;
                 }
@@ -233,6 +236,9 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
                 }
                 if (imp.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
                     gameLayout.removeView(impView);
+                    if (impAlive) {
+                        player.setScore(player.getScore() + 100);
+                    }
                     imp.setAlive(false);
                     impAlive = false;
                 }
