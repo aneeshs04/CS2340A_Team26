@@ -68,6 +68,11 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private static int CHORT_LOOP_DELAY;
     private List<Enemy> enemies = new ArrayList<>();
 
+    public static void setRestart() {
+        necroAlive = true;
+        chortAlive = true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
