@@ -1,11 +1,13 @@
 package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myapplication.model.ChortFactory;
@@ -67,6 +69,10 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private static int NECRO_LOOP_DELAY;
     private static int CHORT_LOOP_DELAY;
     private List<Enemy> enemies = new ArrayList<>();
+    // powerup variables
+    private ImageView healthPowerUp;
+    private int healthPowerUpX = 500;
+    private int healthPowerUpY = 500;
 
     public static void setRestart() {
         necroAlive = true;
@@ -167,6 +173,18 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(970, 580, 1500, 1900));
         walls.add(new Wall(828, 2050, 1500, 2800));
         walls.add(new Wall(828, 1600, 1500, 1900));
+
+        // loading the health powerup
+        if (!player.isHealthPowerUpClaimed()) {
+            healthPowerUp = new ImageView(this);
+            healthPowerUp.setImageResource(R.drawable.heartsprite);
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(80, 80);
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.leftMargin = healthPowerUpX;
+            layoutParams.topMargin = healthPowerUpY;
+            gameLayout.addView(healthPowerUp, layoutParams);
+        }
     }
 
     private void startNecromancerLoop() {
@@ -404,6 +422,12 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             player.notifyObservers();
         }
 
+        if (Math.abs(player.getX() - healthPowerUpX) < 80 && Math.abs(player.getY() - healthPowerUpY) < 80 && !player.isHealthPowerUpClaimed()) {
+            player.setHealth(player.getHealth() + 25);
+            player.setHealthPowerUpClaimed(true);
+            gameLayout.removeView(healthPowerUp);
+        }
+
         // checking to see if player is leaving the screen
         if (player.getX() < minX) {
             player.setX(minX);
@@ -463,6 +487,5 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     public int getMinY() {
         return minY;
     }
-
 }
 

@@ -35,6 +35,7 @@ public class Player implements Subject {
     private boolean invincibility = false;
     private boolean movement = false;
     private String playerDirection = "right";
+    private boolean healthPowerUpClaimed = false;
     private Player () {
         this.movementSpeed = 50;
         this.movementStrategy = new MoveRightStrategy();
@@ -213,5 +214,12 @@ public class Player implements Subject {
 
     public String getPlayerDirection() {
         return playerDirection;
+    }
+    public boolean isHealthPowerUpClaimed() {
+        return healthPowerUpClaimed;
+    }
+
+    public void setHealthPowerUpClaimed(boolean healthPowerUpClaimed) {
+        this.healthPowerUpClaimed = healthPowerUpClaimed;
     }
 }
