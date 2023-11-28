@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -72,6 +73,10 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     private static int NECRO_LOOP_DELAY;
     private static int IMP_LOOP_DELAY;
     private List<Enemy> enemies = new ArrayList<>();
+    // powerup variables
+    private ImageView speedPowerUp;
+    private int speedPowerUpX = 650;
+    private int speedPowerUpY = 2035;
 
     public static void setRestart() {
         necroAlive = true;
@@ -175,6 +180,18 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(0, 2062, 150, 2500));
         walls.add(new Wall(150, 990, 480, 1550));
         walls.add(new Wall(800, 990, 1480, 1550));
+
+        // loading the Speed powerup
+        if (!player.isSpeedPowerUpClaimed()) {
+            speedPowerUp = new ImageView(this);
+            speedPowerUp.setImageResource(R.drawable.speedsprite);
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(80, 80);
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.leftMargin = speedPowerUpX;
+            layoutParams.topMargin = speedPowerUpY;
+            gameLayout.addView(speedPowerUp, layoutParams);
+        }
     }
 
     private void startNecromancerLoop() {
@@ -402,6 +419,13 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
             player.notifyObservers();
+        }
+
+        // checking for collision with speed powerup
+        if (Math.abs(player.getX() - speedPowerUpX) < 80 && Math.abs(player.getY() - speedPowerUpY) < 80 && !player.isSpeedPowerUpClaimed()) {
+            player.setSpeedMultiplier(player.getSpeedMultiplier() + 0.5);
+            player.setSpeedPowerUpClaimed(true);
+            gameLayout.removeView(speedPowerUp);
         }
 
         // checking to see if player is leaving the screen

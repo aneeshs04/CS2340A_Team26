@@ -422,6 +422,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             player.notifyObservers();
         }
 
+        // checking for collision with healthpowerup
         if (Math.abs(player.getX() - healthPowerUpX) < 80 && Math.abs(player.getY() - healthPowerUpY) < 80 && !player.isHealthPowerUpClaimed()) {
             player.setHealth(player.getHealth() + 25);
             player.setHealthPowerUpClaimed(true);
