@@ -7,6 +7,7 @@ public class ScoreCountdown extends CountDownTimer {
     private Player player = Player.getInstance();
     private static ScoreCountdown instance;
     private OnScoreChangeListener onScoreChangeListener;
+    private boolean pause = false;
 
     private ScoreCountdown(long millisInFuture, long countDownInterval) {
         super(millisInFuture, countDownInterval);
@@ -21,13 +22,14 @@ public class ScoreCountdown extends CountDownTimer {
 
     @Override
     public void onTick(long millisUntilFinished) {
-        if (player.getScore() > 0) {
-            player.setScore(player.getScore() - 1);
+        if (!pause) {
+            if (player.getScore() > 0) {
+                player.setScore(player.getScore() - 1);
+            }
+            if (onScoreChangeListener != null) {
+                onScoreChangeListener.onScoreChange(player.getScore());
+            }
         }
-        if (onScoreChangeListener != null) {
-            onScoreChangeListener.onScoreChange(player.getScore());
-        }
-
     }
 
     @Override
@@ -41,5 +43,9 @@ public class ScoreCountdown extends CountDownTimer {
 
     public void setOnScoreChangeListener(OnScoreChangeListener listener) {
         this.onScoreChangeListener = listener;
+    }
+
+    public void setPause (boolean pause) {
+        this.pause = pause;
     }
 }

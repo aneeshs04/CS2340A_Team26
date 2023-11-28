@@ -1,35 +1,47 @@
 package com.example.myapplication.viewmodels;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.myapplication.R;
 import com.example.myapplication.model.ChortFactory;
 import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
-import com.example.myapplication.model.NecromancerFactory;
-import com.example.myapplication.model.ScoreCountdown;
-import com.example.myapplication.model.TimeCountdown;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import com.example.myapplication.R;
-import com.example.myapplication.model.Player;
-import com.example.myapplication.model.Wall;
+import com.example.myapplication.model.Leaderboard;
 import com.example.myapplication.model.MoveDownStrategy;
 import com.example.myapplication.model.MoveLeftStrategy;
 import com.example.myapplication.model.MoveRightStrategy;
 import com.example.myapplication.model.MoveUpStrategy;
 import com.example.myapplication.model.MovementStrategy;
+import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Observer;
+import com.example.myapplication.model.Player;
+import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.model.TimeCountdown;
+import com.example.myapplication.model.Wall;
 import com.example.myapplication.model.Weapon;
 import com.example.myapplication.views.EndActivity;
+import com.example.myapplication.views.MainActivity;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainGameActivity extends AppCompatActivity implements Observer {
@@ -69,6 +81,9 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private static int NECRO_LOOP_DELAY;
     private static int CHORT_LOOP_DELAY;
     private List<Enemy> enemies = new ArrayList<>();
+    private boolean pause;
+    private TimeCountdown timeCountDownTimer;
+    private ScoreCountdown scoreCountDownTimer;
     // powerup variables
     private ImageView healthPowerUp;
     private int healthPowerUpX = 500;
@@ -85,19 +100,24 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         setContentView(R.layout.main_game_screen);
         gameLayout = findViewById(R.id.gameLayout);
 
+        final Button pauseButton = findViewById(R.id.pauseButton);
+        pauseButton.setOnClickListener(v -> {
+            pauseGame();
+        });
+
         player.registerObserver(this);
         player.registerObserver(weapon);
 
         // start the time countdown
         timeTextView = findViewById(R.id.textViewTime);
         timeTextView.setText("Time Spent: " + player.getTime() + " s");
-        TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(200000, 1000);
+        timeCountDownTimer = TimeCountdown.getInstance(200000, 1000);
         timeCountDownTimer.setOnTimeChangeListener(newTime -> timeTextView.setText("Time Spent: " + newTime + " s"));
 
         // start the score countdown
         countdownTextView = findViewById(R.id.viewScore);
         countdownTextView.setText("Score: " + player.getScore());
-        ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
+        scoreCountDownTimer = ScoreCountdown.getInstance(100000, 2000);
         scoreCountDownTimer.setOnScoreChangeListener(newScore -> countdownTextView.setText("Score: " + newScore));
         stop = false;
 
@@ -191,40 +211,42 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         gameLoopHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Enemy necromancer = enemies.get(0);
-                // Move each enemy
-                if (necromancer.getDirection().equals("right")) {
-                    if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
-                        necromancer.move();
-                        if (necromancer.getX() >= maxX) {
+                if (!pause) {
+                    Enemy necromancer = enemies.get(0);
+                    // Move each enemy
+                    if (necromancer.getDirection().equals("right")) {
+                        if (!collidesWithAnyWall((int) necromancer.getX() + 50, (int) necromancer.getY())) {
+                            necromancer.move();
+                            if (necromancer.getX() >= maxX) {
+                                necromancer.changeDirection("left");
+                            }
+                            necroView.invalidate();
+                        } else {
                             necromancer.changeDirection("left");
                         }
-                        necroView.invalidate();
                     } else {
-                        necromancer.changeDirection("left");
-                    }
-                } else {
-                    if (!collidesWithAnyWall((int) necromancer.getX() - 50, (int) necromancer.getY())) {
-                        necromancer.move();
-                        if (necromancer.getX() <= minX) {
+                        if (!collidesWithAnyWall((int) necromancer.getX() - 50, (int) necromancer.getY())) {
+                            necromancer.move();
+                            if (necromancer.getX() <= minX) {
+                                necromancer.changeDirection("right");
+                            }
+                            necroView.invalidate();
+                        } else {
                             necromancer.changeDirection("right");
                         }
-                        necroView.invalidate();
-                    } else {
-                        necromancer.changeDirection("right");
                     }
-                }
-                boolean scoreIncrease = false;
-                if (necromancer.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
-                    gameLayout.removeView(necroView);
-                    if (necroAlive) {
-                        player.setScore(player.getScore() + 50);
+                    boolean scoreIncrease = false;
+                    if (necromancer.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
+                        gameLayout.removeView(necroView);
+                        if (necroAlive) {
+                            player.setScore(player.getScore() + 50);
+                        }
+                        necromancer.setAlive(false);
+                        necroAlive = false;
                     }
-                    necromancer.setAlive(false);
-                    necroAlive = false;
+                    // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                    gameLoopHandler.postDelayed(this, NECRO_LOOP_DELAY);
                 }
-                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
-                gameLoopHandler.postDelayed(this, NECRO_LOOP_DELAY);
             }
         }, NECRO_LOOP_DELAY);
     }
@@ -233,40 +255,42 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         gameLoopHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Enemy chort = enemies.get(1);
-                // Move each enemy
-                if (chort.getDirection().equals("up")) {
-                    if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() + 50)) {
-                        chort.move();
-                        if (chort.getY() >= maxY) {
+                if (!pause) {
+                    Enemy chort = enemies.get(1);
+                    // Move each enemy
+                    if (chort.getDirection().equals("up")) {
+                        if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() + 50)) {
+                            chort.move();
+                            if (chort.getY() >= maxY) {
+                                chort.changeDirection("down");
+                            }
+                            chortView.invalidate();
+                        } else {
                             chort.changeDirection("down");
                         }
-                        chortView.invalidate();
                     } else {
-                        chort.changeDirection("down");
-                    }
-                } else {
-                    if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() - 50)) {
-                        chort.move();
-                        if (chort.getX() <= minX) {
+                        if (!collidesWithAnyWall((int) chort.getX(), (int) chort.getY() - 50)) {
+                            chort.move();
+                            if (chort.getX() <= minX) {
+                                chort.changeDirection("up");
+                            }
+                            chortView.invalidate();
+                        } else {
                             chort.changeDirection("up");
                         }
-                        chortView.invalidate();
-                    } else {
-                        chort.changeDirection("up");
                     }
-                }
-                if (chort.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
-                    gameLayout.removeView(chortView);
-                    if (chortAlive) {
-                        player.setScore(player.getScore() + 75);
-                    }
-                    chortAlive = false;
-                    chort.setAlive(false);
+                    if (chort.contactWithWeapon(weapon) && swordView.getVisibility() == swordView.VISIBLE) {
+                        gameLayout.removeView(chortView);
+                        if (chortAlive) {
+                            player.setScore(player.getScore() + 75);
+                        }
+                        chortAlive = false;
+                        chort.setAlive(false);
 
+                    }
+                    // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
+                    gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
                 }
-                // Repeat this runnable code again every GAME_LOOP_DELAY milliseconds
-                gameLoopHandler.postDelayed(this, CHORT_LOOP_DELAY);
             }
         }, CHORT_LOOP_DELAY);
     }
@@ -280,7 +304,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     // handles the animation of the player
     private void animationCountdown() {
         handler.postDelayed(() -> {
-            if (!stop) {
+            if (!stop && !pause) {
                 playerView.updateAnimation(animationCount % 4, player.getMovement());
                 necroView.updateAnimation(animationCount % 4);
                 chortView.updateAnimation(animationCount % 4);
@@ -293,7 +317,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     // updates the health of the player
     private void updateHealth() {
         handler.postDelayed(() -> {
-            if (!stop) {
+            if (!stop && !pause) { // && !pause
                 for (int i = 0; i < enemies.size(); i++) {
                     if (enemies.get(i).contactWithPlayer() && !player.getInvincibility() && enemies.get(i).isAlive()) {
                         player.setInvincibility(true);
@@ -326,7 +350,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     //performs weapon attack in the given direction the player is facing.
     private void updateWeaponAttack() {
         handler.postDelayed(() -> {
-            if (!stop) {
+            if (!stop && !pause) {
                 if (performWeaponAttack) {
                     player.notifyObservers();
                     weapon.setAttackCooldown(true);
@@ -377,38 +401,50 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         MovementStrategy strategy = null;
         player.setProposedX(player.getX());
         player.setProposedY(player.getY());
-
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                strategy = new MoveLeftStrategy();
-                player.setFacingRight(false);
-                weapon.setWeaponSwingDirection("left");
-                player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                player.setProposedX(player.getProposedX() - 50);
-                break;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                strategy = new MoveRightStrategy();
-                player.setFacingRight(true);
-                weapon.setWeaponSwingDirection("right");
-                player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                player.setProposedX(player.getProposedX() + 50);
-                break;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-                strategy = new MoveDownStrategy();
-                weapon.setWeaponSwingDirection("down");
-                player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                player.setProposedY(player.getProposedY() + 50);
-                break;
-            case KeyEvent.KEYCODE_DPAD_UP:
-                strategy = new MoveUpStrategy();
-                weapon.setWeaponSwingDirection("up");
-                player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                player.setProposedY(player.getProposedY() - 50);
-                break;
-            case KeyEvent.KEYCODE_SPACE:
-                if (weapon.isAttackCooldown() == false) {
-                    performWeaponAttack = true;
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                if (!pause) {
+                    strategy = new MoveLeftStrategy();
+                    player.setFacingRight(false);
+                    weapon.setWeaponSwingDirection("left");
+                    player.setPlayerDirection(weapon.getWeaponSwingDirection());
+                    player.setProposedX(player.getProposedX() - 50);
+                    break;
                 }
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    if (!pause) {
+                        strategy = new MoveRightStrategy();
+                        player.setFacingRight(true);
+                        weapon.setWeaponSwingDirection("right");
+                        player.setPlayerDirection(weapon.getWeaponSwingDirection());
+                        player.setProposedX(player.getProposedX() + 50);
+                        break;
+                    }
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    if (!pause) {
+                        strategy = new MoveDownStrategy();
+                        weapon.setWeaponSwingDirection("down");
+                        player.setPlayerDirection(weapon.getWeaponSwingDirection());
+                        player.setProposedY(player.getProposedY() + 50);
+                        break;
+                    }
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    if (!pause) {
+                        strategy = new MoveUpStrategy();
+                        weapon.setWeaponSwingDirection("up");
+                        player.setPlayerDirection(weapon.getWeaponSwingDirection());
+                        player.setProposedY(player.getProposedY() - 50);
+                        break;
+                    }
+                case KeyEvent.KEYCODE_X:
+                    if (weapon.isAttackCooldown() == false && !pause) {
+                        performWeaponAttack = true;
+                    }
+                    break;
+                case KeyEvent.KEYCODE_P:
+                    pauseGame();
+                    break;
+            }
                 break;
             case KeyEvent.KEYCODE_ESCAPE:
                 //
@@ -472,6 +508,112 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         }
         return false;
     }
+    public void showPopup() {
+        // Anchor popoup with layout to "center" menu
+        View pauseScreenView = getLayoutInflater().inflate(R.layout.pause_screen, null);
+        PopupWindow pausePopup = new PopupWindow(
+                pauseScreenView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                true
+        );
+        pausePopup.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        pausePopup.showAtLocation(gameLayout, Gravity.CENTER, 0, 0);
+        Button resumeButton = pauseScreenView.findViewById(R.id.restartButton);
+        resumeButton.setOnClickListener(v -> {
+            pausePopup.dismiss();
+            pauseGame();
+        });
+        leaderboardInitialization(pauseScreenView);
+    }
+
+    private void leaderboardInitialization(View pauseScreenView) {
+        TextView scoreRecentView = pauseScreenView.findViewById(R.id.scoreRecentView);
+        scoreRecentView.setText(String.valueOf(player.getScore()));
+        TextView nameRecentView = pauseScreenView.findViewById(R.id.nameRecentView);
+        nameRecentView.setText(MainActivity.getName());
+
+        Date currentTime = Calendar.getInstance().getTime();
+        int month = currentTime.getMonth() + 1;
+        int day = currentTime.getDate();
+        String date = month + "/" + day;
+
+        TextView dateRecentView = pauseScreenView.findViewById(R.id.dateRecentView);
+        dateRecentView.setText(date);
+
+
+        Leaderboard lb = Leaderboard.getInstance();
+        ArrayList<String> nameList = lb.getNameList();
+        ArrayList<String> dateList = lb.getDateList();
+        ArrayList<Integer> scoreList = lb.getScoreList();
+
+        // modifying leaderboard visual to take in 5 different inputs
+        if (scoreList.size() >= 1) {
+            TextView leaderboardNameView1 = pauseScreenView.findViewById(R.id.leaderboardNameView1);
+            leaderboardNameView1.setText(nameList.get(0));
+            TextView leaderboardDateView1 = pauseScreenView.findViewById(R.id.leaderboardDateView1);
+            leaderboardDateView1.setText(dateList.get(0));
+            TextView leaderboardScoreView1 = pauseScreenView.findViewById(R.id.leaderboardScoreView1);
+            leaderboardScoreView1.setText(scoreList.get(0).toString());
+        }
+
+        if (scoreList.size() >= 2) {
+            TextView leaderboardNameView2 = pauseScreenView.findViewById(R.id.leaderboardNameView2);
+            leaderboardNameView2.setText(nameList.get(1));
+            TextView leaderboardDateView2 = pauseScreenView.findViewById(R.id.leaderboardDateView2);
+            leaderboardDateView2.setText(dateList.get(1));
+            TextView leaderboardScoreView2 = pauseScreenView.findViewById(R.id.leaderboardScoreView2);
+            leaderboardScoreView2.setText(scoreList.get(1).toString());
+        }
+
+        if (scoreList.size() >= 3) {
+            TextView leaderboardNameView3 = pauseScreenView.findViewById(R.id.leaderboardNameView3);
+            leaderboardNameView3.setText(nameList.get(2));
+            TextView leaderboardDateView3 = pauseScreenView.findViewById(R.id.leaderboardDateView3);
+            leaderboardDateView3.setText(dateList.get(2));
+            TextView leaderboardScoreView3 = pauseScreenView.findViewById(R.id.leaderboardScoreView3);
+            leaderboardScoreView3.setText(scoreList.get(2).toString());
+        }
+
+        if (scoreList.size() >= 4) {
+            TextView leaderboardNameView4 = pauseScreenView.findViewById(R.id.leaderboardNameView4);
+            leaderboardNameView4.setText(nameList.get(3));
+            TextView leaderboardDateView4 = pauseScreenView.findViewById(R.id.leaderboardDateView4);
+            leaderboardDateView4.setText(dateList.get(3));
+            TextView leaderboardScoreView4 = pauseScreenView.findViewById(R.id.leaderboardScoreView4);
+            leaderboardScoreView4.setText(scoreList.get(3).toString());
+        }
+
+        if (scoreList.size() >= 5) {
+            TextView leaderboardNameView5 = pauseScreenView.findViewById(R.id.leaderboardNameView5);
+            leaderboardNameView5.setText(nameList.get(4));
+            TextView leaderboardDateView5 = pauseScreenView.findViewById(R.id.leaderboardDateView5);
+            leaderboardDateView5.setText(dateList.get(4));
+            TextView leaderboardScoreView5 = pauseScreenView.findViewById(R.id.leaderboardScoreView5);
+            leaderboardScoreView5.setText(scoreList.get(4).toString());
+        }
+    }
+
+    public void pauseGame () {
+        if (!pause) {
+            pause = true;
+            timeCountDownTimer.setPause(true);
+            scoreCountDownTimer.setPause(true);
+            showPopup();
+
+        } else {
+            pause = false;
+            updateWeaponAttack();
+            animationCountdown();
+            updateHealth();
+            startChortLoop();
+            startNecromancerLoop();
+            timeCountDownTimer.setPause(false);
+            scoreCountDownTimer.setPause(false);
+
+        }
+    }
+
 
     public int getMaxX() {
         return maxX;

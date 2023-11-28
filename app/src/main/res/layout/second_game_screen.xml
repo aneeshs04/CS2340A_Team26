@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/gameLayout2"
     tools:context=".viewmodels.MainGameActivity">
 
     <ImageView
@@ -17,6 +17,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="37dp" />
 
+    <Button
+        android:id="@+id/pauseButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="PAUSE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
         android:id="@+id/healthIcon"
         android:layout_width="30dp"
@@ -24,19 +33,19 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="2dp"
         android:src="@drawable/healthicon"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/viewScore"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/viewScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:fontFamily="@font/pixeloidsans"
         android:text="Score: 75"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
-        android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/healthIcon"
         tools:layout_editor_absoluteX="4dp" />
