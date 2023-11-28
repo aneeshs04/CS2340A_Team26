@@ -155,7 +155,6 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
 
         textViewName.setText(player.getName());
         textViewDiff.setText("Difficulty: " + player.getDifficulty());
-        player.setHealth(150);
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
         //wall creation for screen 1
@@ -392,6 +391,9 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                 if (weapon.isAttackCooldown() == false) {
                     performWeaponAttack = true;
                 }
+                break;
+            case KeyEvent.KEYCODE_ESCAPE:
+                //
                 break;
         }
         
