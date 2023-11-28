@@ -210,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         MainGameActivity.setRestart();
         SecondGameActivity.setRestart();
         ThirdGameActivity.setRestart();
+        Player.restartPowerups();
     }
 }
 
