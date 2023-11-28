@@ -7,6 +7,7 @@ public class TimeCountdown extends CountDownTimer {
     private Player player = Player.getInstance();
     private static TimeCountdown instance;
     private OnTimeChangeListener onTimeChangeListener;
+    private boolean pause = false;
 
     private TimeCountdown(long millisInFuture, long countDownInterval) {
         super(millisInFuture, countDownInterval);
@@ -21,9 +22,11 @@ public class TimeCountdown extends CountDownTimer {
 
     @Override
     public void onTick(long millisUntilFinished) {
-        player.setTime(player.getTime() +  1);
-        if (onTimeChangeListener != null) {
-            onTimeChangeListener.onTimeChange(player.getTime());
+        if (!pause) {
+            player.setTime(player.getTime() + 1);
+            if (onTimeChangeListener != null) {
+                onTimeChangeListener.onTimeChange(player.getTime());
+            }
         }
     }
     @Override
@@ -37,5 +40,9 @@ public class TimeCountdown extends CountDownTimer {
 
     public void setOnTimeChangeListener(OnTimeChangeListener listener) {
         this.onTimeChangeListener = listener;
+    }
+
+    public void setPause (boolean pause) {
+        this.pause = pause;
     }
 }
