@@ -73,6 +73,11 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
     private static int IMP_LOOP_DELAY;
     private List<Enemy> enemies = new ArrayList<>();
 
+    public static void setRestart() {
+        necroAlive = true;
+        impAlive = true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -341,9 +346,6 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
                         weaponAnimationCount = 0;
                         swordView.setVisibility(swordView.INVISIBLE);
                     }, 400);
-
-                    //animation stuff goes here for attack
-                    //enemy stuff goes here
                     performWeaponAttack = false;
                     handler.postDelayed(() -> {
                         weapon.setAttackCooldown(false);

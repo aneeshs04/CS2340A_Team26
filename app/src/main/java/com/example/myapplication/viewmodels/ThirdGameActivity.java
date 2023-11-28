@@ -72,6 +72,11 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private static final int BIG_LOOP_DELAY = 200;
     private List<Enemy> enemies = new ArrayList<>();
 
+    public static void setRestart() {
+        bigDemonAlive = true;
+        chortAlive = true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -18,6 +18,8 @@ import com.example.myapplication.model.Player;
 import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.viewmodels.MainGameActivity;
+import com.example.myapplication.viewmodels.SecondGameActivity;
+import com.example.myapplication.viewmodels.ThirdGameActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+        restart();
     }
 
     // getters for other classes to access private variables
@@ -201,5 +204,11 @@ public class MainActivity extends AppCompatActivity {
 //    public void setBig3Alive(boolean big3Alive) {
 //        this.big3Alive = big3Alive;
 //    }
+
+    public void restart() {
+        MainGameActivity.setRestart();
+        SecondGameActivity.setRestart();
+        ThirdGameActivity.setRestart();
+    }
 }
 
