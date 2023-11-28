@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 player.setName(name);
                 player.setCharacter(character);
                 player.setTime(0);
+                player.setHealth(150);
                 ScoreCountdown scoreCountDownTimer = ScoreCountdown.getInstance(1000000, 200);
                 scoreCountDownTimer.start();
                 TimeCountdown timeCountDownTimer = TimeCountdown.getInstance(1000000, 1000);
