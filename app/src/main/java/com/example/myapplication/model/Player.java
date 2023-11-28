@@ -35,6 +35,9 @@ public class Player implements Subject {
     private boolean invincibility = false;
     private boolean movement = false;
     private String playerDirection = "right";
+    private static boolean healthPowerUpClaimed = false;
+    private static boolean speedPowerUpClaimed = false;
+    private static double speedMultiplier = 1;
     private Player () {
         this.movementSpeed = 50;
         this.movementStrategy = new MoveRightStrategy();
@@ -213,5 +216,32 @@ public class Player implements Subject {
 
     public String getPlayerDirection() {
         return playerDirection;
+    }
+    public boolean isHealthPowerUpClaimed() {
+        return healthPowerUpClaimed;
+    }
+
+    public void setHealthPowerUpClaimed(boolean healthPowerUpClaimed) {
+        this.healthPowerUpClaimed = healthPowerUpClaimed;
+    }
+
+    public boolean isSpeedPowerUpClaimed() {
+        return speedPowerUpClaimed;
+    }
+
+    public void setSpeedPowerUpClaimed(boolean speedPowerUpClaimed) {
+        this.speedPowerUpClaimed = speedPowerUpClaimed;
+    }
+
+    public void setSpeedMultiplier(double speedMultiplier) {
+        this.speedMultiplier = speedMultiplier;
+    }
+    public double getSpeedMultiplier() {
+        return speedMultiplier;
+    }
+    public static void restartPowerups() {
+        speedMultiplier = 1;
+        speedPowerUpClaimed = false;
+        healthPowerUpClaimed = false;
     }
 }

@@ -3,6 +3,7 @@ package com.example.myapplication.viewmodels;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupWindow;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -82,6 +84,10 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private boolean pause;
     private TimeCountdown timeCountDownTimer;
     private ScoreCountdown scoreCountDownTimer;
+    // powerup variables
+    private ImageView healthPowerUp;
+    private int healthPowerUpX = 500;
+    private int healthPowerUpY = 500;
 
     public static void setRestart() {
         necroAlive = true;
@@ -175,7 +181,6 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
 
         textViewName.setText(player.getName());
         textViewDiff.setText("Difficulty: " + player.getDifficulty());
-        player.setHealth(150);
         textViewHealth.setText(String.valueOf(player.getHealth()));
 
         //wall creation for screen 1
@@ -188,6 +193,18 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(970, 580, 1500, 1900));
         walls.add(new Wall(828, 2050, 1500, 2800));
         walls.add(new Wall(828, 1600, 1500, 1900));
+
+        // loading the health powerup
+        if (!player.isHealthPowerUpClaimed()) {
+            healthPowerUp = new ImageView(this);
+            healthPowerUp.setImageResource(R.drawable.heartsprite);
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(80, 80);
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.leftMargin = healthPowerUpX;
+            layoutParams.topMargin = healthPowerUpY;
+            gameLayout.addView(healthPowerUp, layoutParams);
+        }
     }
 
     private void startNecromancerLoop() {
@@ -428,12 +445,24 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                     pauseGame();
                     break;
             }
+                break;
+            case KeyEvent.KEYCODE_ESCAPE:
+                //
+                break;
+        }
         
         // if no wall collision, update player's position and updates Observers
         player.setMovementStrategy(strategy);
         if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
             player.performMovement();
             player.notifyObservers();
+        }
+
+        // checking for collision with healthpowerup
+        if (Math.abs(player.getX() - healthPowerUpX) < 80 && Math.abs(player.getY() - healthPowerUpY) < 80 && !player.isHealthPowerUpClaimed()) {
+            player.setHealth(player.getHealth() + 25);
+            player.setHealthPowerUpClaimed(true);
+            gameLayout.removeView(healthPowerUp);
         }
 
         // checking to see if player is leaving the screen
@@ -601,6 +630,5 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     public int getMinY() {
         return minY;
     }
-
 }
 

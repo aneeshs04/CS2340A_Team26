@@ -7,7 +7,7 @@ public class MoveUpStrategy implements MovementStrategy {
 
     @Override
     public void move(Player player) {
-        player.setY(player.getY() - 50);
+        player.setY((float)(player.getY() - (50 * player.getSpeedMultiplier())));
     }
 
 }
