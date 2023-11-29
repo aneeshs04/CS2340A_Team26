@@ -64,6 +64,7 @@ public class Weapon implements Observer{
         playerY = y + 125;
         this.x = playerX;
         this.y = playerY;
+        weaponSwingDirection = playerDirection;
     }
 
     public Rect getDestRect() {
