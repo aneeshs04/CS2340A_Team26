@@ -25,7 +25,9 @@ import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
 import com.example.myapplication.model.Leaderboard;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.PlayerDecorator;
 import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.model.StarPowerUpDecorator;
 import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
@@ -481,8 +483,9 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
 
         // checking for collision with star powerup
         if (Math.abs(player.getX() - starPowerUpX) < 80 && Math.abs(player.getY() - starPowerUpY) < 80 && !player.isStarPowerUpClaimed()) {
+            PlayerDecorator playerWithStar = new StarPowerUpDecorator();
+            playerWithStar.activateInvincibility(10000);
             player.setStarPowerUpClaimed(true);
-            player.activateInvincibility(10000);
             gameLayout.removeView(starPowerUp);
         }
 
