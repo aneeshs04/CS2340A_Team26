@@ -21,7 +21,8 @@ import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.model.SpeedPowerUpDecorator;
 import com.example.myapplication.model.StarPowerUpDecorator;
 import com.example.myapplication.model.Weapon;
-
+import com.example.myapplication.viewmodels.MainGameActivity;
+import com.example.myapplication.viewmodels.WeaponViewModel;
 
 public class Sprint5UnitTests {
     @Test
@@ -140,5 +141,19 @@ public class Sprint5UnitTests {
         EnemyFactory bigDemonFactory = new BigDemonFactory();
         Enemy bigDemon = bigDemonFactory.createEnemy((int) weapon.getX(), (int) weapon.getY());
         assertTrue(bigDemon.contactWithWeapon(weapon.weaponRectDown()));
+      
+    @Test
+    public void testWeaponFollowsPlayer() {
+        Weapon weapon = Weapon.getInstance();
+        Player player = Player.getInstance();
+        assertEquals(player.getX() + 50, weapon.getX(), 0);
+        assertEquals(player.getY() + 125, weapon.getY(), 0);
+    }
+    
+    @Test
+    public void testWeaponCooldown() {
+        Weapon weapon = Weapon.getInstance();
+        weapon.setAttackCooldown(true);
+        assertTrue("Weapon should be on cooldown", weapon.isAttackCooldown());
     }
 }
