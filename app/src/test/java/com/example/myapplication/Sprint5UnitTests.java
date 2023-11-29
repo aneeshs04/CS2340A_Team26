@@ -13,6 +13,7 @@ import com.example.myapplication.model.PlayerDecorator;
 import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.model.SpeedPowerUpDecorator;
 import com.example.myapplication.model.StarPowerUpDecorator;
+import com.example.myapplication.model.Weapon;
 
 
 public class Sprint5UnitTests {
@@ -42,6 +43,18 @@ public class Sprint5UnitTests {
         int initialScore = player.getScore();
         scoreCountdown.onTick(50000); // Simulate half a minute has passed
         assertNotEquals("Score should have decreased", initialScore, player.getScore());
+    }
+
+    @Test
+    public void testPlayerMovingRightSwordSwingsRight() {
+        Player player = Player.getInstance();
+        Weapon weapon = Weapon.getInstance();
+
+        player.setPlayerDirection("right");
+        player.performMovement();
+        String weaponSwingDirection = weapon.getWeaponSwingDirection();
+
+        assertEquals("right", weaponSwingDirection);
     }
 
 
