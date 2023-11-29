@@ -13,6 +13,7 @@ import com.example.myapplication.model.ChortFactory;
 import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
 
+import com.example.myapplication.model.HealthPowerUpDecorator;
 import com.example.myapplication.model.ImpFactory;
 import com.example.myapplication.model.MoveDownStrategy;
 import com.example.myapplication.model.MoveLeftStrategy;
@@ -20,6 +21,7 @@ import com.example.myapplication.model.MoveRightStrategy;
 import com.example.myapplication.model.MoveUpStrategy;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.PlayerDecorator;
 
 
 public class Sprint4UnitTests {
@@ -178,5 +180,14 @@ public class Sprint4UnitTests {
 
         enemy1.move();
         enemy2.move();
+    }
+    @Test
+    public void testHealthPowerUpIncreasesHealth() {
+        Player player = Player.getInstance();
+        int initialHealth = player.getHealth();
+        PlayerDecorator playerWithHealthPowerUp = new HealthPowerUpDecorator();
+        playerWithHealthPowerUp.setHealth(initialHealth);
+        assertTrue("Health should increase after collecting health power-up",
+                player.getHealth() > initialHealth);
     }
 }
