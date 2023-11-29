@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -83,6 +84,10 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
     private boolean pause;
     private TimeCountdown timeCountDownTimer;
     private ScoreCountdown scoreCountDownTimer;
+    // powerup variables
+    private ImageView starPowerUp;
+    private int starPowerUpX = 1100;
+    private int starPowerUpY = 250;
 
     public static void setRestart() {
         bigDemonAlive = true;
@@ -192,6 +197,18 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         walls.add(new Wall(150, 2420, 1600, 3000));
         walls.add(new Wall(1250, 2320, 1440, 3000));
         walls.add(new Wall(1250, 2270, 1440, 4000));
+
+        // loading the star powerup
+        if (!player.isStarPowerUpClaimed()) {
+            starPowerUp = new ImageView(this);
+            starPowerUp.setImageResource(R.drawable.starsprite);
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(80, 80);
+            layoutParams.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+            layoutParams.leftMargin = starPowerUpX;
+            layoutParams.topMargin = starPowerUpY;
+            gameLayout.addView(starPowerUp, layoutParams);
+        }
     }
 
     private void startChortLoop() {
@@ -417,7 +434,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                     player.setFacingRight(false);
                     weapon.setWeaponSwingDirection("left");
                     player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                    player.setProposedX(player.getProposedX() - 50);
+                    player.setProposedX(player.getProposedX() - (float)(50 * player.getSpeedMultiplier()));
                     break;
                 }
             case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -426,7 +443,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                     player.setFacingRight(true);
                     weapon.setWeaponSwingDirection("right");
                     player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                    player.setProposedX(player.getProposedX() + 50);
+                    player.setProposedX(player.getProposedX() + (float)(50 * player.getSpeedMultiplier()));
                     break;
                 }
             case KeyEvent.KEYCODE_DPAD_DOWN:
@@ -434,7 +451,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                     strategy = new MoveDownStrategy();
                     weapon.setWeaponSwingDirection("down");
                     player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                    player.setProposedY(player.getProposedY() + 50);
+                    player.setProposedY(player.getProposedY() + (float)(50 * player.getSpeedMultiplier()));
                     break;
                 }
             case KeyEvent.KEYCODE_DPAD_UP:
@@ -442,7 +459,7 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
                     strategy = new MoveUpStrategy();
                     weapon.setWeaponSwingDirection("up");
                     player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                    player.setProposedY(player.getProposedY() - 50);
+                    player.setProposedY(player.getProposedY() - (float)(50 * player.getSpeedMultiplier()));
                     break;
                 }
             case KeyEvent.KEYCODE_X:
@@ -461,6 +478,14 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
             player.performMovement();
             player.notifyObservers();
         }
+
+        // checking for collision with star powerup
+        if (Math.abs(player.getX() - starPowerUpX) < 80 && Math.abs(player.getY() - starPowerUpY) < 80 && !player.isStarPowerUpClaimed()) {
+            player.setStarPowerUpClaimed(true);
+            player.activateInvincibility(10000);
+            gameLayout.removeView(starPowerUp);
+        }
+
 
         // checking to see if player is leaving the screen
         if (player.getX() < minX) {

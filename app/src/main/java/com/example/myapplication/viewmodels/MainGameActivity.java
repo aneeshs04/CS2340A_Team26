@@ -86,7 +86,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private ScoreCountdown scoreCountDownTimer;
     // powerup variables
     private ImageView healthPowerUp;
-    private int healthPowerUpX = 500;
+    private int healthPowerUpX = 530;
     private int healthPowerUpY = 500;
 
     public static void setRestart() {
@@ -408,7 +408,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                     player.setFacingRight(false);
                     weapon.setWeaponSwingDirection("left");
                     player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                    player.setProposedX(player.getProposedX() - 50);
+                    player.setProposedX(player.getProposedX() - (float)(50 * player.getSpeedMultiplier()));
                     break;
                 }
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -417,7 +417,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         player.setFacingRight(true);
                         weapon.setWeaponSwingDirection("right");
                         player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                        player.setProposedX(player.getProposedX() + 50);
+                        player.setProposedX(player.getProposedX() + (float)(50 * player.getSpeedMultiplier()));
                         break;
                     }
                 case KeyEvent.KEYCODE_DPAD_DOWN:
@@ -425,7 +425,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         strategy = new MoveDownStrategy();
                         weapon.setWeaponSwingDirection("down");
                         player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                        player.setProposedY(player.getProposedY() + 50);
+                        player.setProposedY(player.getProposedY() + (float)(50 * player.getSpeedMultiplier()));
                         break;
                     }
                 case KeyEvent.KEYCODE_DPAD_UP:
@@ -433,7 +433,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         strategy = new MoveUpStrategy();
                         weapon.setWeaponSwingDirection("up");
                         player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                        player.setProposedY(player.getProposedY() - 50);
+                        player.setProposedY(player.getProposedY() - (float)(50 * player.getSpeedMultiplier()));
                         break;
                     }
                 case KeyEvent.KEYCODE_X:
@@ -445,12 +445,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                     pauseGame();
                     break;
             }
-                break;
-            case KeyEvent.KEYCODE_ESCAPE:
-                //
-                break;
-        }
-        
+
         // if no wall collision, update player's position and updates Observers
         player.setMovementStrategy(strategy);
         if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {

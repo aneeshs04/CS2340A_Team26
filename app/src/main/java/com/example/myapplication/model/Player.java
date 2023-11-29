@@ -3,6 +3,8 @@ package com.example.myapplication.model;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import com.example.myapplication.viewmodels.ThirdGameActivity;
@@ -37,6 +39,7 @@ public class Player implements Subject {
     private String playerDirection = "right";
     private static boolean healthPowerUpClaimed = false;
     private static boolean speedPowerUpClaimed = false;
+    private static boolean starPowerUpClaimed = false;
     private static double speedMultiplier = 1;
     private Player () {
         this.movementSpeed = 50;
@@ -224,6 +227,13 @@ public class Player implements Subject {
     public void setHealthPowerUpClaimed(boolean healthPowerUpClaimed) {
         this.healthPowerUpClaimed = healthPowerUpClaimed;
     }
+    public boolean isStarPowerUpClaimed() {
+        return starPowerUpClaimed;
+    }
+
+    public void setStarPowerUpClaimed(boolean starPowerUpClaimed) {
+        this.starPowerUpClaimed = starPowerUpClaimed;
+    }
 
     public boolean isSpeedPowerUpClaimed() {
         return speedPowerUpClaimed;
@@ -243,5 +253,12 @@ public class Player implements Subject {
         speedMultiplier = 1;
         speedPowerUpClaimed = false;
         healthPowerUpClaimed = false;
+        starPowerUpClaimed = false;
+    }
+    public void activateInvincibility(int duration) {
+        this.invincibility = true;
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            this.invincibility = false;
+        }, duration);
     }
 }
