@@ -14,7 +14,8 @@ import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.model.SpeedPowerUpDecorator;
 import com.example.myapplication.model.StarPowerUpDecorator;
 import com.example.myapplication.model.Weapon;
-
+import com.example.myapplication.viewmodels.MainGameActivity;
+import com.example.myapplication.viewmodels.WeaponViewModel;
 
 public class Sprint5UnitTests {
     @Test
@@ -55,6 +56,13 @@ public class Sprint5UnitTests {
         String weaponSwingDirection = weapon.getWeaponSwingDirection();
 
         assertEquals("right", weaponSwingDirection);
+    }
+
+    @Test
+    public void testWeaponCooldown() {
+        Weapon weapon = Weapon.getInstance();
+        weapon.setAttackCooldown(true);
+        assertTrue("Weapon should be on cooldown", weapon.isAttackCooldown());
     }
 
 
