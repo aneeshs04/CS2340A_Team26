@@ -25,7 +25,9 @@ import com.example.myapplication.model.ImpFactory;
 import com.example.myapplication.model.Leaderboard;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.PlayerDecorator;
 import com.example.myapplication.model.ScoreCountdown;
+import com.example.myapplication.model.SpeedPowerUpDecorator;
 import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.views.EndActivity;
 import com.example.myapplication.views.MainActivity;
@@ -455,7 +457,8 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
 
         // checking for collision with speed powerup
         if (Math.abs(player.getX() - speedPowerUpX) < 80 && Math.abs(player.getY() - speedPowerUpY) < 80 && !player.isSpeedPowerUpClaimed()) {
-            player.setSpeedMultiplier(player.getSpeedMultiplier() + 0.5);
+            PlayerDecorator playerWithSpeed = new SpeedPowerUpDecorator();
+            playerWithSpeed.setSpeedMultiplier(1.5);
             player.setSpeedPowerUpClaimed(true);
             gameLayout.removeView(speedPowerUp);
         }

@@ -23,6 +23,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.ChortFactory;
 import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
+import com.example.myapplication.model.HealthPowerUpDecorator;
 import com.example.myapplication.model.Leaderboard;
 import com.example.myapplication.model.MoveDownStrategy;
 import com.example.myapplication.model.MoveLeftStrategy;
@@ -32,6 +33,7 @@ import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Observer;
 import com.example.myapplication.model.Player;
+import com.example.myapplication.model.PlayerDecorator;
 import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.model.Wall;
@@ -453,9 +455,10 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             player.notifyObservers();
         }
 
-        // checking for collision with healthpowerup
+        // checking for collision with health powerup
         if (Math.abs(player.getX() - healthPowerUpX) < 80 && Math.abs(player.getY() - healthPowerUpY) < 80 && !player.isHealthPowerUpClaimed()) {
-            player.setHealth(player.getHealth() + 25);
+            PlayerDecorator playerWithHealth = new HealthPowerUpDecorator();
+            playerWithHealth.setHealth(playerWithHealth.getHealth());
             player.setHealthPowerUpClaimed(true);
             gameLayout.removeView(healthPowerUp);
         }
