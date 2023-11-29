@@ -484,9 +484,17 @@ public class ThirdGameActivity extends AppCompatActivity implements Observer {
         // checking for collision with star powerup
         if (Math.abs(player.getX() - starPowerUpX) < 80 && Math.abs(player.getY() - starPowerUpY) < 80 && !player.isStarPowerUpClaimed()) {
             PlayerDecorator playerWithStar = new StarPowerUpDecorator();
-            playerWithStar.activateInvincibility(10000);
             player.setStarPowerUpClaimed(true);
             gameLayout.removeView(starPowerUp);
+//            for (int i = 0; i < 100; i++) {
+//                playerWithStar.activateInvincibility(100);
+//                do {
+//                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+//                        player.setHealth(player.getHealth() + 1);
+//                    }, 100);
+//                } while (pause);
+//            }
+            playerWithStar.activateInvincibility(10000);
         }
 
 

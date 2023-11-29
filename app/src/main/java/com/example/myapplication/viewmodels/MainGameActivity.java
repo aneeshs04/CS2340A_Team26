@@ -23,7 +23,6 @@ import com.example.myapplication.R;
 import com.example.myapplication.model.ChortFactory;
 import com.example.myapplication.model.Enemy;
 import com.example.myapplication.model.EnemyFactory;
-import com.example.myapplication.model.HealthPowerUpDecorator;
 import com.example.myapplication.model.Leaderboard;
 import com.example.myapplication.model.MoveDownStrategy;
 import com.example.myapplication.model.MoveLeftStrategy;
@@ -33,7 +32,6 @@ import com.example.myapplication.model.MovementStrategy;
 import com.example.myapplication.model.NecromancerFactory;
 import com.example.myapplication.model.Observer;
 import com.example.myapplication.model.Player;
-import com.example.myapplication.model.PlayerDecorator;
 import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.model.TimeCountdown;
 import com.example.myapplication.model.Wall;
@@ -88,7 +86,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
     private ScoreCountdown scoreCountDownTimer;
     // powerup variables
     private ImageView healthPowerUp;
-    private int healthPowerUpX = 530;
+    private int healthPowerUpX = 500;
     private int healthPowerUpY = 500;
 
     public static void setRestart() {
@@ -257,7 +255,6 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         gameLoopHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (!pause) {
                     Enemy chort = enemies.get(1);
                     // Move each enemy
@@ -411,7 +408,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                     player.setFacingRight(false);
                     weapon.setWeaponSwingDirection("left");
                     player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                    player.setProposedX(player.getProposedX() - (float)(50 * player.getSpeedMultiplier()));
+                    player.setProposedX(player.getProposedX() - 50);
                     break;
                 }
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -420,7 +417,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         player.setFacingRight(true);
                         weapon.setWeaponSwingDirection("right");
                         player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                        player.setProposedX(player.getProposedX() + (float)(50 * player.getSpeedMultiplier()));
+                        player.setProposedX(player.getProposedX() + 50);
                         break;
                     }
                 case KeyEvent.KEYCODE_DPAD_DOWN:
@@ -428,7 +425,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         strategy = new MoveDownStrategy();
                         weapon.setWeaponSwingDirection("down");
                         player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                        player.setProposedY(player.getProposedY() + (float)(50 * player.getSpeedMultiplier()));
+                        player.setProposedY(player.getProposedY() + 50);
                         break;
                     }
                 case KeyEvent.KEYCODE_DPAD_UP:
@@ -436,7 +433,7 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                         strategy = new MoveUpStrategy();
                         weapon.setWeaponSwingDirection("up");
                         player.setPlayerDirection(weapon.getWeaponSwingDirection());
-                        player.setProposedY(player.getProposedY() - (float)(50 * player.getSpeedMultiplier()));
+                        player.setProposedY(player.getProposedY() - 50);
                         break;
                     }
                 case KeyEvent.KEYCODE_X:
@@ -448,7 +445,6 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
                     pauseGame();
                     break;
             }
-
         // if no wall collision, update player's position and updates Observers
         player.setMovementStrategy(strategy);
         if (!collidesWithAnyWall((int) player.getProposedX(), (int) player.getProposedY()) && strategy != null) {
@@ -456,10 +452,9 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
             player.notifyObservers();
         }
 
-        // checking for collision with health powerup
+        // checking for collision with healthpowerup
         if (Math.abs(player.getX() - healthPowerUpX) < 80 && Math.abs(player.getY() - healthPowerUpY) < 80 && !player.isHealthPowerUpClaimed()) {
-            PlayerDecorator playerWithHealth = new HealthPowerUpDecorator();
-            playerWithHealth.setHealth(playerWithHealth.getHealth());
+            player.setHealth(player.getHealth() + 25);
             player.setHealthPowerUpClaimed(true);
             gameLayout.removeView(healthPowerUp);
         }
@@ -531,8 +526,6 @@ public class MainGameActivity extends AppCompatActivity implements Observer {
         scoreRecentView.setText(String.valueOf(player.getScore()));
         TextView nameRecentView = pauseScreenView.findViewById(R.id.nameRecentView);
         nameRecentView.setText(MainActivity.getName());
-        TextView timeView = pauseScreenView.findViewById(R.id.textViewTime);
-        timeView.setText("Time Spent: " + player.getTime() + " seconds");
 
         Date currentTime = Calendar.getInstance().getTime();
         int month = currentTime.getMonth() + 1;

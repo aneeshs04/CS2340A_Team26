@@ -7,6 +7,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
 import com.example.myapplication.model.HealthPowerUpDecorator;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.PlayerDecorator;
@@ -59,11 +62,80 @@ public class Sprint5UnitTests {
     }
 
     @Test
+    public void testPlayerMovingRightSwordSwingsLeft() {
+        Player player = Player.getInstance();
+        Weapon weapon = Weapon.getInstance();
+
+        player.setPlayerDirection("left");
+        player.registerObserver(weapon);
+        player.performMovement();
+        player.notifyObservers();
+        String weaponSwingDirection = weapon.getWeaponSwingDirection();
+
+        assertEquals("left", weaponSwingDirection);
+    }
+
+    @Test
+    public void testPlayerMovingRightSwordSwingsUp() {
+        Player player = Player.getInstance();
+        Weapon weapon = Weapon.getInstance();
+
+        player.setPlayerDirection("up");
+        player.registerObserver(weapon);
+        player.performMovement();
+        player.notifyObservers();
+        String weaponSwingDirection = weapon.getWeaponSwingDirection();
+
+        assertEquals("up", weaponSwingDirection);
+    }
+
+    @Test
+    public void testPlayerMovingRightSwordSwingsDown() {
+        Player player = Player.getInstance();
+        Weapon weapon = Weapon.getInstance();
+
+        player.setPlayerDirection("down");
+        player.registerObserver(weapon);
+        player.performMovement();
+        player.notifyObservers();
+        String weaponSwingDirection = weapon.getWeaponSwingDirection();
+
+        assertEquals("down", weaponSwingDirection);
+    }
+
+//    @Test
+//    public void testPlayerWeaponHitBoxRight() {
+//        Player player = Player.getInstance();
+//        Weapon weapon = Weapon.getInstance();
+//
+//        weapon.setWeaponSwingDirection("right");
+//        assertEquals(weapon.getDestRect(), new Rect((int) weapon.getX()
+//                , (int) (weapon.getY() - 300 / 2), (int) (weapon.getX() + 150)
+//                , (int) (weapon.getY() + 300 / 2)));
+//    }
+//    @Test
+//    public void testInvinciblePowerUpGivesInvicibility() {
+//        Player player = Player.getInstance();
+//        PlayerDecorator playerwithInvincibility = new StarPowerUpDecorator();
+//        playerwithInvincibility.activateInvincibility(1000);
+//        assertTrue("collecting stars should give player invincibility",
+//                player.getInvincibility() == true);
+//    }
+//
+//    @Test
+//    public void testInvinciblePowerUpLastsWithTime (){
+//        Player player = Player.getInstance();
+//        player.activateInvincibility(1000);
+//        assertTrue(player.getInvincibility() == true);
+//        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+//            assertTrue(player.getInvincibility() == false);
+//        }, 1000);
+//    }
+    
+    @Test
     public void testWeaponCooldown() {
         Weapon weapon = Weapon.getInstance();
         weapon.setAttackCooldown(true);
         assertTrue("Weapon should be on cooldown", weapon.isAttackCooldown());
     }
-
-
 }
