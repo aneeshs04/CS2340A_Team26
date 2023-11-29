@@ -23,6 +23,8 @@ public class EndActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.end_screen);
+        TextView timeView = findViewById(R.id.textViewTime);
+        timeView.setText("Time Spent: " + player.getTime() + " seconds");
 
         // changing end screen based on if player won or lost
         TextView statusTextView = findViewById(R.id.youwinText);
