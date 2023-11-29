@@ -452,4 +452,22 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="TextContrastCheck" />
 
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="300dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="564dp"
+        android:layout_marginEnd="100dp"
+        android:fontFamily="@font/pixeloidsans"
+        android:gravity="end"
+        android:shadowColor="#000000"
+        android:shadowRadius="5"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
