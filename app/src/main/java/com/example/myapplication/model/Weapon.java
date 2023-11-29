@@ -67,6 +67,24 @@ public class Weapon implements Observer{
         weaponSwingDirection = playerDirection;
     }
 
+    public int[] weaponRectRight() {
+        return new int[]{(int) x, (int) (y - 300 / 2)
+                , (int) (x + 150), (int) (y + 300 / 2)};
+    }
+    public int[] weaponRectLeft() {
+        return new int[]{(int) (x - 150), (int) (y - 300 / 2)
+                , (int) x, (int) (y + 300 / 2)};
+    }
+    public int[] weaponRectUp() {
+        return new int[]{(int) (x - 300 / 2), (int) (y - 150)
+                , (int) (x + 300 / 2), (int) (y)};
+    }
+
+    public int[] weaponRectDown() {
+        return new int[]{(int) (x - 300 / 2), (int) (y)
+                , (int) (x + 300 / 2), (int) (y + 150)};
+    }
+
     public Rect getDestRect() {
         Rect destRect;
         switch (weaponSwingDirection) {

@@ -95,6 +95,11 @@ public class ImpDemon implements Enemy {
                 && weapon.getRecDown() > y && weapon.getRecUp() < (y + 90);
     }
 
+    @Override
+    public boolean contactWithWeapon(int[] weaponRect) {
+        return false;
+    }
+
     public boolean isAlive() {
         return alive;
     }
