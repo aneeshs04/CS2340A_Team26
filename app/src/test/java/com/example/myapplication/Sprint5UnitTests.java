@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 import com.example.myapplication.model.HealthPowerUpDecorator;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.PlayerDecorator;
+import com.example.myapplication.model.ScoreCountdown;
 import com.example.myapplication.model.SpeedPowerUpDecorator;
 import com.example.myapplication.model.StarPowerUpDecorator;
 
@@ -33,4 +34,15 @@ public class Sprint5UnitTests {
         assertTrue("Speed multiplier should increase after collecting power-up",
                 player.getSpeedMultiplier() > initialSpeedMultiplier);
     }
+
+    @Test
+    public void testScoreChangesWithTime() {
+        Player player = Player.getInstance();
+        ScoreCountdown scoreCountdown = ScoreCountdown.getInstance(60000, 1000);
+        int initialScore = player.getScore();
+        scoreCountdown.onTick(50000); // Simulate half a minute has passed
+        assertNotEquals("Score should have decreased", initialScore, player.getScore());
+    }
+
+
 }

@@ -533,6 +533,8 @@ public class SecondGameActivity extends AppCompatActivity implements Observer {
         scoreRecentView.setText(String.valueOf(player.getScore()));
         TextView nameRecentView = pauseScreenView.findViewById(R.id.nameRecentView);
         nameRecentView.setText(MainActivity.getName());
+        TextView timeView = pauseScreenView.findViewById(R.id.textViewTime);
+        timeView.setText("Time Spent: " + player.getTime() + " seconds");
 
         Date currentTime = Calendar.getInstance().getTime();
         int month = currentTime.getMonth() + 1;
