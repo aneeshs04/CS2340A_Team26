@@ -141,6 +141,7 @@ public class Sprint5UnitTests {
         EnemyFactory bigDemonFactory = new BigDemonFactory();
         Enemy bigDemon = bigDemonFactory.createEnemy((int) weapon.getX(), (int) weapon.getY());
         assertTrue(bigDemon.contactWithWeapon(weapon.weaponRectDown()));
+    }
       
     @Test
     public void testWeaponFollowsPlayer() {
