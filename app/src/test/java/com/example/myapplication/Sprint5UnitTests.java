@@ -131,6 +131,14 @@ public class Sprint5UnitTests {
 //            assertTrue(player.getInvincibility() == false);
 //        }, 1000);
 //    }
+
+    @Test
+    public void testWeaponFollowsPlayer() {
+        Weapon weapon = Weapon.getInstance();
+        Player player = Player.getInstance();
+        assertEquals(player.getX() + 50, weapon.getX(), 0);
+        assertEquals(player.getY() + 125, weapon.getY(), 0);
+    }
     
     @Test
     public void testWeaponCooldown() {
