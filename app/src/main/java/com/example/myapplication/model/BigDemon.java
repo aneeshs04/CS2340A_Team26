@@ -1,7 +1,5 @@
 package com.example.myapplication.model;
 
-import com.example.myapplication.views.MainActivity;
-
 public class BigDemon implements Enemy {
     private int health;
     private int movementSpeed;
@@ -138,6 +136,12 @@ public class BigDemon implements Enemy {
     public boolean contactWithWeapon(Weapon weapon) {
         return weapon.getRecRight() > (x + 30) && weapon.getRecLeft() < (x + 170)
                 && weapon.getRecDown() > y && weapon.getRecUp() < (y + 205);
+    }
+
+    @Override
+    public boolean contactWithWeapon(int[] weaponRect) {
+        return weaponRect[2] >= (x + 30) && weaponRect[0] <= (x + 170)
+                && weaponRect[3] >= y && weaponRect[1] <= (y + 205);
     }
 
     public boolean isAlive() {

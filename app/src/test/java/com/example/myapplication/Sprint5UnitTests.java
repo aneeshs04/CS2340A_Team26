@@ -10,6 +10,10 @@ import static org.junit.Assert.*;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
+
+import com.example.myapplication.model.BigDemonFactory;
+import com.example.myapplication.model.Enemy;
+import com.example.myapplication.model.EnemyFactory;
 import com.example.myapplication.model.HealthPowerUpDecorator;
 import com.example.myapplication.model.Player;
 import com.example.myapplication.model.PlayerDecorator;
@@ -102,33 +106,39 @@ public class Sprint5UnitTests {
         assertEquals("down", weaponSwingDirection);
     }
 
-//    @Test
-//    public void testPlayerWeaponHitBoxRight() {
-//        Player player = Player.getInstance();
-//        Weapon weapon = Weapon.getInstance();
-//
-//        weapon.setWeaponSwingDirection("right");
-//        assertEquals(weapon.getDestRect(), new Rect((int) weapon.getX()
-//                , (int) (weapon.getY() - 300 / 2), (int) (weapon.getX() + 150)
-//                , (int) (weapon.getY() + 300 / 2)));
-//    }
-//    @Test
-//    public void testInvinciblePowerUpGivesInvicibility() {
-//        Player player = Player.getInstance();
-//        PlayerDecorator playerwithInvincibility = new StarPowerUpDecorator();
-//        playerwithInvincibility.activateInvincibility(1000);
-//        assertTrue("collecting stars should give player invincibility",
-//                player.getInvincibility() == true);
-//    }
-//
-//    @Test
-//    public void testInvinciblePowerUpLastsWithTime (){
-//        Player player = Player.getInstance();
-//        player.activateInvincibility(1000);
-//        assertTrue(player.getInvincibility() == true);
-//        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//            assertTrue(player.getInvincibility() == false);
-//        }, 1000);
-//    }
+    @Test
+    public void testPlayerWeaponHitBoxVSEnemiesRight() {
+        Weapon weapon = Weapon.getInstance();
+        weapon.setWeaponSwingDirection("right");
+        EnemyFactory bigDemonFactory = new BigDemonFactory();
+        Enemy bigDemon = bigDemonFactory.createEnemy((int) weapon.getX(), (int) weapon.getY());
+        assertTrue(bigDemon.contactWithWeapon(weapon.weaponRectRight()));
+    }
 
+    @Test
+    public void testPlayerWeaponHitBoxVSEnemiesLeft() {
+        Weapon weapon = Weapon.getInstance();
+        weapon.setWeaponSwingDirection("left");
+        EnemyFactory bigDemonFactory = new BigDemonFactory();
+        Enemy bigDemon = bigDemonFactory.createEnemy((int) weapon.getX() - 50, (int) weapon.getY());
+        assertTrue(bigDemon.contactWithWeapon(weapon.weaponRectLeft()));
+    }
+
+    @Test
+    public void testPlayerWeaponHitBoxVSEnemiesUp() {
+        Weapon weapon = Weapon.getInstance();
+        weapon.setWeaponSwingDirection("up");
+        EnemyFactory bigDemonFactory = new BigDemonFactory();
+        Enemy bigDemon = bigDemonFactory.createEnemy((int) weapon.getX(), (int) weapon.getY());
+        assertTrue(bigDemon.contactWithWeapon(weapon.weaponRectUp()));
+    }
+
+    @Test
+    public void testPlayerWeaponHitBoxVSEnemiesDown() {
+        Weapon weapon = Weapon.getInstance();
+        weapon.setWeaponSwingDirection("down");
+        EnemyFactory bigDemonFactory = new BigDemonFactory();
+        Enemy bigDemon = bigDemonFactory.createEnemy((int) weapon.getX(), (int) weapon.getY());
+        assertTrue(bigDemon.contactWithWeapon(weapon.weaponRectDown()));
+    }
 }

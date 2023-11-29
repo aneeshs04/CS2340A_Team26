@@ -91,6 +91,11 @@ public class ChortDemon implements Enemy {
                 && weapon.getRecDown() > y && weapon.getRecUp() < (y + 140);
     }
 
+    @Override
+    public boolean contactWithWeapon(int[] weaponRect) {
+        return false;
+    }
+
     public boolean isAlive() {
         return alive;
     }
