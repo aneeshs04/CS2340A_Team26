@@ -3,5 +3,5 @@ Repo for CS2340A Semester Project. We created a dungeon crawler application wher
 
 ## Getting Started
 
-After cloning the repository, please download android studio and import the project into there. We recommend running this application on Pixel 4 XL API 34 for best results.
+After cloning the repository, please download android studio and import the project into there. We recommend running this application on Pixel 4 XL API 34 for best results. From there, you should be ready to play! Have fun!
 
